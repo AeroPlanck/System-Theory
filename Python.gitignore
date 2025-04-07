@@ -1,7 +1,7 @@
-.mp4
-.h5
-.png
-.jpg
+*.mp4
+*.h5
+*.png
+*.jpg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
