@@ -1,6 +1,8 @@
 import numpy as np
 import pandas as pd
+import xarray as xr
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import matplotlib.animation as ma
 from tqdm import tqdm
 from sklearn.base import BaseEstimator, ClusterMixin
@@ -167,7 +169,7 @@ def compute_cluster_order_parameters(model, d_th=0.3):
         np.mean(frame_results['symmetric_ratio'])
     )
 
-def plot_2d_phase_diagram(params):
+""" def plot_2d_phase_diagram(params):
     x_param, y_param, fixed_params = params
 
     rangeLambdas = np.concatenate([
@@ -285,8 +287,109 @@ def plot_2d_phase_diagram(params):
     full_path_sr = os.path.join(save_path, filename_sr)
     plt.savefig(full_path_sr, dpi=300, bbox_inches='tight')
     plt.close()
+ """
+
+# 创建自定义颜色映射（取消归一化，使用绝对数值映射）
+def create_absolute_colormap(vmin, vmax, colors=['#1a2d5f', '#f7d842', '#c12b2b']):
+    norm = mcolors.Normalize(vmin=vmin, vmax=vmax, clip=False)  # 禁用自动缩放
+    return mcolors.LinearSegmentedColormap.from_list('absolute_cmap', colors), norm
+
+# 增强型绘图函数（完全非归一化）
+def plot_absolute_parallel(df, color_col, title):
+    plt.figure(figsize=(15, 8))
+    ax = plt.gca()
+    
+    params = ['lambda1', 'lambda2', 'distance1', 'distance2']
+    n_params = len(params)
+
+    rangeLambdas = np.concatenate([
+        np.arange(0.01, 0.1, 0.02), np.arange(0.1, 1, 0.2)
+    ])
+    distanceDs = np.concatenate([
+        np.arange(0.1, 1, 0.2)
+    ])
+    models = [
+        ThreeBody(l1, l2, d1, d2, agentsNum=200, boundaryLength=5,
+                tqdm=True, overWrite=False)
+        for l1, l2, d1, d2  in product(rangeLambdas, rangeLambdas, distanceDs, distanceDs)
+    ]
+    
+    data = {
+        'lambda1': [],
+        'lambda2': [],
+        'distance1': [],
+        'distance2': [],
+        'R_c': [],
+        'ΔΩ': [],
+        'Symmetric_Ratio': []
+    }
+    
+    for model in models:
+        R_c, Domega, symmetric_ratio = compute_cluster_order_parameters(model)
+        data['lambda1'].append(getattr(model, 'strengthLambda1'))
+        data['lambda2'].append(getattr(model, 'strengthLambda2'))
+        data['distance1'].append(getattr(model, 'distanceD1'))
+        data['distance2'].append(getattr(model,'distanceD2'))
+        data['R_c'].append(R_c)
+        data['ΔΩ'].append(Domega)
+        data['Symmetric_Ratio'].append(symmetric_ratio)
+
+    # 创建网格数据
+    df = pd.DataFrame(data)
+
+    # 创建绝对数值颜色映射
+    cmap, norm = create_absolute_colormap(
+        vmin=df[color_col].min(),
+        vmax=df[color_col].max()
+    )
+    
+    # 绘制每条曲线（使用原始绝对数值）
+    for idx in df.index:
+        values = df.loc[idx, params].values
+        color_val = df.loc[idx, color_col]
+        plt.plot(range(n_params), values,
+                color=cmap(norm(color_val)),  # 直接传入原始值
+                alpha=0.7,
+                linewidth=1.5,
+                solid_capstyle='round')
+    
+    # 坐标轴标注（保留原始数值范围）
+    ax.set_xticks(range(n_params))
+    ax.set_xticklabels([
+        r'$\lambda_1$ (raw)', r'$\lambda_2$ (raw)', 
+        r'$d_1$ (raw)', r'$d_2$ (raw)'
+    ], fontsize=14, rotation=45)
+    
+    # 添加颜色条（显示绝对数值）
+    sm = plt.cm.ScalarMappable(cmap=cmap, norm=norm)
+    cbar = plt.colorbar(sm, extend='both')  # 保留超出范围的颜色
+    cbar.set_label(f'Absolute {color_col}', fontsize=14)
+    cbar.ax.tick_params(labelsize=12)
+    
+    # 增强坐标网格（保持原始数值尺度）
+    for i in range(n_params):
+        ax.axvline(i, color='gray', alpha=0.2, linestyle='-')
+    
+    ax.grid(axis='y', alpha=0.4, linestyle='--')
+    plt.title(f'{title}\nColor Mapping: Absolute {color_col} Values', 
+             fontsize=16, pad=25, weight='bold')
+    plt.tight_layout()
+
+# 为每个强度指标生成独立图表
+for target in ['R_c', 'ΔΩ', 'Symmetric_Ratio']:
+    plot_absolute_parallel(df, target, 'Three-Body System Parameter Space')
+    plt.savefig(f'parallel_coords_{target}.pdf', dpi=300, bbox_inches='tight')
+    plt.show()
 
 if __name__ == "__main__":
+    
+    totalParams = []
+    totalParams.append(('lambda1', 'lambda2', 'distance1', 'distance2'))
+
+    with Pool(len(totalParams)) as p:
+        p.map(plot_absolute_parallel, totalParams) 
+        
+""" if __name__ == "__main__":
     
     param_pairs = [
         ('strengthLambda1', 'distanceD1'),
@@ -315,4 +418,4 @@ if __name__ == "__main__":
         totalParams.append((x_param, y_param, fixed_params))
 
     with Pool(len(totalParams)) as p:
-        p.map(plot_2d_phase_diagram, totalParams)
+        p.map(plot_2d_phase_diagram, totalParams) """
