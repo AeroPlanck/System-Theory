@@ -435,8 +435,8 @@ class PeriodicalPotential(Swarmalators2D):
         self.positionX = np.mod(self.positionX, self.boundaryLength)
         self.tempForK = self.K_
         self.w += self.pointThetaSpeed
-        self.temp += self.pointThetaSpeed * self.dt
-        self.phaseTheta += self.temp
+        self.temp += self.pointThetaSpeed
+        self.phaseTheta += self.temp * self.dt
         self.phaseTheta = np.mod(self.phaseTheta + np.pi, 2 * np.pi) - np.pi
 
     def __str__(self) -> str:
