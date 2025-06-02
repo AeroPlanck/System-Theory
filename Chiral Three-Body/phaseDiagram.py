@@ -187,18 +187,21 @@ def compute_symmetric_ratio_kernel(K2, k2TNum, agentsNum):
             
         K2_t = K2[t]
         symmetric_count = 0
+        valid_triples_count = 0  # 计数K2_t[i,j,k]为真的三元组
         
         # 优化循环，只检查不重复的三元组
         for i in range(agentsNum):
             for j in range(i+1, agentsNum):  # 避免重复
                 for k in range(j+1, agentsNum):  # 避免重复
-                    # 检查轮换对称性
-                    if (K2_t[i,j,k] and K2_t[j,k,i] and K2_t[k,i,j]):
-                        symmetric_count += 1
+                    # 统计K2_t[i,j,k]为真的三元组
+                    if K2_t[i,j,k]:
+                        valid_triples_count += 1
+                        # 检查轮换对称性
+                        if (K2_t[j,k,i] and K2_t[k,i,j]):
+                            symmetric_count += 1
         
-        # 计算当前帧比例
-        total_triples = agentsNum * (agentsNum - 1) * (agentsNum - 2) // 6  # 组合数C(n,3)
-        frame_results[idx] = symmetric_count / total_triples if total_triples > 0 else 0.0
+        # 计算当前帧比例，使用K2_t[i,j,k]为真的三元组数量作为分母
+        frame_results[idx] = symmetric_count / valid_triples_count if valid_triples_count > 0 else 0.0
     
     return np.mean(frame_results[:(k2TNum + 9) // 10])
 

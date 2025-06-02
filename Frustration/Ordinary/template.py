@@ -13,7 +13,8 @@ new_cmap = mcolors.LinearSegmentedColormap.from_list(
 if os.path.exists("/opt/conda/bin/ffmpeg"):
     plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 else:
-    plt.rcParams['animation.ffmpeg_path'] = "D:/Programs/ffmpeg/bin/ffmpeg.exe"
+    # plt.rcParams['animation.ffmpeg_path'] = "D:/Programs/ffmpeg/bin/ffmpeg.exe"
+    pass
 
 
 class Swarmalators:

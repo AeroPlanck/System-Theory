@@ -31,7 +31,8 @@ plt.rcParams['font.family'] = 'STIXGeneral'
 if os.path.exists("/opt/conda/bin/ffmpeg"):
     plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 else:
-    plt.rcParams['animation.ffmpeg_path'] = "D:/Programs/ffmpeg/bin/ffmpeg.exe"
+    # plt.rcParams['animation.ffmpeg_path'] = "D:/Programs/ffmpeg/bin/ffmpeg.exe"
+    pass
 
 sys.path.append("..")
 from template import Swarmalators2D
@@ -184,7 +185,7 @@ plt.rcParams['font.family'] = 'STIXGeneral'
 if os.path.exists("/opt/conda/bin/ffmpeg"):
     plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 else:
-    plt.rcParams['animation.ffmpeg_path'] = "D:/Programs/ffmpeg/bin/ffmpeg.exe"
+    pass
 
 sys.path.append("..")
 from template import Swarmalators2D
@@ -319,45 +320,76 @@ def draw_mp4(model):
         np.concatenate([np.ones(model.agentsNum // 2), np.zeros(model.agentsNum // 2)]).astype(bool), 
         np.concatenate([np.zeros(model.agentsNum // 2), np.ones(model.agentsNum // 2)]).astype(bool)
     )
+    
+    # 设置更大的图形尺寸以容纳两个colorbar
+    plt.rcParams['figure.figsize'] = (14, 6)
 
     def plot_frame(i):
         pbar.update(1)
         positionX = totalPositionX[i]
         phaseTheta = totalPhaseTheta[i]
+        pointTheta = totalPointTheta[i]
+        phaseThetaVelocity = pointTheta / model.dt
         fig.clear()
         ax1 = plt.subplot(1, 2, 1)
-        ax1.quiver(
-            positionX[class1, 0], positionX[class1, 1],
-            np.cos(phaseTheta[class1]), np.sin(phaseTheta[class1]), color='tomato'
+        
+        # 使用colormap根据phaseThetaVelocity值映射颜色
+        # 首先确定phaseThetaVelocity的范围以正确标准化颜色
+        min_vel = np.min(totalPointTheta / model.dt)
+        max_vel = np.max(totalPointTheta / model.dt)
+        norm = plt.Normalize(min_vel, max_vel) # 使用实际的速度范围
+        cmap = plt.cm.jet
+        
+        # 所有箭头使用同一个quiver，颜色由phaseThetaVelocity决定
+        q = ax1.quiver(
+            positionX[:, 0], positionX[:, 1],
+            np.cos(phaseTheta), np.sin(phaseTheta), 
+            phaseThetaVelocity, cmap=cmap, norm=norm
         )
-        ax1.quiver(
-            positionX[class2, 0], positionX[class2, 1],
-            np.cos(phaseTheta[class2]), np.sin(phaseTheta[class2]), color='dodgerblue'
-        )
+        
+        # 添加colorbar，调整大小和位置与3D图保持一致
+        cbar = plt.colorbar(q, ax=ax1, shrink=0.7, pad=0.02, aspect=15)
+        cbar.set_label(r'$\dot{\theta}$')
+        
         ax1.set_xlim(0, 10)
         ax1.set_ylim(0, 10)
 
         ax2 = plt.subplot(1, 2, 2, projection='3d')
-        hist, bins = np.histogram(phaseTheta[class1], bins=100, range=(-np.pi, np.pi))
-        # print(np.array([np.zeros_like(hist), hist]).shape)
-        ax2.plot_surface(
+        # 3D图保持原来的设定，使用phaseTheta的分布
+        hist, bins = np.histogram(phaseTheta, bins=100, range=(-np.pi, np.pi))
+        
+        # 为3D图创建独立的颜色映射，基于phaseTheta的范围
+        norm_3d = plt.Normalize(-np.pi, np.pi)  # 使用phaseTheta的范围
+        cmap_3d = plt.cm.jet  # 可以使用相同的colormap但独立的norm
+        
+        # 根据bins的中心值创建颜色映射
+        bin_centers = (bins[:-1] + bins[1:]) / 2
+        colors_for_3d = cmap_3d(norm_3d(bin_centers))  # 使用独立的norm_3d
+        
+        # 创建3D表面
+        surf = ax2.plot_surface(
             np.cos(bins[:-1]), np.sin(bins[:-1]), 
             np.array([np.zeros_like(hist), hist]), 
-            color='tomato', alpha=0.5, edgecolor="tomato"
+            facecolors=colors_for_3d.reshape(1, -1, 4),
+            alpha=0.7
         )
-        hist, bins = np.histogram(phaseTheta[class2], bins=100, range=(-np.pi, np.pi))
-        ax2.plot_surface(
-            np.cos(bins[:-1]) + shift, np.sin(bins[:-1]) + shift,
-            np.array([np.zeros_like(hist), hist]), 
-            color='dodgerblue', alpha=0.5, edgecolor="dodgerblue"
-        )
+        
+        # 为3D图添加独立的colorbar，调整大小和位置避免重叠
+        cbar_3d = plt.colorbar(plt.cm.ScalarMappable(norm=norm_3d, cmap=cmap_3d), 
+                              ax=ax2, shrink=0.7, pad=0.1, aspect=15)
+        cbar_3d.set_label(r'$\theta$')  # 标签为theta而不是theta_dot
+
         ax2.set_xlabel(r"$\cos(\theta_I)$")
         ax2.set_ylabel(r"$\sin(\theta_I)$")
         ax2.set_zlabel("Count")
 
     mp4TNum = totalPositionX.shape[0]
     pbar = tqdm(total=mp4TNum)
-    fig, ax = plt.subplots(figsize=(11, 5))
+    
+    # 创建图形并调整子图之间的间距
+    fig = plt.figure(figsize=(14, 6))
+    plt.subplots_adjust(wspace=0.3)  # 增加子图之间的水平间距
+    
     ani = ma.FuncAnimation(fig, plot_frame, frames=np.arange(0, mp4TNum, 1), interval=50, repeat=False)
     # 编码格式采用H.265
     ani.save(f"./mp4/{model}.mp4", dpi=250, writer="ffmpeg")
