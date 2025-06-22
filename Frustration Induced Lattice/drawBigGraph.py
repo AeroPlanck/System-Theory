@@ -44,35 +44,37 @@ plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 
-from main import *
+from fermi_coupling import *
 from multiprocessing import Pool
 
-SAVE_PATH = r"E:\MS_ExperimentData\general"
+SAVE_PATH = ".\data"
 
 
 phaseLags = np.linspace(-1, 1, 21) * np.pi
 omegaMins = [0]# [0.1]  # np.linspace(0.1e5, 3, 21)
 randomSeed = 10  # Done: [9]
-strengthLambda = 20
-distanceD0 = 1
+strengthLambdas = np.linspace(0.1, 2, 5) * 1000
+distanceR0 = 2
 deltaOmega = 0  # Done: [1]
 
 models = [
     PhaseLagPatternFormation(
-        strengthK=strengthLambda, distanceD0=distanceD0, phaseLagA0=phaseLag,
+        strengthK=strengthLambda, distanceR0=distanceR0, phaseLagA0=phaseLag,
         # initPhaseTheta=np.zeros(1000), 
         omegaMin=omegaMin, deltaOmega=deltaOmega, dt=0.001,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
         randomSeed=randomSeed, overWrite=True
     )
+    for strengthLambda in strengthLambdas
     for omegaMin in omegaMins
     for phaseLag in phaseLags
 ]
+
 sas = [StateAnalysis(model) for model in tqdm(models)]
 
 fig, axs = plt.subplots(
-    len(omegaMins), len(phaseLags), 
-    figsize=(len(phaseLags) * 4, len(omegaMins) * 4)
+    len(strengthLambdas), len(phaseLags), 
+    figsize=(len(phaseLags), len(strengthLambdas) * 4)
 )
 axs = axs.flatten()
 
@@ -88,7 +90,7 @@ for i, sa in tqdm(enumerate(sas), total=len(sas)):
     ax.set_yticks([])
     ax.set_title(
         rf"$\alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
-        f"\ \omega_{{\min}}={sa.model.omegaMin:.2f}$", 
+        f"\ K={sa.model.strengthK:.2f}$", 
         fontsize=16, loc="left"
     )
     ax.set_aspect("equal")
@@ -97,7 +99,7 @@ plt.tight_layout()
 
 plt.savefig(
     f"./figs/MeanFieldChiralInducedPhaseLag_"
-    f"l{strengthLambda}_d{distanceD0}_dO{deltaOmega}_rS{randomSeed}_micro.png", 
+    f"d{distanceR0}_w{deltaOmega}_rS{randomSeed}_micro.png", 
     bbox_inches="tight"
 )
 plt.close()
