@@ -77,10 +77,10 @@ def draw_frame(sa: StateAnalysis):
 if __name__ == "__main__":
 
     model = FermiCouplingPhaseLagPatternFormation(
-    strengthK=20, distanceR0=1, phaseLagA0=0.6 * np.pi, fermiBeta=30,
+    strengthK=20, distanceR0=3, phaseLagA0=0.6 * np.pi, fermiBeta=30,
     # initPhaseTheta=np.zeros(1000), 
     omegaMin=0, deltaOmega=0,
-    agentsNum=120, dt=0.001,
+    agentsNum=1000, dt=0.001,
     tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
     randomSeed=9, overWrite=False
 )

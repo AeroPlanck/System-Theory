@@ -44,13 +44,13 @@ plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 
-from main import *
+from fermi_coupling import *
 from multiprocessing import Pool
 
-SAVE_PATH = r"E:\MS_ExperimentData\general"
+SAVE_PATH = "./data"
 
 
-def run_model(model: PhaseLagPatternFormation):
+def run_model(model: FermiCouplingPhaseLagPatternFormation):
     model.run(80000)
 
 
@@ -58,23 +58,32 @@ if __name__ == "__main__":
     phaseLags = np.linspace(-1, 1, 21) * np.pi
     omegaMins = [0]# [0.1]  # np.linspace(0.1e5, 3, 21)
     randomSeed = 10  # Done: [9]
-    strengthLambda = 20
-    distanceD0 = 1
+    strengthLambdas = np.linspace(100, 2000, 5) 
+    distanceR0 = 2
     deltaOmega = 0  # Done: [1]
 
     models = [
-        PhaseLagPatternFormationNoCounter(
-            strengthK=strengthLambda, distanceD0=distanceD0, phaseLagA0=phaseLag,
-            # initPhaseTheta=np.zeros(1000), 
-            omegaMin=omegaMin, deltaOmega=deltaOmega, dt=0.001,
-            tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
-            randomSeed=randomSeed, overWrite=False
+        FermiCouplingPhaseLagPatternFormation(
+                strengthK=strengthLambda, distanceR0=distanceR0, phaseLagA0=phaseLag, fermiBeta=30,
+                # initPhaseTheta=np.zeros(1000), 
+                omegaMin=omegaMin, deltaOmega=deltaOmega,
+                agentsNum=1000, dt=0.001,
+                tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
+                randomSeed=9, overWrite=True
         )
+        # PhaseLagPatternFormationNoCounter(
+        #     strengthK=strengthLambda, distanceD0=distanceD0, phaseLagA0=phaseLag,
+        #     # initPhaseTheta=np.zeros(1000), 
+        #     omegaMin=omegaMin, deltaOmega=deltaOmega, dt=0.001,
+        #     tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
+        #     randomSeed=randomSeed, overWrite=False
+        # )
+        for strengthLambda in strengthLambdas
         for omegaMin in omegaMins
         for phaseLag in phaseLags
     ]
 
-    with Pool(7) as p:
+    with Pool(40) as p:
         p.map(
             run_model, 
             tqdm(models, desc="run models", total=len(models))
