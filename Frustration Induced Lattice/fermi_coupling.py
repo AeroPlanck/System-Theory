@@ -462,7 +462,7 @@ class StateAnalysis:
                                     self.model.boundaryLength, self.model.halfBoundaryLength)
         A = np.where(self.model.distance_x(deltaX) <= self.model.distanceR0, 1, 0)
         return self.model._calc_dot_phase(deltaTheta, A, self.model.freqOmega, 
-                                        self.model.strengthK, self.model.phaseLagA0)
+                                        self.model.strengthK, self.model.phaseLagA0, self.model.agentsNum)
     
     def calc_rotation_center(self, positionX: np.ndarray = None, phaseTheta: np.ndarray = None,
                        lookIdx: int = -1) -> np.ndarray:
