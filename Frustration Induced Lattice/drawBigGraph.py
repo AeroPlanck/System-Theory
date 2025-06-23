@@ -47,19 +47,19 @@ plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 from fermi_coupling import *
 from multiprocessing import Pool
 
-SAVE_PATH = ".\data"
+SAVE_PATH = "./data"
 
 
 phaseLags = np.linspace(-1, 1, 21) * np.pi
 omegaMins = [0]# [0.1]  # np.linspace(0.1e5, 3, 21)
-randomSeed = 10  # Done: [9]
+randomSeed = 9  # Done: [9]
 strengthLambdas = np.linspace(0.1, 2, 5) * 1000
 distanceR0 = 2
 deltaOmega = 0  # Done: [1]
 
 models = [
-    PhaseLagPatternFormation(
-        strengthK=strengthLambda, distanceR0=distanceR0, phaseLagA0=phaseLag,
+    FermiCouplingPhaseLagPatternFormation(
+        strengthK=strengthLambda, distanceR0=distanceR0, phaseLagA0=phaseLag, fermiBeta = 30,
         # initPhaseTheta=np.zeros(1000), 
         omegaMin=omegaMin, deltaOmega=deltaOmega, dt=0.001,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
@@ -90,7 +90,7 @@ for i, sa in tqdm(enumerate(sas), total=len(sas)):
     ax.set_yticks([])
     ax.set_title(
         rf"$\alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
-        f"\ K={sa.model.strengthK:.2f}$", 
+        f"K={sa.model.strengthK:.2f}$", 
         fontsize=16, loc="left"
     )
     ax.set_aspect("equal")
