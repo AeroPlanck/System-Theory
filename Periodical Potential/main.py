@@ -317,7 +317,7 @@ class PeriodicalPotential(Swarmalators2D):
     def __init__(self, strengthLambda: float,
                  distanceD: float,  gamma: float, kappa: float, L: float, boundaryLength: float = 5,
                  agentsNum: int = 1000, dt: float = 0.01,
-                 tqdm: bool = False, savePath: str = None, shotsnaps: int = 5,
+                 tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
                  uniform: bool = True, randomSeed: int = 10, overWrite: bool = False) -> None:
 
         self.speed = None
