@@ -10,6 +10,10 @@ import subprocess
 import imageio
 import os
 import shutil
+import sys
+sys.path.append("..")
+
+from PJT_Frustration_Induced_Crystallize.main import *
 
 new_cmap = mcolors.LinearSegmentedColormap.from_list(
     "new", plt.cm.jet(np.linspace(0, 1, 256)) * 0.85, N=256
@@ -40,19 +44,17 @@ plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['font.family'] = 'STIXGeneral'
 # plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 
-""" from main import * """
-from fermi_coupling import *
 from multiprocessing import Pool
 import pandas as pd
 
 
-# SAVE_PATH = "./data"
-# MP4_PATH = "./mp4"
-# MP4_TEMP_PATH = "./mp4_temp"
+# SAVE_PATH = r"E:\MS_ExperimentData\general"
+# MP4_PATH = r"E:\MS_ExperimentData\mp4"
+# MP4_TEMP_PATH = r"E:\MS_ExperimentData\mp4_temp"
 
-SAVE_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\data"
-MP4_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4"
-MP4_TEMP_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4_temp"
+SAVE_PATH = r"D:\MS_ExperimentData\general"
+MP4_PATH = r"D:\MS_ExperimentData\mp4"
+MP4_TEMP_PATH = r"D:\MS_ExperimentData\mp4_temp"
 
 
 def draw_frame(sa: StateAnalysis):
@@ -69,6 +71,8 @@ def draw_frame(sa: StateAnalysis):
     #     np.arange(0 + xShift, sa.model.boundaryLength + xShift + 1),
     #     np.arange(0, sa.model.boundaryLength + 1))
     # plt.tick_params(length=3, direction="in")
+    plt.xlim(4, 6)
+    plt.ylim(4, 6)
 
     plt.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
     plt.close()
@@ -76,28 +80,19 @@ def draw_frame(sa: StateAnalysis):
 
 if __name__ == "__main__":
 
-    model = FermiCouplingPhaseLagPatternFormation(
-    strengthK=20, distanceR0=3, phaseLagA0=0.6 * np.pi, fermiBeta=30,
-    # initPhaseTheta=np.zeros(1000), 
-    omegaMin=0, deltaOmega=0,
-    agentsNum=1000, dt=0.001,
-    tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
-    randomSeed=9, overWrite=False
-)
-
-    """ model = PhaseLagPatternFormation(
+    model = PhaseLagPatternFormation(
         strengthK=20, distanceD0=1, phaseLagA0=0.6 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         omegaMin=0, deltaOmega=0,
-        dt=0.001,
-        tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
+        agentsNum=102, dt=0.001,
+        tqdm=True, savePath=SAVE_PATH, shotsnaps=1, 
         randomSeed=9, overWrite=True
-    ) """
+    )
 
-    """ model = PhaseLagPatternFormation1D(strengthK=20, distanceD0=1, phaseLagA0=0.6*np.pi, 
-                                       dt=0.001,
-                                       tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
-                                       randomSeed=9, overWrite=True) """
+    # model = PhaseLagPatternFormation1D(strengthK=20, distanceD0=1, phaseLagA0=0.6*np.pi, 
+    #                                    dt=0.001,
+    #                                    tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
+    #                                    randomSeed=9, overWrite=True)
 
     sa = StateAnalysis(model)
     subSaList = list()
