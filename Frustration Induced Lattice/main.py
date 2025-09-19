@@ -26,11 +26,13 @@ cmap = mcolors.LinearSegmentedColormap.from_list("cmap", colors)
 new_cmap = mcolors.LinearSegmentedColormap.from_list(
     "new", plt.cm.hsv(np.linspace(0, 1, 256)) * 0.85, N=256
 )
-with open("../swarmalatorlib/hex_colors.json", "r", encoding="utf-8") as f:
+import os
+script_dir = os.path.dirname(os.path.abspath(__file__))
+hex_colors_path = os.path.join(script_dir, "swarmalatorlib", "hex_colors.json")
+with open(hex_colors_path, "r", encoding="utf-8") as f:
     hexColors = json.load(f)
 hexCmap = mcolors.LinearSegmentedColormap.from_list("cmap", hexColors)
 
-sys.path.append("..")
 from swarmalatorlib.template import Swarmalators2D
 
 
@@ -567,7 +569,9 @@ class StateAnalysis:
             return
         self.model = model
         
-        targetPath = f"{self.model.savePath}/{self.model}.h5"
+        # 使用与模型保存时相同的简化文件名
+        class_name = self.model.__class__.__name__
+        targetPath = f"{self.model.savePath}/{class_name}_{self.model.randomSeed}.h5"
         
         totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
         TNum = totalPhaseTheta.shape[0] // self.model.agentsNum
@@ -788,7 +792,7 @@ class StateAnalysis:
     
         return newClasses
     
-    def calc_replative_distance(self, position1: np.ndarray, position2: np.ndarray):  #  -> float | np.ndarray
+    def calc_relative_distance(self, position1: np.ndarray, position2: np.ndarray):  #  -> float | np.ndarray
         deltaX = self.model._delta_x(position1, position2, 
                                      self.model.boundaryLength, 
                                      self.model.halfBoundaryLength)
