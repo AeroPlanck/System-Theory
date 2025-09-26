@@ -81,7 +81,7 @@ if __name__ == "__main__":
         omegaMin=0, deltaOmega=3,
         agentsNum=1000, dt=0.005,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
-        randomSeed=10, overWrite=False
+        randomSeed=10, overWrite=True
     )
 
     # model = PhaseLagPatternFormation1D(strengthK=20, distanceD0=1, phaseLagA0=0.6*np.pi, 
