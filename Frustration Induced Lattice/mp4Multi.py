@@ -13,7 +13,7 @@ import shutil
 import sys
 sys.path.append("..")
 
-from PJT_Frustration_Induced_Crystallize.main import *
+from main import *
 
 new_cmap = mcolors.LinearSegmentedColormap.from_list(
     "new", plt.cm.jet(np.linspace(0, 1, 256)) * 0.85, N=256
@@ -47,14 +47,9 @@ plt.rcParams['font.family'] = 'STIXGeneral'
 from multiprocessing import Pool
 import pandas as pd
 
-
-# SAVE_PATH = r"E:\MS_ExperimentData\general"
-# MP4_PATH = r"E:\MS_ExperimentData\mp4"
-# MP4_TEMP_PATH = r"E:\MS_ExperimentData\mp4_temp"
-
-SAVE_PATH = r"D:\MS_ExperimentData\general"
-MP4_PATH = r"D:\MS_ExperimentData\mp4"
-MP4_TEMP_PATH = r"D:\MS_ExperimentData\mp4_temp"
+SAVE_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\data"
+MP4_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4"
+MP4_TEMP_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4_temp"
 
 
 def draw_frame(sa: StateAnalysis):
@@ -64,15 +59,15 @@ def draw_frame(sa: StateAnalysis):
 
     sa.plot_spatial(ax=None, colorsBy="phase")
 
-    # xShift = 0.
-    # plt.xlim(0 + xShift, sa.model.boundaryLength + xShift)
-    # plt.ylim(0, sa.model.boundaryLength)
+    xShift = 0.
+    plt.xlim(0 + xShift, sa.model.boundaryLength + xShift)
+    plt.ylim(0, sa.model.boundaryLength)
     # plt.xticks(
     #     np.arange(0 + xShift, sa.model.boundaryLength + xShift + 1),
     #     np.arange(0, sa.model.boundaryLength + 1))
     # plt.tick_params(length=3, direction="in")
-    plt.xlim(4, 6)
-    plt.ylim(4, 6)
+    # plt.xlim(4, 6)
+    # plt.ylim(4, 6)
 
     plt.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
     plt.close()
@@ -81,12 +76,12 @@ def draw_frame(sa: StateAnalysis):
 if __name__ == "__main__":
 
     model = PhaseLagPatternFormation(
-        strengthK=20, distanceD0=1, phaseLagA0=0.6 * np.pi,
+        strengthK=20, distanceD0=1, phaseLagA0=1.5 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
-        omegaMin=0, deltaOmega=0,
-        agentsNum=102, dt=0.001,
-        tqdm=True, savePath=SAVE_PATH, shotsnaps=1, 
-        randomSeed=9, overWrite=True
+        omegaMin=0, deltaOmega=3,
+        agentsNum=1000, dt=0.005,
+        tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
+        randomSeed=10, overWrite=False
     )
 
     # model = PhaseLagPatternFormation1D(strengthK=20, distanceD0=1, phaseLagA0=0.6*np.pi, 
