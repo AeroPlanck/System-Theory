@@ -275,7 +275,214 @@ class PhaseLagPatternFormation05pi(PhaseLagPatternFormation):
             deltaTheta = phaseTheta[neighborIdxs][A] - phaseTheta[i]
             coupling[i] = np.mean(np.cos(deltaTheta)) - 1
         return strengthK * coupling + freqOmega
+   
+class CollisionBoundaryPatternFormation(Swarmalators2D):
+    def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
+                 boundaryLength: float = 7, speedV: float = 3.0,
+                 freqDist: str = "uniform", initPhaseTheta: np.ndarray = None,
+                 omegaMin: float = 0., deltaOmega: float = 1.0,
+                 agentsNum: int = 1000, dt: float = 0.01,
+                 tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
+                 randomSeed: int = 10, overWrite: bool = False) -> None:
+        
+        assert freqDist in ["uniform", "cauchy"]
+        
+        if freqDist == "cauchy":
+            omegaMin = 0.0
+            deltaOmega = 0.0
+
+        self.strengthK = strengthK
+        self.distanceD0 = distanceD0
+        self.phaseLagA0 = phaseLagA0
+        self.boundaryLength = boundaryLength
+        self.speedV = speedV
+        self.freqDist = freqDist
+        self.initPhaseTheta = initPhaseTheta
+        self.omegaMin = omegaMin
+        self.deltaOmega = deltaOmega
+        self.agentsNum = agentsNum
+        self.dt = dt
+        self.tqdm = tqdm
+        self.savePath = savePath
+        self.shotsnaps = shotsnaps
+        self.randomSeed = randomSeed
+        self.overWrite = overWrite
+        
+        np.random.seed(randomSeed)
+        self.positionX = np.random.random((agentsNum, 2)) * boundaryLength
+        self.phaseTheta = np.random.random(agentsNum) * 2 * np.pi
+        if initPhaseTheta is not None:
+            assert len(initPhaseTheta) == agentsNum, "initPhaseTheta must match agentsNum"
+            self.phaseTheta = initPhaseTheta
+        if freqDist == "uniform":
+            posOmega = np.random.uniform(omegaMin, omegaMin + deltaOmega, agentsNum // 2)
+        else:
+            posOmega = np.abs(np.random.standard_cauchy(agentsNum // 2))
+        self.freqOmega = np.concatenate([
+            posOmega, -posOmega
+        ])
+        self.freqOmega = np.sort(self.freqOmega)
+        self.halfBoundaryLength = boundaryLength / 2
+        self.counts = 0
+        self.dotThetaParams = (
+            self.boundaryLength,
+            self.halfBoundaryLength,
+            self.distanceD0,
+            self.strengthK,
+            self.phaseLagA0,
+        )
     
+    @staticmethod
+    @nb.njit
+    def _direction(phaseTheta: np.ndarray) -> np.ndarray:
+        direction = np.zeros((phaseTheta.shape[0], 2))
+        direction[:, 0] = np.cos(phaseTheta)
+        direction[:, 1] = np.sin(phaseTheta)
+        return direction
+
+    @property
+    def dotPosition(self) -> np.ndarray:
+        return self.speedV * self._direction(self.phaseTheta)
+
+    @property
+    def dotPhase(self) -> np.ndarray:
+        return self._calc_dot_phase_collision(
+                positionX=self.positionX, 
+                phaseTheta=self.phaseTheta, 
+                freqOmega=self.freqOmega, 
+                params=self.dotThetaParams
+            )
+    
+    @staticmethod
+    @nb.njit
+    def _calc_dot_phase_collision(positionX: np.ndarray, phaseTheta: np.ndarray, 
+                                  freqOmega: np.ndarray, params: Tuple[float]) -> np.ndarray:
+        agentsNum = positionX.shape[0]
+        boundaryLength, halfBoundaryLength, distanceD0, strengthK, phaseLagA0 = params
+
+        coupling = np.zeros(agentsNum)
+        for i in range(agentsNum):
+            # 对于碰撞边界，不需要考虑周期性，直接计算欧几里得距离
+            distances = np.sqrt(np.sum((positionX - positionX[i])**2, axis=1))
+            neighborIdxs = np.where((distances <= distanceD0) & (distances > 0))[0]
+            
+            if neighborIdxs.size == 0:
+                continue
+
+            deltaTheta = phaseTheta[neighborIdxs] - phaseTheta[i]
+            coupling[i] = np.mean(
+                np.sin(deltaTheta + phaseLagA0)
+            ) - np.sin(phaseLagA0)
+        return strengthK * coupling + freqOmega
+
+    @property
+    def deltaX(self) -> np.ndarray:
+        # 对于碰撞边界，直接计算欧几里得距离差
+        return self.positionX[:, np.newaxis] - self.positionX[np.newaxis, :]
+
+    @property
+    def A(self) -> np.ndarray:
+        """Adjacency matrix: 1 if |x_i - x_j| <= d0 else 0"""
+        return np.where(self.distance_x(self.deltaX) <= self.distanceD0, 1, 0)
+
+    @staticmethod
+    @nb.njit
+    def _handle_collision(positionX: np.ndarray, velocity: np.ndarray, 
+                          boundaryLength: float) -> Tuple[np.ndarray, np.ndarray]:
+        """处理碰撞边界条件"""
+        agentsNum = positionX.shape[0]
+        newPositionX = positionX.copy()
+        newVelocity = velocity.copy()
+        
+        for i in range(agentsNum):
+            # 检查左边界 (x = 0)
+            if newPositionX[i, 0] < 0:
+                newPositionX[i, 0] = 0  # 将粒子位置设置到边界上
+                newVelocity[i, 0] = -newVelocity[i, 0]   # 反转x方向速度
+            
+            # 检查右边界 (x = boundaryLength)
+            elif newPositionX[i, 0] > boundaryLength:
+                newPositionX[i, 0] = boundaryLength  # 将粒子位置设置到边界上
+                newVelocity[i, 0] = -newVelocity[i, 0]   # 反转x方向速度
+            
+            # 检查下边界 (y = 0)
+            if newPositionX[i, 1] < 0:
+                newPositionX[i, 1] = 0  # 将粒子位置设置到边界上
+                newVelocity[i, 1] = -newVelocity[i, 1]   # 反转y方向速度
+            
+            # 检查上边界 (y = boundaryLength)
+            elif newPositionX[i, 1] > boundaryLength:
+                newPositionX[i, 1] = boundaryLength  # 将粒子位置设置到边界上
+                newVelocity[i, 1] = -newVelocity[i, 1]   # 反转y方向速度
+        
+        return newPositionX, newVelocity
+
+    def update(self):
+        dotPos = self.dotPosition
+        dotPhase = self.dotPhase
+        
+        # 计算新位置
+        newPositionX = self.positionX + dotPos * self.dt
+        
+        # 处理碰撞边界条件
+        self.positionX, correctedVelocity = self._handle_collision(
+            newPositionX, dotPos, self.boundaryLength
+        )
+        
+        # 如果发生碰撞，需要更新相位（因为速度方向改变了）
+        # 检查哪些粒子发生了碰撞（速度方向改变）
+        collision_mask = ~np.isclose(correctedVelocity[:, 0], dotPos[:, 0]) | ~np.isclose(correctedVelocity[:, 1], dotPos[:, 1])
+        if np.any(collision_mask):
+            # 根据新的速度方向更新相位，但只更新发生碰撞的粒子
+            newPhaseTheta = np.arctan2(correctedVelocity[:, 1], correctedVelocity[:, 0])
+            self.phaseTheta[collision_mask] = newPhaseTheta[collision_mask]
+        
+        # 更新相位（基于原始的相位演化）
+        self.phaseTheta = np.mod(self.phaseTheta + dotPhase * self.dt, 2 * np.pi)
+
+    def append(self):
+        if self.store is not None:
+            if self.counts % self.shotsnaps != 0:
+                return
+            self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
+            self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
+    
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+        if ax is None:
+            _, ax = plt.subplots(figsize=(5, 5))
+        
+        if colorsBy == "freq":
+            colors = (
+                ["red"] * (self.freqOmega >= 0).sum() + 
+                ["#414CC7"] * (self.freqOmega < 0).sum()
+            )
+        elif colorsBy == "phase":
+            colors = [hexCmap(i) for i in
+                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
+            ]
+
+        ax.quiver(
+            self.positionX[:, 0], self.positionX[:, 1],
+            np.cos(self.phaseTheta), np.sin(self.phaseTheta), 
+            scale_units='inches', scale=15.0, width=0.002,
+            color=colors
+        )
+        ax.set_xlim(0, self.boundaryLength)
+        ax.set_ylim(0, self.boundaryLength)
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}("
+            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
+            f"phaseLagA0={self.phaseLagA0:.3f},boundaryLength={self.boundaryLength:.1f},"
+            f"speedV={self.speedV:.1f},freqDist={self.freqDist},"
+            f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
+            f"omegaMin={self.omegaMin:.3f},deltaOmega={self.deltaOmega:.3f},"
+            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
+            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            ")"
+        )
+
 
 class CellAndSingleParticle(PhaseLagPatternFormation):
     def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
