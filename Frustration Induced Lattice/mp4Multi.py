@@ -76,7 +76,7 @@ def draw_frame(sa: StateAnalysis):
 if __name__ == "__main__":
 
     model = CollisionBoundaryPatternFormation(
-        strengthK=20, distanceD0=1, phaseLagA0=1 * np.pi,
+        strengthK=20, distanceD0=1, phaseLagA0=0.8 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         omegaMin=0, deltaOmega=3,
         agentsNum=1000, dt=0.005,
