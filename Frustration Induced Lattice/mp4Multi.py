@@ -75,13 +75,13 @@ def draw_frame(sa: StateAnalysis):
 
 if __name__ == "__main__":
 
-    model = PhaseLagPatternFormation(
-        strengthK=20, distanceD0=1, phaseLagA0=1.5 * np.pi,
+    model = CollisionBoundaryPatternFormation(
+        strengthK=20, distanceD0=1, phaseLagA0=1 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         omegaMin=0, deltaOmega=3,
         agentsNum=1000, dt=0.005,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
-        randomSeed=10, overWrite=False
+        randomSeed=9, overWrite=False
     )
 
     # model = PhaseLagPatternFormation1D(strengthK=20, distanceD0=1, phaseLagA0=0.6*np.pi, 

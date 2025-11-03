@@ -45,11 +45,14 @@ class PhaseLagPatternFormation(Swarmalators2D):
                  tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
                  randomSeed: int = 10, overWrite: bool = False) -> None:
         
-        assert freqDist in ["uniform", "cauchy"]
+        assert freqDist in ["uniform", "cauchy", "identical"]
         
         if freqDist == "cauchy":
             omegaMin = 0.0
             deltaOmega = 0.0
+        elif freqDist == "identical":
+            # For identical distribution, all agents have the same frequency
+            pass
 
         self.strengthK = strengthK
         self.distanceD0 = distanceD0
@@ -76,7 +79,10 @@ class PhaseLagPatternFormation(Swarmalators2D):
             self.phaseTheta = initPhaseTheta
         if freqDist == "uniform":
             posOmega = np.random.uniform(omegaMin, omegaMin + deltaOmega, agentsNum // 2)
-        else:
+        elif freqDist == "identical":
+            # All agents have the same frequency (omegaMin)
+            posOmega = np.full(agentsNum // 2, omegaMin)
+        else:  # cauchy
             posOmega = np.abs(np.random.standard_cauchy(agentsNum // 2))
         self.freqOmega = np.concatenate([
             posOmega, -posOmega
@@ -276,20 +282,24 @@ class PhaseLagPatternFormation05pi(PhaseLagPatternFormation):
             coupling[i] = np.mean(np.cos(deltaTheta)) - 1
         return strengthK * coupling + freqOmega
    
+
 class CollisionBoundaryPatternFormation(Swarmalators2D):
     def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
                  boundaryLength: float = 7, speedV: float = 3.0,
-                 freqDist: str = "uniform", initPhaseTheta: np.ndarray = None,
+                 freqDist: str = "identical", initPhaseTheta: np.ndarray = None,
                  omegaMin: float = 0., deltaOmega: float = 1.0,
                  agentsNum: int = 1000, dt: float = 0.01,
                  tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
                  randomSeed: int = 10, overWrite: bool = False) -> None:
         
-        assert freqDist in ["uniform", "cauchy"]
+        assert freqDist in ["uniform", "cauchy", "identical"]
         
         if freqDist == "cauchy":
             omegaMin = 0.0
             deltaOmega = 0.0
+        elif freqDist == "identical":
+            # For identical distribution, all agents have the same frequency
+            pass
 
         self.strengthK = strengthK
         self.distanceD0 = distanceD0
@@ -316,7 +326,10 @@ class CollisionBoundaryPatternFormation(Swarmalators2D):
             self.phaseTheta = initPhaseTheta
         if freqDist == "uniform":
             posOmega = np.random.uniform(omegaMin, omegaMin + deltaOmega, agentsNum // 2)
-        else:
+        elif freqDist == "identical":
+            # All agents have the same frequency (omegaMin)
+            posOmega = np.full(agentsNum // 2, omegaMin)
+        else:  # cauchy
             posOmega = np.abs(np.random.standard_cauchy(agentsNum // 2))
         self.freqOmega = np.concatenate([
             posOmega, -posOmega
