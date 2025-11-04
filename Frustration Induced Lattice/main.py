@@ -286,7 +286,7 @@ class PhaseLagPatternFormation05pi(PhaseLagPatternFormation):
 class CollisionBoundaryPatternFormation(Swarmalators2D):
     def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
                  boundaryLength: float = 7, speedV: float = 3.0,
-                 freqDist: str = "identical", initPhaseTheta: np.ndarray = None,
+                 freqDist: str = "uniform", initPhaseTheta: np.ndarray = None,
                  omegaMin: float = 0., deltaOmega: float = 1.0,
                  agentsNum: int = 1000, dt: float = 0.01,
                  tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
