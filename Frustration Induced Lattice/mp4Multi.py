@@ -76,7 +76,7 @@ def draw_frame(sa: StateAnalysis):
 if __name__ == "__main__":
 
     model = CollisionBoundaryPatternFormation(
-        strengthK=20, distanceD0=5, phaseLagA0=-0.6 * np.pi,
+        strengthK=20, distanceD0=1, phaseLagA0=0.4 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         omegaMin=0, deltaOmega=3,
         agentsNum=1000, dt=0.005,
@@ -117,7 +117,7 @@ if __name__ == "__main__":
     img = iio.imread(os.path.join(MP4_TEMP_PATH, "0.png"))
     print(img.shape)  # output: (height, width, channels)
 
-    fps = 60
+    fps = 120
     ffmpeg_command = [
         'ffmpeg',
         '-framerate', str(fps),

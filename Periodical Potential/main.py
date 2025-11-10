@@ -417,17 +417,14 @@ class PeriodicalPotential(Swarmalators2D):
             self.store.append(key="speed", value=pd.DataFrame(self.speed))
 
     def update(self):
-        speed_magnitude = np.sqrt(self.speed[:, 0] ** 2 + self.speed[:, 1] ** 2)
-        self.speed[:, 0] = speed_magnitude * np.cos(self.phaseTheta)
-        self.speed[:, 1] = speed_magnitude * np.sin(self.phaseTheta)
         self.speed[:, 0] += (
-                            -self.gamma * (speed_magnitude * np.cos(self.phaseTheta) - self.speedV0 * np.cos(self.phaseTheta))
+                            -self.gamma * (self.speed[:, 0] - self.speedV0 * np.cos(self.phaseTheta))
                             + self.kappa * (
                             np.sin(2 * np.pi * self.positionX[:, 0] / self.L)
                                             )
                             ) * self.dt
         self.speed[:, 1] += (
-                            -self.gamma * (speed_magnitude * np.sin(self.phaseTheta) - self.speedV0 * np.sin(self.phaseTheta))
+                            -self.gamma * (self.speed[:, 1] - self.speedV0 * np.sin(self.phaseTheta))
                             + self.kappa * (
                             np.sin(2 * np.pi * self.positionX[:, 1] / self.L)
                            + 0.25 * np.sin(4 * np.pi * self.positionX[:, 1] / self.L)
