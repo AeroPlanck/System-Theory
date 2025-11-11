@@ -62,21 +62,21 @@ def run_model(model: PhaseLagPatternFormation):
 
 if __name__ == "__main__":
     # phaseLags = np.linspace(-1, 1, 21) * np.pi
-    phaseLags = np.linspace(0, 1, 11) * np.pi
+    # phaseLags = np.linspace(0, 1, 11) * np.pi
     # phaseLags = [0.75 * np.pi]
-    # phaseLags = [0.6 * np.pi]
-    omegaMins = [0]  # np.linspace(1e-5, 3, 21)
+    phaseLags = [0 * np.pi]
+    omegaMins = [0] # np.linspace(1e-5, 3, 21)
     # randomSeeds = range(10)
     randomSeeds = [10]
     # strengthKs = np.linspace(4, 20, 7)  # [20]  # 
-    # strengthKs = np.linspace(1, 20, 7)
-    strengthKs = [20]
-    # distanceD0s = np.linspace(0.3, 1.1, 7)  #  np.linspace(0.1, 3, 7)  # [1]
-    distanceD0s = [1]
+    strengthKs = np.linspace(1, 20, 7)
+    # strengthKs = [20]
+    distanceD0s = np.linspace(0.1, 3, 7)  #  np.linspace(0.1, 3, 7)  # [1]
+    # distanceD0s = [1]
     deltaOmegas = [0]  # np.linspace(1e-5, 3, 21)  # [1.0]
 
     models = [
-        PhaseLagPatternFormation(
+        CollisionBoundaryPatternFormation(
             strengthK=strengthK, distanceD0=distanceD0, phaseLagA0=phaseLag,
             freqDist="uniform", initPhaseTheta=None,
             omegaMin=omegaMin, deltaOmega=deltaOmega, 
