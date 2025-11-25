@@ -114,7 +114,7 @@ class PhaseLagPatternFormation(Swarmalators2D):
     def dotPhase(self) -> np.ndarray:
         # return self._calc_dot_phase(self.deltaTheta, self.A, self.freqOmega, 
         #                             self.strengthK, self.phaseLagA0)
-        return self._calc_dot_phase2(
+        return self._calc_dot_phase_opti(
                 positionX=self.positionX, 
                 phaseTheta=self.phaseTheta, 
                 freqOmega=self.freqOmega, 
@@ -123,7 +123,7 @@ class PhaseLagPatternFormation(Swarmalators2D):
     
     @staticmethod
     @nb.njit
-    def _calc_dot_phase2(positionX: np.ndarray, phaseTheta: np.ndarray, 
+    def _calc_dot_phase_opti(positionX: np.ndarray, phaseTheta: np.ndarray, 
                          freqOmega: np.ndarray, params: Tuple[float]) -> np.ndarray:
         agentsNum = positionX.shape[0]
         boundaryLength, halfBoundaryLength, distanceD0, strengthK, phaseLagA0 = params
@@ -239,6 +239,205 @@ class PhaseLagPatternFormation(Swarmalators2D):
         )
     
 
+class PhaseLagPatternFormationBigArea(Swarmalators2D):
+    def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
+                 boundaryLength: float = 16, speedV: float = 3.0,
+                 freqDist: str = "uniform", initPhaseTheta: np.ndarray = None,
+                 omegaMin: float = 0., deltaOmega: float = 1.0,
+                 agentsNum: int = 1000, dt: float = 0.01,
+                 tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
+                 randomSeed: int = 10, overWrite: bool = False) -> None:
+        
+        assert freqDist in ["uniform", "cauchy", "identical"]
+        
+        if freqDist == "cauchy":
+            omegaMin = 0.0
+            deltaOmega = 0.0
+        elif freqDist == "identical":
+            # For identical distribution, all agents have the same frequency
+            pass
+
+        self.strengthK = strengthK
+        self.distanceD0 = distanceD0
+        self.phaseLagA0 = phaseLagA0
+        self.boundaryLength = boundaryLength
+        self.speedV = speedV
+        self.freqDist = freqDist
+        self.initPhaseTheta = initPhaseTheta
+        self.omegaMin = omegaMin
+        self.deltaOmega = deltaOmega
+        self.agentsNum = agentsNum
+        self.dt = dt
+        self.tqdm = tqdm
+        self.savePath = savePath
+        self.shotsnaps = shotsnaps
+        self.randomSeed = randomSeed
+        self.overWrite = overWrite
+        
+        np.random.seed(randomSeed)
+        self.positionX = np.random.random((agentsNum, 2)) * boundaryLength * 0.5 + boundaryLength * 0.25
+        self.phaseTheta = np.random.random(agentsNum) * 2 * np.pi
+        if initPhaseTheta is not None:
+            assert len(initPhaseTheta) == agentsNum, "initPhaseTheta must match agentsNum"
+            self.phaseTheta = initPhaseTheta
+        if freqDist == "uniform":
+            posOmega = np.random.uniform(omegaMin, omegaMin + deltaOmega, agentsNum // 2)
+        elif freqDist == "identical":
+            # All agents have the same frequency (omegaMin)
+            posOmega = np.full(agentsNum // 2, omegaMin)
+        else:  # cauchy
+            posOmega = np.abs(np.random.standard_cauchy(agentsNum // 2))
+        self.freqOmega = np.concatenate([
+            posOmega, -posOmega
+        ])
+        self.freqOmega = np.sort(self.freqOmega)
+        self.halfBoundaryLength = boundaryLength / 2
+        self.counts = 0
+        self.dotThetaParams = (
+            self.boundaryLength,
+            self.halfBoundaryLength,
+            self.distanceD0,
+            self.strengthK,
+            self.phaseLagA0,
+        )
+    
+    @staticmethod
+    @nb.njit
+    def _direction(phaseTheta: np.ndarray) -> np.ndarray:
+        direction = np.zeros((phaseTheta.shape[0], 2))
+        direction[:, 0] = np.cos(phaseTheta)
+        direction[:, 1] = np.sin(phaseTheta)
+        return direction
+
+    @property
+    def dotPosition(self) -> np.ndarray:
+        return self.speedV * self._direction(self.phaseTheta)
+
+    @property
+    def dotPhase(self) -> np.ndarray:
+        # return self._calc_dot_phase(self.deltaTheta, self.A, self.freqOmega, 
+        #                             self.strengthK, self.phaseLagA0)
+        return self._calc_dot_phase_opti(
+                positionX=self.positionX, 
+                phaseTheta=self.phaseTheta, 
+                freqOmega=self.freqOmega, 
+                params=self.dotThetaParams
+            )
+    
+    @staticmethod
+    @nb.njit
+    def _calc_dot_phase_opti(positionX: np.ndarray, phaseTheta: np.ndarray, 
+                         freqOmega: np.ndarray, params: Tuple[float]) -> np.ndarray:
+        agentsNum = positionX.shape[0]
+        boundaryLength, halfBoundaryLength, distanceD0, strengthK, phaseLagA0 = params
+
+        coupling = np.zeros(agentsNum)
+        for i in range(agentsNum):
+            distances = np.sqrt(np.sum((positionX - positionX[i])**2, axis=1))
+            neighborIdxs = np.where((distances <= distanceD0) & (distances > 0))[0]
+            if neighborIdxs.size == 0:
+                continue
+
+            deltaTheta = phaseTheta[neighborIdxs] - phaseTheta[i]
+            coupling[i] = np.mean(
+                np.sin(deltaTheta + phaseLagA0)
+            ) - np.sin(phaseLagA0)
+        return strengthK * coupling + freqOmega
+
+    @property
+    def deltaX(self) -> np.ndarray:
+        return self.positionX[:, np.newaxis] - self.positionX[np.newaxis, :]
+
+    @staticmethod
+    @nb.njit
+    def _delta_x(positionX: np.ndarray, others: np.ndarray,
+                 boundaryLength: float, halfBoundaryLength: float) -> np.ndarray:
+        subX = positionX - others
+        return positionX - (
+            others * (-halfBoundaryLength <= subX) * (subX <= halfBoundaryLength) + 
+            (others - boundaryLength) * (subX < -halfBoundaryLength) + 
+            (others + boundaryLength) * (subX > halfBoundaryLength)
+        )
+
+    @property
+    def A(self) -> np.ndarray:
+        """Adjacency matrix: 1 if |x_i - x_j| <= d0 else 0"""
+        return np.where(self.distance_x(self.deltaX) <= self.distanceD0, 1, 0)
+
+    @staticmethod
+    @nb.njit
+    def _calc_dot_phase(deltaTheta: np.ndarray, A: np.ndarray, omega: np.ndarray, 
+                        K: float, phaseLagA0: float) -> np.ndarray:
+        coupling = np.zeros(deltaTheta.shape[0])
+        for idx in range(deltaTheta.shape[0]):
+            coupling[idx] = np.mean(
+                np.sin(deltaTheta[idx][A[idx] == 1] + phaseLagA0) - np.sin(phaseLagA0)
+            )
+        return K * coupling + omega
+
+    def update(self):
+        dotPos = self.dotPosition
+        dotPhase = self.dotPhase
+        newPosition = self.positionX + dotPos * self.dt
+        inside = (
+            (newPosition[:, 0] >= 0) & (newPosition[:, 0] <= self.boundaryLength) &
+            (newPosition[:, 1] >= 0) & (newPosition[:, 1] <= self.boundaryLength)
+        )
+        if inside.any():
+            self.positionX = newPosition[inside]
+            self.phaseTheta = np.mod(self.phaseTheta + dotPhase * self.dt, 2 * np.pi)[inside]
+            self.freqOmega = self.freqOmega[inside]
+            self.agentsNum = self.positionX.shape[0]
+        else:
+            self.positionX = np.empty((0, 2))
+            self.phaseTheta = np.empty((0,))
+            self.freqOmega = np.empty((0,))
+            self.agentsNum = 0
+
+    def append(self):
+        if self.store is not None:
+            if self.counts % self.shotsnaps != 0:
+                return
+            self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
+            self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
+    
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+        if ax is None:
+            _, ax = plt.subplots(figsize=(5, 5))
+        
+        if colorsBy == "freq":
+            colors = (
+                ["red"] * (self.freqOmega >= 0).sum() + 
+                ["#414CC7"] * (self.freqOmega < 0).sum()
+            )
+        elif colorsBy == "phase":
+            colors = [hexCmap(i) for i in
+                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
+            ]
+
+        ax.quiver(
+            self.positionX[:, 0], self.positionX[:, 1],
+            np.cos(self.phaseTheta), np.sin(self.phaseTheta), 
+            scale_units='inches', scale=15.0, width=0.002,
+            color=colors
+        )
+        ax.set_xlim(0, self.boundaryLength)
+        ax.set_ylim(0, self.boundaryLength)
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}("
+            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
+            f"phaseLagA0={self.phaseLagA0:.3f},boundaryLength={self.boundaryLength:.1f},"
+            f"speedV={self.speedV:.1f},freqDist={self.freqDist},"
+            f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
+            f"omegaMin={self.omegaMin:.3f},deltaOmega={self.deltaOmega:.3f},"
+            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
+            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            ")"
+        )
+
+
 class PhaseLagPatternFormation05pi(PhaseLagPatternFormation):
     def __init__(self, strengthK: float, distanceD0: float,
                  boundaryLength: float = 7, speedV: float = 3.0,
@@ -251,7 +450,7 @@ class PhaseLagPatternFormation05pi(PhaseLagPatternFormation):
     
     @staticmethod
     @nb.njit
-    def _calc_dot_phase2(positionX: np.ndarray, phaseTheta: np.ndarray, 
+    def _calc_dot_phase_opti(positionX: np.ndarray, phaseTheta: np.ndarray, 
                          freqOmega: np.ndarray, params: Tuple[float]) -> np.ndarray:
         agentsNum = positionX.shape[0]
         boundaryLength, halfBoundaryLength, distanceD0, strengthK, phaseLagA0 = params
@@ -642,7 +841,7 @@ class PhaseLagPatternFormationNoCounter(PhaseLagPatternFormation):
 class AdditivePhaseLagPatternFormation(PhaseLagPatternFormation):
     @staticmethod
     @nb.njit
-    def _calc_dot_phase2(positionX: np.ndarray, phaseTheta: np.ndarray, 
+    def _calc_dot_phase_opti(positionX: np.ndarray, phaseTheta: np.ndarray, 
                          freqOmega: np.ndarray, params: Tuple[float]) -> np.ndarray:
         agentsNum = positionX.shape[0]
         boundaryLength, halfBoundaryLength, distanceD0, strengthK, phaseLagA0 = params
