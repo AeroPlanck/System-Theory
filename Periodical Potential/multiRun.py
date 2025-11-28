@@ -1,5 +1,5 @@
 def run_model(model):
-        model.run(50000)
+        model.run(80000)
 
 
 if __name__ == "__main__":
@@ -7,26 +7,41 @@ if __name__ == "__main__":
     from itertools import product
     from main import PeriodicalPotential
     from multiprocessing import Pool
+    from tqdm import tqdm
 
-    rangeLambdas = np.concatenate([
-        np.arange(0.01, 0.1, 0.02), np.arange(0.1, 1, 0.2)
-    ])
-    distanceDs = np.concatenate([
-        np.arange(0.1, 1, 0.2)
-    ])
-    rangeGamma = np.linspace(0, 2, 5)
-    rangeKappa = np.linspace(0, 1, 5)
-    rangePeriod = np.linspace(0.1, 2.5, 6)
+    gammas = np.linspace(0, 1, 11)
+    dampingRatios = [0.1, 1, 10]
+    randomSeed = 10
+    strengthLambdas = np.linspace(0.1, 1.0, 5)
+    distanceDs = [1.0]
+    kappas = [0.25, 0.50]
 
-    savePath = "./data"
+    savePath = r"D:\PythonProject\System Theory\Periodical Potential\data"
 
     models = [
         PeriodicalPotential(
-            strengthLambda=l, distanceD=d, gamma=g, kappa=k, L=period,
-            agentsNum=1000, boundaryLength=5,
-            tqdm=True, savePath=savePath, overWrite=False)
-        for l, d, g, k, period in product(rangeLambdas, distanceDs, rangeGamma, rangeKappa, rangePeriod)
+            strengthLambda=strengthLambda,
+            distanceD=distanceD,
+            gamma=gamma,
+            dampingRatio=dampingRatio,
+            kappa=kappa,
+            L=1.5,
+            agentsNum=1000,
+            boundaryLength=5,
+            dt=0.005,
+            tqdm=True,
+            savePath=savePath,
+            overWrite=True
+        )
+        for strengthLambda in strengthLambdas
+        for distanceD in distanceDs
+        for dampingRatio in dampingRatios
+        for kappa in kappas
+        for gamma in gammas
     ]
 
-    with Pool(40) as p:
-        p.map(run_model, models)
+    with Pool(min(len(models), 12)) as p:
+        p.map(
+            run_model,
+            tqdm(models, desc="run models", total=len(models))
+        )

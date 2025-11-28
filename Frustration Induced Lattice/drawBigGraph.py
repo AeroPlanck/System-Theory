@@ -46,7 +46,7 @@ plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.family'] = 'STIXGeneral'
 plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 
-from PJT_Frustration_Induced_Crystallize.main import *
+from main import *
 from multiprocessing import Pool
 
 SAVE_PATH = r"F:\MS_ExperimentData\general"
