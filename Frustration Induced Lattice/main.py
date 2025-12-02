@@ -988,9 +988,7 @@ class StateAnalysis:
             return
         self.model = model
         
-        # 使用与模型保存时相同的简化文件名
-        class_name = self.model.__class__.__name__
-        targetPath = f"{self.model.savePath}/{class_name}_{self.model.randomSeed}.h5"
+        targetPath = f"{self.model.savePath}/{self.model}.h5"
         
         totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
         TNum = totalPhaseTheta.shape[0] // self.model.agentsNum

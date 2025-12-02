@@ -61,8 +61,7 @@ def _segment_frames(df: pd.DataFrame) -> list:
     return [df.iloc[bounds[i]:bounds[i + 1]].values for i in range(len(bounds) - 1)]
 
 def _load_variable_frames(model) -> list:
-    class_name = model.__class__.__name__
-    target_path = os.path.join(model.savePath, f"{class_name}_{model.randomSeed}.h5")
+    target_path = os.path.join(model.savePath, f"{model}.h5")
     pos_df = pd.read_hdf(target_path, key="positionX")
     theta_df = pd.read_hdf(target_path, key="phaseTheta")
     pos_frames = _segment_frames(pos_df)

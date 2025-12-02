@@ -50,9 +50,7 @@ class Swarmalators:
         if self.savePath is None:
             self.store = None
         else:
-            # 使用简化的文件名避免路径过长
-            class_name = self.__class__.__name__
-            targetPath = f"{self.savePath}/{class_name}_{self.randomSeed}.h5"
+            targetPath = f"{self.savePath}/{self}.h5"
 
             if self.overWrite and os.path.exists(targetPath):
                 os.remove(targetPath)
