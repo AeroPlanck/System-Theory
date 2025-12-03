@@ -228,13 +228,13 @@ class PhaseLagPatternFormation(Swarmalators2D):
     def __str__(self):
         return (
             f"{self.__class__.__name__}("
-            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
-            f"phaseLagA0={self.phaseLagA0:.3f},boundaryLength={self.boundaryLength:.1f},"
-            f"speedV={self.speedV:.1f},freqDist={self.freqDist},"
+            f"K={self.strengthK:.3f},D0={self.distanceD0:.3f},"
+            f"A0={self.phaseLagA0:.3f},L={self.boundaryLength:.1f},"
+            f"v={self.speedV:.1f},dist={self.freqDist},"
             f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
-            f"omegaMin={self.omegaMin:.3f},deltaOmega={self.deltaOmega:.3f},"
-            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
-            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            f"wMin={self.omegaMin:.3f},dw={self.deltaOmega:.3f},"
+            f"N={self.agentsNum},dt={self.dt:.3f},"
+            f"snap={self.shotsnaps},seed={self.randomSeed}"
             ")"
         )
     
@@ -427,13 +427,13 @@ class PhaseLagPatternFormationBigArea(Swarmalators2D):
     def __str__(self):
         return (
             f"{self.__class__.__name__}("
-            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
-            f"phaseLagA0={self.phaseLagA0:.3f},boundaryLength={self.boundaryLength:.1f},"
-            f"speedV={self.speedV:.1f},freqDist={self.freqDist},"
+            f"K={self.strengthK:.3f},D0={self.distanceD0:.3f},"
+            f"A0={self.phaseLagA0:.3f},L={self.boundaryLength:.1f},"
+            f"v={self.speedV:.1f},dist={self.freqDist},"
             f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
-            f"omegaMin={self.omegaMin:.3f},deltaOmega={self.deltaOmega:.3f},"
-            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
-            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            f"wMin={self.omegaMin:.3f},dw={self.deltaOmega:.3f},"
+            f"N={self.agentsNum},dt={self.dt:.3f},"
+            f"snap={self.shotsnaps},seed={self.randomSeed}"
             ")"
         )
 
@@ -609,23 +609,23 @@ class CollisionBoundaryPatternFormation(Swarmalators2D):
         for i in range(agentsNum):
             # 检查左边界 (x = 0)
             if newPositionX[i, 0] < 0:
-                newPositionX[i, 0] = 0  # 将粒子位置设置到边界上
-                newVelocity[i, 0] = -newVelocity[i, 0]   # 反转x方向速度
+                newPositionX[i, 0] = -newPositionX[i, 0]  # 反射：将超出部分折叠回区域内
+                newVelocity[i, 0] = -newVelocity[i, 0]    # 反转x方向速度
             
             # 检查右边界 (x = boundaryLength)
             elif newPositionX[i, 0] > boundaryLength:
-                newPositionX[i, 0] = boundaryLength  # 将粒子位置设置到边界上
-                newVelocity[i, 0] = -newVelocity[i, 0]   # 反转x方向速度
+                newPositionX[i, 0] = 2 * boundaryLength - newPositionX[i, 0]  # 反射：L - (x - L) = 2L - x
+                newVelocity[i, 0] = -newVelocity[i, 0]    # 反转x方向速度
             
             # 检查下边界 (y = 0)
             if newPositionX[i, 1] < 0:
-                newPositionX[i, 1] = 0  # 将粒子位置设置到边界上
-                newVelocity[i, 1] = -newVelocity[i, 1]   # 反转y方向速度
+                newPositionX[i, 1] = -newPositionX[i, 1]  # 反射
+                newVelocity[i, 1] = -newVelocity[i, 1]    # 反转y方向速度
             
             # 检查上边界 (y = boundaryLength)
             elif newPositionX[i, 1] > boundaryLength:
-                newPositionX[i, 1] = boundaryLength  # 将粒子位置设置到边界上
-                newVelocity[i, 1] = -newVelocity[i, 1]   # 反转y方向速度
+                newPositionX[i, 1] = 2 * boundaryLength - newPositionX[i, 1]  # 反射
+                newVelocity[i, 1] = -newVelocity[i, 1]    # 反转y方向速度
         
         return newPositionX, newVelocity
 
@@ -685,13 +685,13 @@ class CollisionBoundaryPatternFormation(Swarmalators2D):
     def __str__(self):
         return (
             f"{self.__class__.__name__}("
-            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
-            f"phaseLagA0={self.phaseLagA0:.3f},boundaryLength={self.boundaryLength:.1f},"
-            f"speedV={self.speedV:.1f},freqDist={self.freqDist},"
+            f"K={self.strengthK:.3f},D0={self.distanceD0:.3f},"
+            f"A0={self.phaseLagA0:.3f},L={self.boundaryLength:.1f},"
+            f"v={self.speedV:.1f},dist={self.freqDist},"
             f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
-            f"omegaMin={self.omegaMin:.3f},deltaOmega={self.deltaOmega:.3f},"
-            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
-            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            f"wMin={self.omegaMin:.3f},dw={self.deltaOmega:.3f},"
+            f"N={self.agentsNum},dt={self.dt:.3f},"
+            f"snap={self.shotsnaps},seed={self.randomSeed}"
             ")"
         )
 
@@ -727,12 +727,12 @@ class CellAndSingleParticle(PhaseLagPatternFormation):
     def __str__(self):
         return (
             f"{self.__class__.__name__}("
-            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
-            f"phaseLagA0={self.phaseLagA0:.3f},"
+            f"K={self.strengthK:.3f},D0={self.distanceD0:.3f},"
+            f"A0={self.phaseLagA0:.3f},"
             f"sPD={self.singleParticleDis:.3f},sPA={self.singleParticleAngle:.3f},"
-            f"boundaryLength={self.boundaryLength:.1f},speedV={self.speedV:.1f},"
-            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
-            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            f"L={self.boundaryLength:.1f},v={self.speedV:.1f},"
+            f"N={self.agentsNum},dt={self.dt:.3f},"
+            f"snap={self.shotsnaps},seed={self.randomSeed}"
             ")"
         )
     
@@ -758,13 +758,13 @@ class CommonDistPhaseLagPatternFormation(PhaseLagPatternFormation):
     def __str__(self):
         return (
             f"{self.__class__.__name__}("
-            f"strengthK={self.strengthK:.3f},distanceD0={self.distanceD0:.3f},"
-            f"phaseLagA0={self.phaseLagA0:.3f},boundaryLength={self.boundaryLength:.1f},"
-            f"speedV={self.speedV:.1f},freqDist={self.freqDist},"
+            f"K={self.strengthK:.3f},D0={self.distanceD0:.3f},"
+            f"A0={self.phaseLagA0:.3f},L={self.boundaryLength:.1f},"
+            f"v={self.speedV:.1f},dist={self.freqDist},"
             f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
-            f"meanOmega={self.meanOmega:.3f},deltaOmega={self.deltaOmega:.3f},"
-            f"agentsNum={self.agentsNum},dt={self.dt:.3f},"
-            f"shotsnaps={self.shotsnaps},randomSeed={self.randomSeed}"
+            f"wMean={self.meanOmega:.3f},dw={self.deltaOmega:.3f},"
+            f"N={self.agentsNum},dt={self.dt:.3f},"
+            f"snap={self.shotsnaps},seed={self.randomSeed}"
             ")"
         )
 

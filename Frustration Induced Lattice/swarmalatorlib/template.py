@@ -50,6 +50,8 @@ class Swarmalators:
         if self.savePath is None:
             self.store = None
         else:
+            if not os.path.exists(self.savePath):
+                os.makedirs(self.savePath)
             targetPath = f"{self.savePath}/{self}.h5"
 
             if self.overWrite and os.path.exists(targetPath):
