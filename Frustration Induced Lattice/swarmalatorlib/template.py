@@ -61,19 +61,18 @@ class Swarmalators:
                 self.store = pd.HDFStore(targetPath)
                 return True
 
-            print(f"{targetPath} already exists, ", end="")
-            endTNum = TNum // self.shotsnaps + 2
-            sa = StateAnalysis(self)
-            if sa.TNum >= endTNum:
-                print(f"already has {sa.TNum} snapshots, no need to run again.")
-                return False
-            print(f"but has only {sa.TNum} snapshots, will continue to run until {endTNum} snapshots.")
+            # print(f"{targetPath} already exists, ", end="")
+            # endTNum = TNum // self.shotsnaps + 2
+            # sa = StateAnalysis(self)
+            # if sa.TNum >= endTNum:
+            #     print(f"already has {sa.TNum} snapshots, no need to run again.")
+            #     return False
+            # print(f"but has only {sa.TNum} snapshots, will continue to run until {endTNum} snapshots.")
 
-            self.positionX, self.phaseTheta = sa.get_state(-1)
-            self.counts = (sa.TNum - 2) * self.shotsnaps + 1
+            # self.positionX, self.phaseTheta = sa.get_state(-1)
+            # self.counts = (sa.TNum - 2) * self.shotsnaps + 1
 
-            self.store = pd.HDFStore(targetPath, mode="a")
-
+            # self.store = pd.HDFStore(targetPath, mode="a")
             
         self.append()
         return True
