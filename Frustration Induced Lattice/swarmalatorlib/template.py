@@ -41,6 +41,7 @@ class Swarmalators:
         self.K = K
         self.tqdm = tqdm
         self.savePath = savePath
+        self.store = None
         self.shotsnaps = shotsnaps
         self.counts = 0
         self.temp = {}
@@ -207,6 +208,7 @@ class Swarmalators1D(Swarmalators):
         self.K = K
         self.tqdm = tqdm
         self.savePath = savePath
+        self.store = None
         self.shotsnaps = shotsnaps
         self.counts = 0
         self.temp = {}
@@ -264,6 +266,7 @@ class Swarmalators2D(Swarmalators):
         self.K = K
         self.tqdm = tqdm
         self.savePath = savePath
+        self.store = None
         self.shotsnaps = shotsnaps
         self.counts = 0
         self.temp = {}
