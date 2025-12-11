@@ -67,7 +67,6 @@ class PhaseLagPatternFormation(Swarmalators2D):
         self.dt = dt
         self.tqdm = tqdm
         self.savePath = savePath
-        self.store = None
         self.shotsnaps = shotsnaps
         self.randomSeed = randomSeed
         self.overWrite = overWrite
