@@ -992,7 +992,7 @@ class StateAnalysis:
         
         targetPath = f"{self.model.savePath}/{self.model}.h5"
         
-        # Original code (commented out for debugging/reference)
+        # Original snippet for no data flaw
         # totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
         # TNum = totalPhaseTheta.shape[0] // self.model.agentsNum
         # self.TNum = TNum
@@ -1007,6 +1007,7 @@ class StateAnalysis:
         # else:
         #     self.totalPositionX = totalPositionX.values.reshape(TNum, self.model.agentsNum, 2)
         
+        # Snippet for no data flaw
         totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
         TNum_theta = totalPhaseTheta.shape[0] // self.model.agentsNum
 
