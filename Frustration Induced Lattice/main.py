@@ -1007,29 +1007,30 @@ class StateAnalysis:
         # else:
         #     self.totalPositionX = totalPositionX.values.reshape(TNum, self.model.agentsNum, 2)
         
-        # Snippet for no data flaw
-        totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
-        TNum_theta = totalPhaseTheta.shape[0] // self.model.agentsNum
+        # Snippet for data flaw
+        with pd.HDFStore(targetPath, mode='r') as store:
+            totalPhaseTheta = store.select("phaseTheta")
+            TNum_theta = totalPhaseTheta.shape[0] // self.model.agentsNum
 
-        if isinstance(model, PurePhaseFrustration):
-            self.TNum = TNum_theta
-            self.totalPhaseTheta = totalPhaseTheta.values.reshape(TNum_theta, self.model.agentsNum)
-            return
+            if isinstance(model, PurePhaseFrustration):
+                self.TNum = TNum_theta
+                self.totalPhaseTheta = totalPhaseTheta.values.reshape(TNum_theta, self.model.agentsNum)
+                return
 
-        totalPositionX = pd.read_hdf(targetPath, key="positionX")
-        TNum_pos = totalPositionX.shape[0] // self.model.agentsNum
+            totalPositionX = store.select("positionX")
+            TNum_pos = totalPositionX.shape[0] // self.model.agentsNum
 
-        # Use the minimum TNum to ensure consistency
-        self.TNum = min(TNum_theta, TNum_pos)
-        truncate_len = self.TNum * self.model.agentsNum
+            # Use the minimum TNum to ensure consistency
+            self.TNum = min(TNum_theta, TNum_pos)
+            truncate_len = self.TNum * self.model.agentsNum
 
-        # Truncate and reshape
-        self.totalPhaseTheta = totalPhaseTheta.values[:truncate_len].reshape(self.TNum, self.model.agentsNum)
+            # Truncate and reshape
+            self.totalPhaseTheta = totalPhaseTheta.values[:truncate_len].reshape(self.TNum, self.model.agentsNum)
 
-        if isinstance(model, PhaseLagPatternFormation1D):
-            self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum)
-        else:
-            self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum, 2)
+            if isinstance(model, PhaseLagPatternFormation1D):
+                self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum)
+            else:
+                self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum, 2)
         
 
     def get_state(self, index: int = -1):

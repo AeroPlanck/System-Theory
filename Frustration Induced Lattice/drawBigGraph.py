@@ -77,38 +77,59 @@ models = [
     for phaseLag in phaseLags
 ]
 
-sas = [StateAnalysis(model) for model in tqdm(models)]
+def _ensure_sa(model):
+    return StateAnalysis(model)
 
-fig, axs = plt.subplots(
-    len(omegaMins), len(phaseLags), 
-    figsize=(len(phaseLags) * 4, len(omegaMins) * 4)
-)
-axs = axs.flatten()
+sas = [_ensure_sa(model) for model in tqdm(models)]
 
-for i, sa in tqdm(enumerate(sas), total=len(sas)):
+sa_map = {}
+for sa in sas:
+    key = (sa.model.strengthK, sa.model.distanceD0, sa.model.deltaOmega, sa.model.omegaMin, sa.model.phaseLagA0)
+    sa_map[key] = sa
 
-    colors = ["red"] * (sa.model.freqOmega < 0).sum() + ["#414CC7"] * (sa.model.freqOmega > 0).sum()
+for strengthK in strengthKs:
+    for distanceD0 in distanceD0s:
+        for deltaOmega in deltaOmegas:
+            fig, axs = plt.subplots(
+                len(strengthKs), len(distanceD0s), 
+                figsize=(len(strengthKs) * 4, len(distanceD0s) * 4),
+                squeeze=False
+            )
+            
+            # To capture a representative model for filename generation
+            rep_sa = None
 
-    ax = axs[i]
-    index = -1
-    sa.plot_spatial(ax, colorsBy="phase", index=index)
-    subLetter = chr(97 + i)
-    ax.set_xticks([])
-    ax.set_yticks([])
-    ax.set_title(
-        rf"$\alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
-        rf"\ \omega_{{\min}}={sa.model.omegaMin:.2f}$", 
-        fontsize=16, loc="left"
-    )
-    ax.set_aspect("equal")
+            for i, omegaMin in enumerate(omegaMins):
+                for j, phaseLag in enumerate(phaseLags):
+                    key = (strengthK, distanceD0, deltaOmega, omegaMin, phaseLag)
+                    if key in sa_map:
+                        sa = sa_map[key]
+                        rep_sa = sa
+                        ax = axs[i, j]
+                        
+                        colors = ["red"] * (sa.model.freqOmega < 0).sum() + ["#414CC7"] * (sa.model.freqOmega > 0).sum()
+                        index = -1
+                        sa.plot_spatial(ax, colorsBy="phase", index=index)
+                        
+                        ax.set_xticks([])
+                        ax.set_yticks([])
+                        ax.set_title(
+                            rf"$\alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
+                            rf"\ \omega_{{\min}}={sa.model.omegaMin:.2f}$", 
+                            fontsize=16, loc="left"
+                        )
+                        ax.set_aspect("equal")
 
-plt.tight_layout()
-
-plt.savefig(
-    f"figs/{sa.model.__class__.__name__}_"
-    f"a{phaseLags[0]:.2f}_Do{deltaOmegas[0]}"
-    f"{'initPhaseTheta,' if sa.model.initPhaseTheta is not None else ''}"
-    f"_aN{sa.model.agentsNum}_dist{sa.model.freqDist}.pdf", 
-    bbox_inches="tight"
-)
-plt.close()
+            plt.tight_layout()
+            
+            if rep_sa:
+                os.makedirs("figs", exist_ok=True)
+                plt.savefig(
+                    f"figs/{rep_sa.model.__class__.__name__}_"
+                    f"K{strengthK:.2f}_D{distanceD0:.2f}_"
+                    f"Alpha{phaseLags[0]:.2f}_Del{deltaOmega:.2f}"
+                    f"{'initPhaseTheta,' if rep_sa.model.initPhaseTheta is not None else ''}"
+                    f"_N{rep_sa.model.agentsNum}_Dist{rep_sa.model.freqDist}.pdf", 
+                    bbox_inches="tight"
+                )
+            plt.close()
