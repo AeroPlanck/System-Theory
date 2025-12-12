@@ -62,7 +62,7 @@ distanceD0s = [1.55]  # np.linspace(0.1, 3, 7)
 deltaOmegas = [0]  # np.linspace(1e-5, 3, 21)  # [1.0]
 
 models = [
-    PhaseLagPatternFormation(
+    CollisionBoundaryPatternFormation(
         strengthK=strengthK, distanceD0=distanceD0, phaseLagA0=phaseLag,
         freqDist="uniform", 
         omegaMin=omegaMin, deltaOmega=deltaOmega, 
@@ -97,7 +97,7 @@ for i, sa in tqdm(enumerate(sas), total=len(sas)):
     ax.set_yticks([])
     ax.set_title(
         rf"$\alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
-        f"\ \omega_{{\min}}={sa.model.omegaMin:.2f}$", 
+        rf"\ \omega_{{\min}}={sa.model.omegaMin:.2f}$", 
         fontsize=16, loc="left"
     )
     ax.set_aspect("equal")
