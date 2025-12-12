@@ -101,7 +101,6 @@ class Swarmalators:
 
             self.store = pd.HDFStore(targetPath, mode="a")
 
-            
         self.append()
         return True
 

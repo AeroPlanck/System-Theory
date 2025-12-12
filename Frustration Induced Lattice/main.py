@@ -992,19 +992,43 @@ class StateAnalysis:
         
         targetPath = f"{self.model.savePath}/{self.model}.h5"
         
+        # Original code (commented out for debugging/reference)
+        # totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
+        # TNum = totalPhaseTheta.shape[0] // self.model.agentsNum
+        # self.TNum = TNum
+        # self.totalPhaseTheta = totalPhaseTheta.values.reshape(TNum, self.model.agentsNum)
+
+        # if isinstance(model, PurePhaseFrustration):
+        #     return
+
+        # totalPositionX = pd.read_hdf(targetPath, key="positionX")
+        # if isinstance(model, PhaseLagPatternFormation1D):
+        #     self.totalPositionX = totalPositionX.values.reshape(TNum, self.model.agentsNum)
+        # else:
+        #     self.totalPositionX = totalPositionX.values.reshape(TNum, self.model.agentsNum, 2)
+        
         totalPhaseTheta = pd.read_hdf(targetPath, key="phaseTheta")
-        TNum = totalPhaseTheta.shape[0] // self.model.agentsNum
-        self.TNum = TNum
-        self.totalPhaseTheta = totalPhaseTheta.values.reshape(TNum, self.model.agentsNum)
+        TNum_theta = totalPhaseTheta.shape[0] // self.model.agentsNum
 
         if isinstance(model, PurePhaseFrustration):
+            self.TNum = TNum_theta
+            self.totalPhaseTheta = totalPhaseTheta.values.reshape(TNum_theta, self.model.agentsNum)
             return
 
         totalPositionX = pd.read_hdf(targetPath, key="positionX")
+        TNum_pos = totalPositionX.shape[0] // self.model.agentsNum
+
+        # Use the minimum TNum to ensure consistency
+        self.TNum = min(TNum_theta, TNum_pos)
+        truncate_len = self.TNum * self.model.agentsNum
+
+        # Truncate and reshape
+        self.totalPhaseTheta = totalPhaseTheta.values[:truncate_len].reshape(self.TNum, self.model.agentsNum)
+
         if isinstance(model, PhaseLagPatternFormation1D):
-            self.totalPositionX = totalPositionX.values.reshape(TNum, self.model.agentsNum)
+            self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum)
         else:
-            self.totalPositionX = totalPositionX.values.reshape(TNum, self.model.agentsNum, 2)
+            self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum, 2)
         
 
     def get_state(self, index: int = -1):
