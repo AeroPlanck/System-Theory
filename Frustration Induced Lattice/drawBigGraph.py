@@ -52,14 +52,19 @@ from multiprocessing import Pool
 SAVE_PATH = r"F:\MS_ExperimentData\general"
 
 
-# phaseLags = np.linspace(-1, 1, 21) * np.pi
-phaseLags = np.linspace(0, 1, 11) * np.pi
-# phaseLags = [0.6 * np.pi]
-omegaMins = [0]  # np.linspace(1e-5, 3, 21)
-randomSeed = 10
-strengthKs = [16.833333]  # np.linspace(1, 20, 7)
-distanceD0s = [1.55]  # np.linspace(0.1, 3, 7)
-deltaOmegas = [0]  # np.linspace(1e-5, 3, 21)  # [1.0]
+phaseLags = np.linspace(-1, 1, 21) * np.pi
+# phaseLags = np.linspace(0, 1, 11) * np.pi
+# phaseLags = [0.75 * np.pi]
+# phaseLags = [0 * np.pi]
+omegaMins = [0] # np.linspace(1e-5, 3, 21)
+# randomSeeds = range(10)
+randomSeeds = [10]
+# strengthKs = np.linspace(4, 20, 7)  # [20]  # 
+strengthKs = np.linspace(1e-5, 25, 5)
+# strengthKs = [20]
+distanceD0s = np.linspace(0.1, 7, 5)  #  np.linspace(0.1, 3, 7)  # [1]
+# distanceD0s = [1]
+deltaOmegas =  [0, 3]  # [1.0]
 
 models = [
     CollisionBoundaryPatternFormation(
@@ -114,8 +119,8 @@ for strengthK in strengthKs:
                         ax.set_xticks([])
                         ax.set_yticks([])
                         ax.set_title(
-                            rf"$\alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
-                            rf"\ \omega_{{\min}}={sa.model.omegaMin:.2f}$", 
+                            rf"$\Alpha={(sa.model.phaseLagA0/np.pi):.2f}\pi,"
+                            rf"\ \Omega_{{\min}}={sa.model.omegaMin:.2f}$", 
                             fontsize=16, loc="left"
                         )
                         ax.set_aspect("equal")
