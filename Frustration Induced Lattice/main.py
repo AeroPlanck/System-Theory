@@ -1068,14 +1068,14 @@ class StateAnalysis:
                 ["#414CC7"] * (self.model.freqOmega < 0).sum()
             )
         elif colorsBy == "phase":
-            colors = [hexCmap(i) for i in
-                np.floor(256 - phaseTheta / (2 * np.pi) * 256).astype(np.int32)
-            ]
+            # Fix: Ensure indices are within [0, 255] and normalize to [0, 1] for colormap
+            indices = np.floor(256 - phaseTheta / (2 * np.pi) * 256).astype(np.int32) % 256
+            colors = [hexCmap(i / 255.0) for i in indices]
 
         ax.quiver(
             positionX[:, 0], positionX[:, 1],
             np.cos(phaseTheta), np.sin(phaseTheta), 
-            scale_units='inches', scale=15.0, width=0.002,
+            scale_units='inches', scale=15.0, width=0.005,
             color=colors
         )
         ax.set_xlim(0, self.model.boundaryLength)
