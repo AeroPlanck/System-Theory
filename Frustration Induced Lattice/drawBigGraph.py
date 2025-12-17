@@ -101,28 +101,33 @@ for indices, model in zip(param_indices, models):
 # Use product to create a single iterable for the outer loops to use with tqdm
 # We use indices here too
 outer_loops_indices = list(product(
-    range(len(strengthKs)), 
-    range(len(distanceD0s)), 
-    range(len(deltaOmegas))
+    range(len(omegaMins)),
+    range(len(deltaOmegas)),
+    range(len(phaseLags))
 ))
 
-for i_K, i_D0, i_dOmega in tqdm(outer_loops_indices, desc="Generating Plots"):
-    strengthK = strengthKs[i_K]
-    distanceD0 = distanceD0s[i_D0]
+for i_omegaMin, i_dOmega, i_phaseLag in tqdm(outer_loops_indices, desc="Generating Plots"):
+    omegaMin = omegaMins[i_omegaMin]
     deltaOmega = deltaOmegas[i_dOmega]
+    phaseLag = phaseLags[i_phaseLag]
 
-    # Adjusted subplot dimensions to match the inner loops (omegaMin vs phaseLag)
+    # Adjusted subplot dimensions to match the inner loops (distanceD0 vs strengthK)
     fig, axs = plt.subplots(
-        len(omegaMins), len(phaseLags), 
-        figsize=(len(phaseLags) * 4, len(omegaMins) * 4),
+        len(distanceD0s), len(strengthKs),
+        figsize=(len(strengthKs) * 4, len(distanceD0s) * 4),
         squeeze=False
+    )
+
+    fig.suptitle(
+        rf"$\alpha={(phaseLag/np.pi):.2f}\pi,\ \Omega_{{\min}}={omegaMin:.2f},\ \Delta\Omega={deltaOmega:.2f}$",
+        fontsize=18
     )
     
     # To capture a representative model for filename generation
     rep_model = None
 
-    for i_omegaMin, omegaMin in enumerate(omegaMins):
-        for i_phaseLag, phaseLag in enumerate(phaseLags):
+    for i_D0, distanceD0 in enumerate(distanceD0s):
+        for i_K, strengthK in enumerate(strengthKs):
             # Construct key in the same order as 'models' creation:
             # K, D0, omegaMin, dOmega, phaseLag
             key = (i_K, i_D0, i_omegaMin, i_dOmega, i_phaseLag)
@@ -131,7 +136,7 @@ for i_K, i_D0, i_dOmega in tqdm(outer_loops_indices, desc="Generating Plots"):
                 model = model_map[key]
                 rep_model = model
                 
-                ax = axs[i_omegaMin, i_phaseLag]
+                ax = axs[i_D0, i_K]
                 
                 # Simplified plotting
                 sa = StateAnalysis(model)
@@ -141,8 +146,7 @@ for i_K, i_D0, i_dOmega in tqdm(outer_loops_indices, desc="Generating Plots"):
                 ax.set_xticks([])
                 ax.set_yticks([])
                 ax.set_title(
-                    rf"$\alpha={(model.phaseLagA0/np.pi):.2f}\pi,"
-                    rf"\ \Omega_{{\min}}={model.omegaMin:.2f}$", 
+                    rf"$K={model.strengthK:.2f},\ D_0={model.distanceD0:.2f}$",
                     fontsize=16, loc="left"
                 )
                 ax.set_aspect("equal")
@@ -151,8 +155,9 @@ for i_K, i_D0, i_dOmega in tqdm(outer_loops_indices, desc="Generating Plots"):
         os.makedirs("figs", exist_ok=True)
         filename_base = (
             f"figs/{rep_model.__class__.__name__}_"
-            f"K{strengthK:.2f}_D{distanceD0:.2f}_"
-            f"Alpha{phaseLags[0]:.2f}_Del{deltaOmega:.2f}"
+            f"K{strengthKs[0]:.2f}-{strengthKs[-1]:.2f}_"
+            f"D{distanceD0s[0]:.2f}-{distanceD0s[-1]:.2f}_"
+            f"Alpha{phaseLag:.2f}_OmMin{omegaMin:.2f}_Del{deltaOmega:.2f}"
             f"{'initPhaseTheta,' if rep_model.initPhaseTheta is not None else ''}"
             f"_N{rep_model.agentsNum}_Dist{rep_model.freqDist}"
         )
