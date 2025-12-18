@@ -82,24 +82,27 @@ class Swarmalators:
                 self.append()
                 return True
 
-            print(f"{targetPath} already exists, ", end="")
-            endTNum = TNum // self.shotsnaps + 1
-            try:
-                sa = self.stateAnalysisClass(self)
-            except ValueError:
-                print("but cannot read the file, will overwrite.")
-                os.remove(targetPath)
-                self.store = pd.HDFStore(targetPath)
-                return True
-            if sa.TNum >= endTNum:
-                print(f"already has {sa.TNum} snapshots, no need to run again.")
-                return False
-            print(f"but has only {sa.TNum} snapshots, will continue to run until {endTNum} snapshots.")
+            # print(f"{targetPath} already exists, ", end="")
+            # endTNum = TNum // self.shotsnaps + 1
+            # try:
+            #     sa = self.stateAnalysisClass(self)
+            # except ValueError:
+            #     print("but cannot read the file, will overwrite.")
+            #     os.remove(targetPath)
+            #     self.store = pd.HDFStore(targetPath)
+            #     return True
+            # if sa.TNum >= endTNum:
+            #     print(f"already has {sa.TNum} snapshots, no need to run again.")
+            #     return False
+            # print(f"but has only {sa.TNum} snapshots, will continue to run until {endTNum} snapshots.")
 
-            self.positionX, self.phaseTheta = sa.get_state(-1)
-            self.counts = (sa.TNum - 2) * self.shotsnaps + 1
+            # self.positionX, self.phaseTheta = sa.get_state(-1)
+            # self.counts = (sa.TNum - 2) * self.shotsnaps + 1
 
-            self.store = pd.HDFStore(targetPath, mode="a")
+            # self.store = pd.HDFStore(targetPath, mode="a")
+
+            print(f"{targetPath} already exists, skipping.")
+            return False
 
         self.append()
         return True
