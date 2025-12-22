@@ -18,7 +18,7 @@ new_cmap = mcolors.LinearSegmentedColormap.from_list(
     "new", plt.cm.hsv(np.linspace(0, 1, 256)) * 0.85, N=256
 )
 
-with open("../swarmalatorlib/hex_colors.json", "r", encoding="utf-8") as f:
+with open("D:/PythonProject/System Theory/Frustration Induced Lattice/swarmalatorlib/hex_colors.json", "r", encoding="utf-8") as f:
     hexColors = json.load(f)
 hexCmap = mcolors.LinearSegmentedColormap.from_list("cmap", hexColors)
 
