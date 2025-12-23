@@ -45,7 +45,7 @@ class PhaseLagPatternFormation(Swarmalators2D):
                  tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
                  randomSeed: int = 10, overWrite: bool = False) -> None:
         
-        assert freqDist in ["uniform", "cauchy", "identical"]
+        assert freqDist in ["uniform", "cauchy", "identical", "unichiral"]
         
         if freqDist == "cauchy":
             omegaMin = 0.0
@@ -82,11 +82,17 @@ class PhaseLagPatternFormation(Swarmalators2D):
         elif freqDist == "identical":
             # All agents have the same frequency (omegaMin)
             posOmega = np.full(agentsNum // 2, omegaMin)
+        elif freqDist == "unichiral":
+            posOmega = np.full(agentsNum, omegaMin)
         else:  # cauchy
             posOmega = np.abs(np.random.standard_cauchy(agentsNum // 2))
-        self.freqOmega = np.concatenate([
-            posOmega, -posOmega
-        ])
+        
+        if freqDist == "unichiral":
+            self.freqOmega = posOmega
+        else:
+            self.freqOmega = np.concatenate([
+                posOmega, -posOmega
+            ])
         self.freqOmega = np.sort(self.freqOmega)
         self.halfBoundaryLength = boundaryLength / 2
         self.counts = 0
@@ -651,7 +657,7 @@ class CollisionBoundaryPatternFormation(Swarmalators2D):
             newPhaseTheta = np.arctan2(correctedVelocity[:, 1], correctedVelocity[:, 0])
             self.phaseTheta[collision_mask] = newPhaseTheta[collision_mask]
         
-        # 更新相位（基于原始的相位演化）
+        # 更新相位
         self.phaseTheta = np.mod(self.phaseTheta + dotPhase * self.dt, 2 * np.pi)
 
     def append(self):

@@ -122,8 +122,9 @@ if __name__ == "__main__":
     model = PhaseLagPatternFormation(
         strengthK=25, distanceD0=3.5, phaseLagA0=1 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
+        freqDist="uniform",
         omegaMin=0, deltaOmega=0,
-        agentsNum=1000, dt=0.001,
+        agentsNum=1000, dt=0.005,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
         randomSeed=9, overWrite=False
     )
