@@ -47,7 +47,7 @@ def parse_filename_params(filename):
                     params[key] = value
     return params
 
-def cluster_particles(position, phase, dist_threshold=0.5, phase_threshold=0.1, boundary_length=7.0):
+def cluster_particles(position, phase, dist_threshold=1.5, phase_threshold=0.1, boundary_length=7.0):
     """
     Cluster particles based on spatial proximity and phase synchronization.
     
@@ -166,17 +166,10 @@ def main():
         print("No clusters found to modify.")
         return
 
-    # For automation, we select the largest cluster
-    counts = np.bincount(labels[labels >= 0])
-    largest_cluster_id = np.argmax(counts)
-    
-    print(f"Total clusters found: {n_clusters}")
-    print(f"Largest cluster is ID {largest_cluster_id} with {counts[largest_cluster_id]} particles.")
-    
     # Allow user to manually select cluster
     while True:
         try:
-            user_in = input(f"Enter cluster ID to modify (0-{n_clusters-1}) [default: {largest_cluster_id}]: ")
+            user_in = input(f"Enter cluster ID to modify (0-{n_clusters-1})")
             if user_in.strip() == "":
                 selected_cluster_id = largest_cluster_id
                 break
@@ -187,59 +180,65 @@ def main():
                 print(f"ID out of range. Please enter 0-{n_clusters-1}.")
         except ValueError:
             print("Invalid input. Please enter an integer.")
-    
+
     print(f"Modifying Cluster {selected_cluster_id}...")
+
+    # Define angles to iterate: 0.1*pi to 1.0*pi
+    # angles = np.arange(0.1, 1.1, 0.1) * np.pi
+    angles = [1 * np.pi]
     
-    # 6. Modify Data
-    # Let's rotate the phase of this cluster by pi
-    mask = labels == selected_cluster_id
-    modified_theta = last_theta.copy()
-    modified_theta[mask] = np.mod(modified_theta[mask] + 0.5*np.pi, 2*np.pi)
-    
-    modified_pos = last_pos.copy()
-    # Optionally move them? Let's just change phase for now as requested "modify particle data"
-    
-    # 7. Initialize New Model
-    print("Initializing new simulation with modified state...")
-    
-    # Reconstruct model args
-    # params from filename: K, D0, A0, L, v, dist, wMin, dw, N, dt, snap, seed
+    # Create subplots for results (2 rows, 5 columns)
+    fig, axes = plt.subplots(2, 5, figsize=(25, 10))
+    axes = axes.flatten()
     
     new_save_path = os.path.join(script_dir, "data_modified")
     os.makedirs(new_save_path, exist_ok=True)
     
-    model = CollisionBoundaryPatternFormation(
-        strengthK=params.get('K', 18.75),
-        distanceD0=params.get('D0', 7),
-        phaseLagA0=params.get('A0', 0.8 * np.pi),
-        boundaryLength=params.get('L', 7),
-        speedV=params.get('v', 3),
-        freqDist=params.get('dist', 'uniform'),
-        initPhaseTheta=modified_theta, # Pass modified phases
-        omegaMin=params.get('wMin', 0),
-        deltaOmega=params.get('dw', 0),
-        agentsNum=int(params.get('N', 2000)),
-        dt=params.get('dt', 0.005),
-        tqdm=True,
-        savePath=new_save_path, # New save path
-        shotsnaps=int(params.get('snap', 10)),
-        randomSeed=int(params.get('seed', 9)),
-        overWrite=True
-    )
-    
-    # Overwrite position
-    model.positionX = modified_pos
-    
-    # 8. Run Simulation
-    run_steps = 2000
-    print(f"Running simulation for {run_steps} steps...")
-    model.run(run_steps)
-    
-    # 9. Plot Result
-    print("Simulation finished. Plotting result...")
-    model.plot()
-    plt.title("After Modification and Evolution")
-    plt.savefig("After_Modification_and_Evolution.png")
+    for i, angle in enumerate(angles):
+        print(f"Simulating for angle modification: {angle/np.pi:.1f} PI ({i+1}/{len(angles)})")
+        
+        # Modify Data
+        mask = labels == selected_cluster_id
+        modified_theta = last_theta.copy()
+        # Apply modification
+        modified_theta[mask] = np.mod(modified_theta[mask] + angle, 2*np.pi)
+        
+        modified_pos = last_pos.copy()
+        
+        # Initialize New Model
+        model = CollisionBoundaryPatternFormation(
+            strengthK=params.get('K', 18.75),
+            distanceD0=params.get('D0', 7),
+            phaseLagA0=params.get('A0', 0.8 * np.pi),
+            boundaryLength=params.get('L', 7),
+            speedV=params.get('v', 3),
+            freqDist=params.get('dist', 'uniform'),
+            initPhaseTheta=modified_theta, # Pass modified phases
+            omegaMin=params.get('wMin', 0),
+            deltaOmega=params.get('dw', 0),
+            agentsNum=int(params.get('N', 2000)),
+            dt=params.get('dt', 0.005),
+            tqdm=True,
+            savePath=new_save_path,
+            shotsnaps=int(params.get('snap', 10)),
+            randomSeed=int(params.get('seed', 9)),
+            overWrite=True
+        )
+        
+        # Overwrite position
+        model.positionX = modified_pos
+        
+        # Run Simulation
+        run_steps = 2000
+        model.run(run_steps)
+        
+        # Plot Result on subplot
+        model.plot(ax=axes[i])
+        axes[i].set_aspect('equal')
+        axes[i].set_title(f"Mod Angle: {angle/np.pi:.1f}$\pi$")
+        
+    # plt.tight_layout()
+    plt.savefig("Angle_Modification_Comparison.png")
     plt.show()
 
 if __name__ == "__main__":
