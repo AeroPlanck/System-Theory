@@ -13,6 +13,61 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from main import CollisionBoundaryPatternFormation, StateAnalysis, hexCmap
 
+class PerturbedCollisionBoundaryPatternFormation(CollisionBoundaryPatternFormation):
+    """
+    Subclass that allows for continuous phase perturbation (random or periodic)
+    on specific subsets of particles.
+    """
+    def __init__(self, perturbation_list=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.perturbation_list = perturbation_list if perturbation_list else []
+        # perturbation_list format:
+        # [
+        #    {
+        #       'indices': np.array([...]),
+        #       'type': 'random' or 'periodic',
+        #       'strength': float,
+        #       'frequency': float (optional)
+        #    },
+        #    ...
+        # ]
+        self.time_elapsed = 0.0
+
+    def update(self):
+        # 1. Run standard update (dynamics + interactions + boundary)
+        super().update()
+        
+        # 2. Update time
+        self.time_elapsed += self.dt
+        
+        # 3. Apply continuous perturbations
+        if not self.perturbation_list:
+            return
+
+        additional_phase_delta = np.zeros(self.agentsNum)
+        
+        for p in self.perturbation_list:
+            indices = p['indices']
+            p_type = p['type']
+            strength = p.get('strength', 0.0)
+            
+            if p_type == 'random':
+                # Langevin noise: strength * N(0,1) * sqrt(dt)
+                # strength acts as diffusion coefficient related parameter
+                noise = strength * np.random.normal(0, 1, size=len(indices)) * np.sqrt(self.dt)
+                additional_phase_delta[indices] += noise
+                
+            elif p_type == 'periodic':
+                freq = p.get('frequency', 1.0)
+                # Force: F(t) = A * sin(wt)
+                # Phase change: dTheta = F(t) * dt
+                delta = strength * np.sin(freq * self.time_elapsed) * self.dt
+                additional_phase_delta[indices] += delta
+        
+        # Apply delta and wrap to [0, 2pi]
+        if np.any(additional_phase_delta != 0):
+            self.phaseTheta = np.mod(self.phaseTheta + additional_phase_delta, 2 * np.pi)
+
 def load_data(file_path):
     """Load data from .h5 file."""
     # We can use StateAnalysis to load data, but it requires a model instance or we can just read the h5 directly
@@ -166,79 +221,219 @@ def main():
         print("No clusters found to modify.")
         return
 
-    # Allow user to manually select cluster
-    while True:
-        try:
-            user_in = input(f"Enter cluster ID to modify (0-{n_clusters-1})")
-            if user_in.strip() == "":
-                selected_cluster_id = largest_cluster_id
-                break
-            selected_cluster_id = int(user_in)
-            if 0 <= selected_cluster_id < n_clusters:
-                break
-            else:
-                print(f"ID out of range. Please enter 0-{n_clusters-1}.")
-        except ValueError:
-            print("Invalid input. Please enter an integer.")
+    # Calculate largest cluster for default
+    if n_clusters > 0:
+        counts = np.bincount(labels[labels>=0])
+        largest_cluster_id = np.argmax(counts)
+    else:
+        largest_cluster_id = 0
 
-    print(f"Modifying Cluster {selected_cluster_id}...")
-
-    # Define angles to iterate: 0.1*pi to 1.0*pi
-    # angles = np.arange(0.1, 1.1, 0.1) * np.pi
-    angles = [1 * np.pi]
+    print("-" * 50)
+    print(f"Enter cluster modifications.")
+    print(f"Format: 'id:type:param1:param2:ratio'")
+    print(f"Types:")
+    print(f"  - shift (or s): One-time phase shift. param1=shift(in PI).")
+    print(f"  - random (or r): Continuous random noise. param1=strength.")
+    print(f"  - periodic (or p): Continuous periodic forcing. param1=strength, param2=freq.")
+    print(f"Examples:")
+    print(f"  '0:s:1.0' -> Cluster 0, shift 1.0*pi")
+    print(f"  '0:r:5.0' -> Cluster 0, random noise strength 5.0")
+    print(f"  '0:p:5.0:2.0' -> Cluster 0, strength 5.0, freq 2.0")
+    print(f"  '0:p:5.0:2.0:0.5' -> ... applied to 50% of particles")
+    print(f"Press Enter to modify the largest cluster ({largest_cluster_id}) by PI (shift).")
+    print("-" * 50)
     
-    # Create subplots for results (2 rows, 5 columns)
-    fig, axes = plt.subplots(2, 5, figsize=(25, 10))
-    axes = axes.flatten()
+    parsed_mods = []
+    
+    while True:
+        user_in = input(f"Enter modifications: ")
+        if user_in.strip() == "":
+            # Default: shift largest cluster by pi
+            parsed_mods.append({
+                'id': largest_cluster_id,
+                'type': 'shift',
+                'params': [1.0],
+                'ratio': 1.0
+            })
+            break
+        
+        try:
+            parts = user_in.split(',')
+            valid_input = True
+            temp_mods = []
+            
+            for part in parts:
+                part = part.strip()
+                if not part: continue
+                
+                subparts = [s.strip() for s in part.split(':')]
+                
+                if len(subparts) == 0: continue
+                
+                cid = int(subparts[0])
+                if not (0 <= cid < n_clusters):
+                    print(f"Error: Cluster ID {cid} out of range.")
+                    valid_input = False
+                    break
+                
+                # Defaults
+                mod_type = 'shift'
+                mod_args = []
+                ratio = 1.0
+                
+                # Heuristic parsing
+                if len(subparts) == 1:
+                    # "0" -> shift 1.0 pi
+                    mod_args = [1.0]
+                elif len(subparts) >= 2:
+                    # Check if second arg is type or number
+                    p2 = subparts[1].lower()
+                    if p2 in ['shift', 's']:
+                        mod_type = 'shift'
+                        # param1 (shift val)
+                        if len(subparts) > 2: mod_args = [float(subparts[2])]
+                        else: mod_args = [1.0]
+                        # ratio
+                        if len(subparts) > 3: ratio = float(subparts[3])
+                    elif p2 in ['random', 'r']:
+                        mod_type = 'random'
+                        if len(subparts) > 2: mod_args = [float(subparts[2])]
+                        else: mod_args = [1.0] # default strength
+                        if len(subparts) > 3: ratio = float(subparts[3])
+                    elif p2 in ['periodic', 'p']:
+                        mod_type = 'periodic'
+                        if len(subparts) > 2: mod_args.append(float(subparts[2])) # strength
+                        else: mod_args.append(1.0)
+                        if len(subparts) > 3: mod_args.append(float(subparts[3])) # freq
+                        else: mod_args.append(1.0)
+                        if len(subparts) > 4: ratio = float(subparts[4])
+                    else:
+                        # Assume old format: id:shift:ratio
+                        # Or id:shift
+                        try:
+                            val = float(p2)
+                            mod_type = 'shift'
+                            mod_args = [val]
+                            if len(subparts) > 2: ratio = float(subparts[2])
+                        except ValueError:
+                             print(f"Unknown type or value: {p2}")
+                             valid_input = False
+                             break
+                
+                temp_mods.append({
+                    'id': cid,
+                    'type': mod_type,
+                    'params': mod_args,
+                    'ratio': ratio
+                })
+            
+            if valid_input and temp_mods:
+                parsed_mods = temp_mods
+                break
+            elif not valid_input:
+                continue
+            else:
+                print("No valid modifications parsed.")
+                
+        except Exception as e:
+            print(f"Invalid input: {e}")
+
+    print(f"Applying modifications: {parsed_mods}")
+
+    # Create figure for result
+    fig, ax = plt.subplots(figsize=(10, 10))
     
     new_save_path = os.path.join(script_dir, "data_modified")
     os.makedirs(new_save_path, exist_ok=True)
     
-    for i, angle in enumerate(angles):
-        print(f"Simulating for angle modification: {angle/np.pi:.1f} PI ({i+1}/{len(angles)})")
+    # Modify Data
+    modified_theta = last_theta.copy()
+    continuous_perturbations = []
+    
+    title_parts = []
+
+    for mod in parsed_mods:
+        cid = mod['id']
+        m_type = mod['type']
+        mod_params = mod['params']
+        ratio = mod['ratio']
         
-        # Modify Data
-        mask = labels == selected_cluster_id
-        modified_theta = last_theta.copy()
-        # Apply modification
-        modified_theta[mask] = np.mod(modified_theta[mask] + angle, 2*np.pi)
+        # Select particles
+        cluster_indices = np.where(labels == cid)[0]
+        n_cluster_particles = len(cluster_indices)
+        n_modify = int(n_cluster_particles * ratio)
         
-        modified_pos = last_pos.copy()
+        if ratio >= 1.0:
+            selected_indices = cluster_indices
+        else:
+            selected_indices = np.random.choice(cluster_indices, n_modify, replace=False)
+            
+        print(f"  - Cluster {cid} ({m_type}): targeting {n_modify}/{n_cluster_particles} particles.")
         
-        # Initialize New Model
-        model = CollisionBoundaryPatternFormation(
-            strengthK=params.get('K', 18.75),
-            distanceD0=params.get('D0', 7),
-            phaseLagA0=params.get('A0', 0.8 * np.pi),
-            boundaryLength=params.get('L', 7),
-            speedV=params.get('v', 3),
-            freqDist=params.get('dist', 'uniform'),
-            initPhaseTheta=modified_theta, # Pass modified phases
-            omegaMin=params.get('wMin', 0),
-            deltaOmega=params.get('dw', 0),
-            agentsNum=int(params.get('N', 2000)),
-            dt=params.get('dt', 0.005),
-            tqdm=True,
-            savePath=new_save_path,
-            shotsnaps=int(params.get('snap', 10)),
-            randomSeed=int(params.get('seed', 9)),
-            overWrite=True
-        )
-        
-        # Overwrite position
-        model.positionX = modified_pos
-        
-        # Run Simulation
-        run_steps = 2000
-        model.run(run_steps)
-        
-        # Plot Result on subplot
-        model.plot(ax=axes[i])
-        axes[i].set_aspect('equal')
-        axes[i].set_title(f"Mod Angle: {angle/np.pi:.1f}$\pi$")
-        
-    # plt.tight_layout()
-    plt.savefig("Angle_Modification_Comparison.png")
+        if m_type == 'shift':
+            shift_val = mod_params[0] * np.pi
+            modified_theta[selected_indices] = np.mod(modified_theta[selected_indices] + shift_val, 2*np.pi)
+            title_parts.append(f"C{cid}:Shift {mod_params[0]:.1f}$\pi$")
+            
+        elif m_type == 'random':
+            strength = mod_params[0]
+            continuous_perturbations.append({
+                'indices': selected_indices,
+                'type': 'random',
+                'strength': strength
+            })
+            title_parts.append(f"C{cid}:Rnd({strength})")
+            
+        elif m_type == 'periodic':
+            strength = mod_params[0]
+            freq = mod_params[1] if len(mod_params) > 1 else 1.0
+            continuous_perturbations.append({
+                'indices': selected_indices,
+                'type': 'periodic',
+                'strength': strength,
+                'frequency': freq
+            })
+            title_parts.append(f"C{cid}:Per({strength}, {freq})")
+    
+    modified_pos = last_pos.copy()
+    
+    # Initialize New Model
+    model = PerturbedCollisionBoundaryPatternFormation(
+        perturbation_list=continuous_perturbations,
+        strengthK=params.get('K', 18.75),
+        distanceD0=params.get('D0', 7),
+        phaseLagA0=params.get('A0', 0.8 * np.pi),
+        boundaryLength=params.get('L', 7),
+        speedV=params.get('v', 3),
+        freqDist=params.get('dist', 'uniform'),
+        initPhaseTheta=modified_theta, # Pass modified phases
+        omegaMin=params.get('wMin', 0),
+        deltaOmega=params.get('dw', 0),
+        agentsNum=int(params.get('N', 2000)),
+        dt=params.get('dt', 0.005),
+        tqdm=True,
+        savePath=new_save_path,
+        shotsnaps=int(params.get('snap', 10)),
+        randomSeed=int(params.get('seed', 9)),
+        overWrite=True
+    )
+    
+    # Overwrite position
+    model.positionX = modified_pos
+    
+    # Run Simulation
+    run_steps = 50000
+    model.run(run_steps)
+    
+    # Plot Result
+    model.plot(ax=ax)
+    ax.set_aspect('equal')
+    
+    title_str = ", ".join(title_parts) if title_parts else "No Modifications"
+    ax.set_title(f"Modified: {title_str}")
+    
+    plt.tight_layout()
+    plt.savefig("Modified_Simulation.png")
     plt.show()
 
 if __name__ == "__main__":
