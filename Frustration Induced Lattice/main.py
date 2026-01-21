@@ -1242,6 +1242,16 @@ class StateAnalysis:
                 self.totalPositionX = totalPositionX.values[:truncate_len].reshape(self.TNum, self.model.agentsNum, 2)
         
 
+    def _is_circular_boundary(self) -> bool:
+        return isinstance(self.model, CircularBoundaryPatternFormation)
+
+    def _calc_delta_x(self, positionX: np.ndarray, others: np.ndarray) -> np.ndarray:
+        if self._is_circular_boundary():
+            return positionX - others
+        return self.model._delta_x(positionX, others, 
+                                   self.model.boundaryLength, 
+                                   self.model.halfBoundaryLength)
+
     def get_state(self, index: int = -1):
         if isinstance(self.model, PurePhaseFrustration):
             positionX = None
@@ -1266,7 +1276,10 @@ class StateAnalysis:
                      shift: np.ndarray = np.array([0, 0])):
 
         positionX, phaseTheta = self.get_state(index)
-        positionX = np.mod(positionX + shift, self.model.boundaryLength)
+        if self._is_circular_boundary():
+            positionX = positionX + shift
+        else:
+            positionX = np.mod(positionX + shift, self.model.boundaryLength)
 
         if ax is None:
             _, ax = plt.subplots(figsize=(5, 5))
@@ -1287,6 +1300,9 @@ class StateAnalysis:
             scale_units='inches', scale=15.0, width=0.005,
             color=colors
         )
+        if self._is_circular_boundary():
+            circle = plt.Circle(self.model.circleCenter + shift, self.model.circleRadius, fill=False, lw=1.0)
+            ax.add_artist(circle)
         ax.set_xlim(0, self.model.boundaryLength)
         ax.set_ylim(0, self.model.boundaryLength)
 
@@ -1333,13 +1349,17 @@ class StateAnalysis:
     def calc_dot_theta(self, positionX: np.ndarray = None, phaseTheta: np.ndarray = None,
                        lookIdx: int = -1) -> np.ndarray:
         positionX, phaseTheta = self.check_state_input(positionX, phaseTheta, lookIdx)
-    
+        
+        if hasattr(self.model, "_calc_dot_phase_collision"):
+            return self.model._calc_dot_phase_collision(
+                positionX, phaseTheta, self.model.freqOmega, self.model.dotThetaParams
+            )
+        
         deltaTheta = phaseTheta - phaseTheta[:, np.newaxis]
-        deltaX = self.model._delta_x(positionX, positionX[:, np.newaxis], 
-                                    self.model.boundaryLength, self.model.halfBoundaryLength)
+        deltaX = self._calc_delta_x(positionX, positionX[:, np.newaxis])
         A = np.where(self.model.distance_x(deltaX) <= self.model.distanceD0, 1, 0)
         return self.model._calc_dot_phase(deltaTheta, A, self.model.freqOmega, 
-                                        self.model.strengthK, self.model.phaseLagA0)
+                                          self.model.strengthK, self.model.phaseLagA0)
     
     def calc_rotation_center(self, positionX: np.ndarray = None, phaseTheta: np.ndarray = None,
                        lookIdx: int = -1) -> np.ndarray:
@@ -1360,11 +1380,10 @@ class StateAnalysis:
         positionX, phaseTheta = self.check_state_input(positionX, phaseTheta, lookIdx)
         
         centers = self.calc_rotation_center(positionX, phaseTheta, lookIdx)
-        centers = np.mod(centers, self.model.boundaryLength)
-        totalDistances = self.model.distance_x(self.model._delta_x(
-            centers, centers[:, np.newaxis], 
-            self.model.boundaryLength, self.model.halfBoundaryLength
-        ))
+        if not self._is_circular_boundary():
+            centers = np.mod(centers, self.model.boundaryLength)
+        deltaX = self._calc_delta_x(centers, centers[:, np.newaxis])
+        totalDistances = self.model.distance_x(deltaX)
 
         classes = self._calc_classes(centers, classDistance, totalDistances)
         return classes, centers
@@ -1384,10 +1403,7 @@ class StateAnalysis:
         else:
             adjPositionX = positionX
 
-        deltaX = self.model._delta_x(
-            adjPositionX, adjPositionX[:, np.newaxis], 
-            self.model.boundaryLength, self.model.halfBoundaryLength
-        )
+        deltaX = self._calc_delta_x(adjPositionX, adjPositionX[:, np.newaxis])
         totalDistances = (deltaX ** 2).sum(axis=-1) ** 0.5
 
         classes = self._calc_classes(adjPositionX, classDistance, totalDistances)
@@ -1447,9 +1463,7 @@ class StateAnalysis:
         return newClasses
     
     def calc_relative_distance(self, position1: np.ndarray, position2: np.ndarray):  #  -> float | np.ndarray
-        deltaX = self.model._delta_x(position1, position2, 
-                                     self.model.boundaryLength, 
-                                     self.model.halfBoundaryLength)
+        deltaX = self._calc_delta_x(position1, position2)
         return np.linalg.norm(deltaX, axis=-1)
 
     def calc_abslute_distance(self, position1: np.ndarray, position2: np.ndarray) -> float:
@@ -1460,19 +1474,18 @@ class StateAnalysis:
                           stdMulti: float = 0.3, 
                           relativeDistance: bool = False) -> Tuple[List[Tuple[int, int]], np.ndarray]:
 
-        # For plot in periodic boundary conditions
-        # classCenters be adjusted to include periodic images
         rawClassNums = classCenters.shape[0]
-        positionShifts = product(
-            [-self.model.boundaryLength, 0, self.model.boundaryLength],
-            [-self.model.boundaryLength, 0, self.model.boundaryLength]
-        )
-        periodicCenters = []
-        for xShift, yShift in positionShifts:
-            periodicCenters.append(
-                np.array([classCenters[:, 0] + xShift, classCenters[:, 1] + yShift]).T
+        if not self._is_circular_boundary():
+            positionShifts = product(
+                [-self.model.boundaryLength, 0, self.model.boundaryLength],
+                [-self.model.boundaryLength, 0, self.model.boundaryLength]
             )
-        classCenters = np.concatenate(periodicCenters, axis=0)
+            periodicCenters = []
+            for xShift, yShift in positionShifts:
+                periodicCenters.append(
+                    np.array([classCenters[:, 0] + xShift, classCenters[:, 1] + yShift]).T
+                )
+            classCenters = np.concatenate(periodicCenters, axis=0)
 
         tri = Delaunay(classCenters)
         edges = set()
@@ -1503,6 +1516,8 @@ class StateAnalysis:
                 filteredEdges.append(edge)
     
         if relativeDistance:
+            if self._is_circular_boundary():
+                return [tuple(edge) for edge in filteredEdges]
             edge = np.unique(np.mod(filteredEdges, rawClassNums), axis=0)
             return [tuple(edge) for edge in edge]
         else:
@@ -1511,9 +1526,7 @@ class StateAnalysis:
     def select_classIdx_of_line(self, selectClassIdx: int, classCenters: np.ndarray,
                                 visualAngle: float, span: float) -> List[int]:
         selectClassPos = classCenters[selectClassIdx]
-        deltaX = self.model._delta_x(selectClassPos, classCenters, 
-                                    self.model.boundaryLength, 
-                                    self.model.halfBoundaryLength)
+        deltaX = self._calc_delta_x(selectClassPos, classCenters)
         spaceAngle = np.arctan2(deltaX[:, 1], deltaX[:, 0])
         filterClassIdx = np.where(
             (np.abs(spaceAngle - visualAngle) < span) |

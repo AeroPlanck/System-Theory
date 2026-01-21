@@ -119,12 +119,12 @@ def draw_frame(sa: StateAnalysis):
 
 if __name__ == "__main__":
 
-    model = CollisionBoundaryPatternFormation(
-        strengthK=25, distanceD0=7, phaseLagA0=0.4 * np.pi,
+    model = CircularBoundaryPatternFormation(
+        strengthK=18.75, distanceD0=3.5, phaseLagA0=0.4 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         freqDist="uniform",
         omegaMin=0, deltaOmega=0,
-        agentsNum=1000, dt=0.005,
+        agentsNum=2000, dt=0.005,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
         randomSeed=9, overWrite=False
     )

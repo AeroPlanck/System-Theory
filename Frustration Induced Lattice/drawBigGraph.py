@@ -80,6 +80,7 @@ models = [
     for omegaMin in omegaMins
     for deltaOmega in deltaOmegas
     for phaseLag in phaseLags
+    for randomSeed in randomSeeds
 ]
 
 # Use indices for mapping to avoid floating point comparison issues
@@ -91,11 +92,11 @@ param_indices = product(
     range(len(distanceD0s)),
     range(len(omegaMins)),
     range(len(deltaOmegas)),
-    range(len(phaseLags))
+    range(len(phaseLags)),
+    range(len(randomSeeds))
 )
 
 for indices, model in zip(param_indices, models):
-    # indices: (i_K, i_D0, i_omegaMin, i_dOmega, i_phaseLag)
     model_map[indices] = model
 
 # Use product to create a single iterable for the outer loops to use with tqdm
@@ -103,13 +104,15 @@ for indices, model in zip(param_indices, models):
 outer_loops_indices = list(product(
     range(len(omegaMins)),
     range(len(deltaOmegas)),
-    range(len(phaseLags))
+    range(len(phaseLags)),
+    range(len(randomSeeds))
 ))
 
-for i_omegaMin, i_dOmega, i_phaseLag in tqdm(outer_loops_indices, desc="Generating Plots"):
+for i_omegaMin, i_dOmega, i_phaseLag, i_seed in tqdm(outer_loops_indices, desc="Generating Plots"):
     omegaMin = omegaMins[i_omegaMin]
     deltaOmega = deltaOmegas[i_dOmega]
     phaseLag = phaseLags[i_phaseLag]
+    randomSeed = randomSeeds[i_seed]
 
     # Adjusted subplot dimensions to match the inner loops (distanceD0 vs strengthK)
     fig, axs = plt.subplots(
@@ -119,7 +122,7 @@ for i_omegaMin, i_dOmega, i_phaseLag in tqdm(outer_loops_indices, desc="Generati
     )
 
     fig.suptitle(
-        rf"$\alpha={(phaseLag/np.pi):.2f}\pi,\ \Omega_{{\min}}={omegaMin:.2f},\ \Delta\Omega={deltaOmega:.2f}$",
+        rf"$\alpha={(phaseLag/np.pi):.2f}\pi,\ \Omega_{{\min}}={omegaMin:.2f},\ \Delta\Omega={deltaOmega:.2f},\ seed={randomSeed}$",
         fontsize=18
     )
     
@@ -128,9 +131,7 @@ for i_omegaMin, i_dOmega, i_phaseLag in tqdm(outer_loops_indices, desc="Generati
 
     for i_D0, distanceD0 in enumerate(distanceD0s):
         for i_K, strengthK in enumerate(strengthKs):
-            # Construct key in the same order as 'models' creation:
-            # K, D0, omegaMin, dOmega, phaseLag
-            key = (i_K, i_D0, i_omegaMin, i_dOmega, i_phaseLag)
+            key = (i_K, i_D0, i_omegaMin, i_dOmega, i_phaseLag, i_seed)
             
             if key in model_map:
                 model = model_map[key]
@@ -157,7 +158,7 @@ for i_omegaMin, i_dOmega, i_phaseLag in tqdm(outer_loops_indices, desc="Generati
             f"figs/{rep_model.__class__.__name__}_"
             f"K{strengthKs[0]:.2f}-{strengthKs[-1]:.2f}_"
             f"D{distanceD0s[0]:.2f}-{distanceD0s[-1]:.2f}_"
-            f"Alpha{phaseLag:.2f}_OmMin{omegaMin:.2f}_Del{deltaOmega:.2f}"
+            f"Alpha{phaseLag:.2f}_OmMin{omegaMin:.2f}_Del{deltaOmega:.2f}_Seed{randomSeed}"
             f"{'initPhaseTheta,' if rep_model.initPhaseTheta is not None else ''}"
             f"_N{rep_model.agentsNum}_Dist{rep_model.freqDist}"
         )
