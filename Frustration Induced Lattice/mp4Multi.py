@@ -120,7 +120,7 @@ def draw_frame(sa: StateAnalysis):
 if __name__ == "__main__":
 
     model = CircularBoundaryPatternFormation(
-        strengthK=18.75, distanceD0=3.5, phaseLagA0=0.4 * np.pi,
+        strengthK=18.75, distanceD0=1, phaseLagA0=0.6 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         freqDist="uniform",
         omegaMin=0, deltaOmega=0,
