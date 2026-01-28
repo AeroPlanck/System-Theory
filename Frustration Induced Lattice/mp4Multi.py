@@ -1,3 +1,5 @@
+import matplotlib as mpl
+mpl.use("Agg")
 import matplotlib.colors as mcolors
 import matplotlib.animation as ma
 import matplotlib.pyplot as plt
@@ -7,6 +9,7 @@ import pandas as pd
 import numpy as np
 import numba as nb
 import subprocess
+import gc
 import imageio
 import os
 import shutil
@@ -44,12 +47,14 @@ plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['font.family'] = 'STIXGeneral'
 # plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 
-from multiprocessing import Pool
 import pandas as pd
+from multiprocessing import Pool
 
 SAVE_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\data"
 MP4_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4"
 MP4_TEMP_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4_temp"
+BATCH_SIZE = 200
+NUM_WORKERS = max(1, (os.cpu_count() or 1) // 2)
 
 
 def _segment_frames(df: pd.DataFrame) -> list:
@@ -60,22 +65,13 @@ def _segment_frames(df: pd.DataFrame) -> list:
     bounds = np.concatenate([[0], reset, [len(idx)]])
     return [df.iloc[bounds[i]:bounds[i + 1]].values for i in range(len(bounds) - 1)]
 
-def _load_variable_frames(model) -> list:
+def _load_variable_frames(model):
     target_path = os.path.join(model.savePath, f"{model}.h5")
     pos_df = pd.read_hdf(target_path, key="positionX")
     theta_df = pd.read_hdf(target_path, key="phaseTheta")
     pos_frames = _segment_frames(pos_df)
     theta_frames = _segment_frames(theta_df)
-    T = min(len(pos_frames), len(theta_frames))
-    frames = []
-    for i in range(T):
-        frames.append({
-            "model": model,
-            "positionX": pos_frames[i],
-            "phaseTheta": theta_frames[i].reshape(-1),
-            "index": i
-        })
-    return frames
+    return pos_frames, theta_frames
 
 def draw_frame_dyn(frame: dict):
     idx = frame["index"]
@@ -84,28 +80,31 @@ def draw_frame_dyn(frame: dict):
     phaseTheta = frame["phaseTheta"]
 
     colors = [hexCmap(i) for i in colors_idx(phaseTheta)]
-    plt.quiver(
+    fig, ax = plt.subplots(1, 1, figsize=(6, 6))
+    ax.quiver(
         positionX[:, 0], positionX[:, 1],
         np.cos(phaseTheta), np.sin(phaseTheta),
         scale_units='inches', scale=15.0, width=0.002,
         color=colors
     )
-    plt.xlim(0, model.boundaryLength)
-    plt.ylim(0, model.boundaryLength)
+    ax.set_xlim(0, model.boundaryLength)
+    ax.set_ylim(0, model.boundaryLength)
+    ax.set_aspect("equal", adjustable="box")
 
-    plt.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
-    plt.close()
+    fig.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
+    plt.close(fig)
+    gc.collect()
 
 def draw_frame(sa: StateAnalysis):
     idx = sa.index
     
-    # fig, ax = plt.subplots(1, 1, figsize=(4, 4))
-
-    sa.plot_spatial(ax=None, colorsBy="phase")
+    fig, ax = plt.subplots(1, 1, figsize=(6, 6))
+    sa.plot_spatial(ax=ax, colorsBy="phase")
 
     xShift = 0.
-    plt.xlim(0 + xShift, sa.model.boundaryLength + xShift)
-    plt.ylim(0, sa.model.boundaryLength)
+    ax.set_xlim(0 + xShift, sa.model.boundaryLength + xShift)
+    ax.set_ylim(0, sa.model.boundaryLength)
+    ax.set_aspect("equal", adjustable="box")
     # plt.xticks(
     #     np.arange(0 + xShift, sa.model.boundaryLength + xShift + 1),
     #     np.arange(0, sa.model.boundaryLength + 1))
@@ -113,8 +112,9 @@ def draw_frame(sa: StateAnalysis):
     # plt.xlim(4, 6)
     # plt.ylim(4, 6)
 
-    plt.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
-    plt.close()
+    fig.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
+    plt.close(fig)
+    gc.collect()
 
 
 if __name__ == "__main__":
@@ -136,34 +136,50 @@ if __name__ == "__main__":
 
     class_name = model.__class__.__name__
     if class_name == "PhaseLagPatternFormationBigArea":
-        frames = _load_variable_frames(model)
+        pos_frames, theta_frames = _load_variable_frames(model)
+        total_frames = min(len(pos_frames), len(theta_frames))
     else:
         sa = StateAnalysis(model)
-        subSaList = list()
-        for i in tqdm(range(0, sa.TNum), desc="Processing data"):
-            subSa = StateAnalysis()
-            subSa.totalPositionX = [sa.totalPositionX[i]]
-            subSa.totalPhaseTheta = [sa.totalPhaseTheta[i]]
-            subSa.model = sa.model
-            subSa.index = i
-            subSa.model = sa.model
-            subSaList.append(subSa)
 
     if os.path.exists(MP4_TEMP_PATH):
         shutil.rmtree(MP4_TEMP_PATH)
     os.mkdir(MP4_TEMP_PATH)
     
-    with Pool(10) as p:
-        if class_name == "PhaseLagPatternFormationBigArea":
-            p.map(
-                draw_frame_dyn,
-                tqdm(frames, desc="Drawing frames", total=len(frames)),
-            )
-        else:
-            p.map(
-                draw_frame,
-                tqdm(subSaList, desc="Drawing frames", total=sa.TNum),
-            )
+    if class_name == "PhaseLagPatternFormationBigArea":
+        total_batches = (total_frames + BATCH_SIZE - 1) // BATCH_SIZE
+        for batch_idx in tqdm(range(total_batches), desc="Drawing batches", total=total_batches):
+            start = batch_idx * BATCH_SIZE
+            end = min(start + BATCH_SIZE, total_frames)
+            batch_frames = []
+            for i in range(start, end):
+                batch_frames.append({
+                    "model": model,
+                    "positionX": pos_frames[i],
+                    "phaseTheta": theta_frames[i].reshape(-1),
+                    "index": i
+                })
+            with Pool(NUM_WORKERS) as p:
+                p.map(draw_frame_dyn, batch_frames)
+            del batch_frames
+            gc.collect()
+    else:
+        total_batches = (sa.TNum + BATCH_SIZE - 1) // BATCH_SIZE
+        for batch_idx in tqdm(range(total_batches), desc="Drawing batches", total=total_batches):
+            start = batch_idx * BATCH_SIZE
+            end = min(start + BATCH_SIZE, sa.TNum)
+            subSaList = []
+            for i in range(start, end):
+                subSa = StateAnalysis()
+                subSa.totalPositionX = [sa.totalPositionX[i]]
+                subSa.totalPhaseTheta = [sa.totalPhaseTheta[i]]
+                subSa.model = sa.model
+                subSa.index = i
+                subSa.model = sa.model
+                subSaList.append(subSa)
+            with Pool(NUM_WORKERS) as p:
+                p.map(draw_frame, subSaList)
+            del subSaList
+            gc.collect()
     
     if os.path.exists(MP4_PATH + rf"\{model}.mp4"):
         os.remove(rf"{MP4_PATH}\{model}.mp4")
@@ -186,3 +202,5 @@ if __name__ == "__main__":
     ]
 
     subprocess.run(ffmpeg_command)
+    if os.path.exists(MP4_TEMP_PATH):
+        shutil.rmtree(MP4_TEMP_PATH)
