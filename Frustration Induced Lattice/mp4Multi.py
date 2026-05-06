@@ -73,6 +73,18 @@ def _load_variable_frames(model):
     theta_frames = _segment_frames(theta_df)
     return pos_frames, theta_frames
 
+def _apply_boundary_style(ax: plt.Axes, model):
+    if hasattr(model, "boundaryVertices"):
+        boundary = np.vstack([model.boundaryVertices, model.boundaryVertices[0]])
+        ax.plot(boundary[:, 0], boundary[:, 1], color="black", linewidth=1.2)
+        pad = 0.1
+        ax.set_xlim(np.min(model.boundaryVertices[:, 0]) - pad, np.max(model.boundaryVertices[:, 0]) + pad)
+        ax.set_ylim(np.min(model.boundaryVertices[:, 1]) - pad, np.max(model.boundaryVertices[:, 1]) + pad)
+    else:
+        ax.set_xlim(0, model.boundaryLength)
+        ax.set_ylim(0, model.boundaryLength)
+    ax.set_aspect("equal", adjustable="box")
+
 def draw_frame_dyn(frame: dict):
     idx = frame["index"]
     model = frame["model"]
@@ -87,9 +99,7 @@ def draw_frame_dyn(frame: dict):
         scale_units='inches', scale=15.0, width=0.002,
         color=colors
     )
-    ax.set_xlim(0, model.boundaryLength)
-    ax.set_ylim(0, model.boundaryLength)
-    ax.set_aspect("equal", adjustable="box")
+    _apply_boundary_style(ax, model)
 
     fig.savefig(os.path.join(MP4_TEMP_PATH, f"{idx}.png"), bbox_inches='tight', dpi=200)
     plt.close(fig)
@@ -100,11 +110,7 @@ def draw_frame(sa: StateAnalysis):
     
     fig, ax = plt.subplots(1, 1, figsize=(6, 6))
     sa.plot_spatial(ax=ax, colorsBy="phase")
-
-    xShift = 0.
-    ax.set_xlim(0 + xShift, sa.model.boundaryLength + xShift)
-    ax.set_ylim(0, sa.model.boundaryLength)
-    ax.set_aspect("equal", adjustable="box")
+    _apply_boundary_style(ax, sa.model)
     # plt.xticks(
     #     np.arange(0 + xShift, sa.model.boundaryLength + xShift + 1),
     #     np.arange(0, sa.model.boundaryLength + 1))
@@ -119,11 +125,11 @@ def draw_frame(sa: StateAnalysis):
 
 if __name__ == "__main__":
 
-    model = CircularBoundaryPatternFormation(
-        strengthK=20.75, distanceD0=0.5, phaseLagA0=0.0 * np.pi,
+    model = CollisionBoundaryMidpointSpikePatternFormation(
+        strengthK=20.75, distanceD0=1.0, phaseLagA0=0.6 * np.pi,
         # initPhaseTheta=np.zeros(1000), 
         freqDist="uniform",
-        omegaMin=0, deltaOmega=12,
+        omegaMin=0, deltaOmega=3, protrusionHeight=0.5, protrusionHalfWidth=0.25,
         agentsNum=2000, dt=0.005,
         tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
         randomSeed=9, overWrite=False

@@ -704,6 +704,335 @@ class CollisionBoundaryPatternFormation(Swarmalators2D):
         )
 
 
+class CollisionBoundaryMidpointSpikePatternFormation(CollisionBoundaryPatternFormation):
+    def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
+                 boundaryLength: float = 7, speedV: float = 3.0,
+                 freqDist: str = "uniform", initPhaseTheta: np.ndarray = None,
+                 omegaMin: float = 0., deltaOmega: float = 1.0,
+                 protrusionHeight: float = 0.8, protrusionHalfWidth: float = None,
+                 agentsNum: int = 1000, dt: float = 0.01,
+                 tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
+                 randomSeed: int = 10, overWrite: bool = False) -> None:
+        super().__init__(
+            strengthK=strengthK,
+            distanceD0=distanceD0,
+            phaseLagA0=phaseLagA0,
+            boundaryLength=boundaryLength,
+            speedV=speedV,
+            freqDist=freqDist,
+            initPhaseTheta=initPhaseTheta,
+            omegaMin=omegaMin,
+            deltaOmega=deltaOmega,
+            agentsNum=agentsNum,
+            dt=dt,
+            tqdm=tqdm,
+            savePath=savePath,
+            shotsnaps=shotsnaps,
+            randomSeed=randomSeed,
+            overWrite=overWrite
+        )
+
+        if protrusionHalfWidth is None:
+            protrusionHalfWidth = max(1e-6, protrusionHeight * 0.35)
+        assert protrusionHeight >= 0.0, "protrusionHeight must be non-negative"
+        assert protrusionHeight < boundaryLength / 2, "protrusionHeight must be < L/2 for inward spikes"
+        assert 0 < protrusionHalfWidth < boundaryLength / 2, "protrusionHalfWidth must be in (0, L/2)"
+
+        self.protrusionHeight = protrusionHeight
+        self.protrusionHalfWidth = protrusionHalfWidth
+        self.boundaryVertices = self._build_spike_boundary_vertices(
+            self.boundaryLength, self.protrusionHeight, self.protrusionHalfWidth
+        )
+
+    @staticmethod
+    def _build_spike_boundary_vertices(boundaryLength: float, protrusionHeight: float,
+                                       protrusionHalfWidth: float) -> np.ndarray:
+        L = boundaryLength
+        h = protrusionHeight
+        w = protrusionHalfWidth
+        mid = 0.5 * L
+
+        return np.array([
+            [0.0, 0.0],
+            [mid - w, 0.0],
+            [mid, h],
+            [mid + w, 0.0],
+            [L, 0.0],
+            [L, mid - w],
+            [L - h, mid],
+            [L, mid + w],
+            [L, L],
+            [mid + w, L],
+            [mid, L - h],
+            [mid - w, L],
+            [0.0, L],
+            [0.0, mid + w],
+            [h, mid],
+            [0.0, mid - w],
+        ], dtype=np.float64)
+
+    @staticmethod
+    @nb.njit
+    def _point_in_polygon(point: np.ndarray, vertices: np.ndarray) -> bool:
+        x = point[0]
+        y = point[1]
+        inside = False
+        n = vertices.shape[0]
+
+        for i in range(n):
+            j = (i - 1 + n) % n
+            xi, yi = vertices[i, 0], vertices[i, 1]
+            xj, yj = vertices[j, 0], vertices[j, 1]
+            intersects = (yi > y) != (yj > y)
+            if intersects:
+                x_cross = (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi
+                if x < x_cross:
+                    inside = not inside
+        return inside
+
+    @staticmethod
+    @nb.njit
+    def _closest_point_on_segment(point: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
+        ab = b - a
+        ab2 = ab[0] * ab[0] + ab[1] * ab[1]
+        if ab2 < 1e-15:
+            return a.copy()
+        ap = point - a
+        t = (ap[0] * ab[0] + ap[1] * ab[1]) / ab2
+        if t < 0.0:
+            t = 0.0
+        elif t > 1.0:
+            t = 1.0
+        return a + t * ab
+
+    @staticmethod
+    @nb.njit
+    def _reflect_by_polygon(point: np.ndarray, velocity: np.ndarray,
+                            vertices: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        n = vertices.shape[0]
+        best_idx = 0
+        min_dist2 = 1e30
+
+        for i in range(n):
+            j = (i + 1) % n
+            a = vertices[i]
+            b = vertices[j]
+            proj = CollisionBoundaryMidpointSpikePatternFormation._closest_point_on_segment(point, a, b)
+            dx = point[0] - proj[0]
+            dy = point[1] - proj[1]
+            dist2 = dx * dx + dy * dy
+            if dist2 < min_dist2:
+                min_dist2 = dist2
+                best_idx = i
+
+        a = vertices[best_idx]
+        b = vertices[(best_idx + 1) % n]
+        proj = CollisionBoundaryMidpointSpikePatternFormation._closest_point_on_segment(point, a, b)
+        normal = point - proj
+        norm = np.sqrt(normal[0] * normal[0] + normal[1] * normal[1])
+
+        if norm < 1e-12:
+            edge = b - a
+            normal = np.array([-edge[1], edge[0]], dtype=np.float64)
+            norm = np.sqrt(normal[0] * normal[0] + normal[1] * normal[1]) + 1e-15
+
+        unit_normal = normal / norm
+        dot_p = (point[0] - proj[0]) * unit_normal[0] + (point[1] - proj[1]) * unit_normal[1]
+        reflected_point = point - 2.0 * dot_p * unit_normal
+        reflected_velocity = velocity - 2.0 * (
+            velocity[0] * unit_normal[0] + velocity[1] * unit_normal[1]
+        ) * unit_normal
+
+        return reflected_point, reflected_velocity
+
+    @staticmethod
+    @nb.njit
+    def _handle_collision_spiked(positionX: np.ndarray, velocity: np.ndarray,
+                                 vertices: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        agentsNum = positionX.shape[0]
+        newPositionX = positionX.copy()
+        newVelocity = velocity.copy()
+        n = vertices.shape[0]
+
+        for i in range(agentsNum):
+            point = newPositionX[i].copy()
+            vel = newVelocity[i].copy()
+
+            # point-in-polygon (ray casting)
+            x = point[0]
+            y = point[1]
+            inside = False
+            for k in range(n):
+                j = (k - 1 + n) % n
+                xi = vertices[k, 0]
+                yi = vertices[k, 1]
+                xj = vertices[j, 0]
+                yj = vertices[j, 1]
+                intersects = (yi > y) != (yj > y)
+                if intersects:
+                    x_cross = (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi
+                    if x < x_cross:
+                        inside = not inside
+            if inside:
+                continue
+
+            for _ in range(4):
+                # find closest edge to current point
+                best_idx = 0
+                min_dist2 = 1e30
+                for k in range(n):
+                    j = (k + 1) % n
+                    ax = vertices[k, 0]
+                    ay = vertices[k, 1]
+                    bx = vertices[j, 0]
+                    by = vertices[j, 1]
+                    abx = bx - ax
+                    aby = by - ay
+                    ab2 = abx * abx + aby * aby
+                    if ab2 < 1e-15:
+                        px = ax
+                        py = ay
+                    else:
+                        apx = point[0] - ax
+                        apy = point[1] - ay
+                        t = (apx * abx + apy * aby) / ab2
+                        if t < 0.0:
+                            t = 0.0
+                        elif t > 1.0:
+                            t = 1.0
+                        px = ax + t * abx
+                        py = ay + t * aby
+                    dx = point[0] - px
+                    dy = point[1] - py
+                    dist2 = dx * dx + dy * dy
+                    if dist2 < min_dist2:
+                        min_dist2 = dist2
+                        best_idx = k
+
+                # reflect point and velocity by closest edge normal
+                j = (best_idx + 1) % n
+                ax = vertices[best_idx, 0]
+                ay = vertices[best_idx, 1]
+                bx = vertices[j, 0]
+                by = vertices[j, 1]
+                abx = bx - ax
+                aby = by - ay
+                ab2 = abx * abx + aby * aby
+                if ab2 < 1e-15:
+                    px = ax
+                    py = ay
+                else:
+                    apx = point[0] - ax
+                    apy = point[1] - ay
+                    t = (apx * abx + apy * aby) / ab2
+                    if t < 0.0:
+                        t = 0.0
+                    elif t > 1.0:
+                        t = 1.0
+                    px = ax + t * abx
+                    py = ay + t * aby
+
+                nx = point[0] - px
+                ny = point[1] - py
+                norm = np.sqrt(nx * nx + ny * ny)
+                if norm < 1e-12:
+                    nx = -aby
+                    ny = abx
+                    norm = np.sqrt(nx * nx + ny * ny) + 1e-15
+                ux = nx / norm
+                uy = ny / norm
+
+                dot_p = (point[0] - px) * ux + (point[1] - py) * uy
+                point[0] = point[0] - 2.0 * dot_p * ux
+                point[1] = point[1] - 2.0 * dot_p * uy
+
+                dot_v = vel[0] * ux + vel[1] * uy
+                vel[0] = vel[0] - 2.0 * dot_v * ux
+                vel[1] = vel[1] - 2.0 * dot_v * uy
+
+                # check if inside after reflection
+                x = point[0]
+                y = point[1]
+                inside = False
+                for k in range(n):
+                    jj = (k - 1 + n) % n
+                    xi = vertices[k, 0]
+                    yi = vertices[k, 1]
+                    xj = vertices[jj, 0]
+                    yj = vertices[jj, 1]
+                    intersects = (yi > y) != (yj > y)
+                    if intersects:
+                        x_cross = (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi
+                        if x < x_cross:
+                            inside = not inside
+                if inside:
+                    break
+
+            newPositionX[i] = point
+            newVelocity[i] = vel
+
+        return newPositionX, newVelocity
+
+    def update(self):
+        dotPos = self.dotPosition
+        dotPhase = self.dotPhase
+
+        newPositionX = self.positionX + dotPos * self.dt
+        self.positionX, correctedVelocity = self._handle_collision_spiked(
+            newPositionX, dotPos, self.boundaryVertices
+        )
+
+        collision_mask = ~np.isclose(correctedVelocity[:, 0], dotPos[:, 0]) | ~np.isclose(correctedVelocity[:, 1], dotPos[:, 1])
+        if np.any(collision_mask):
+            newPhaseTheta = np.arctan2(correctedVelocity[:, 1], correctedVelocity[:, 0])
+            self.phaseTheta[collision_mask] = newPhaseTheta[collision_mask]
+
+        self.phaseTheta = np.mod(self.phaseTheta + dotPhase * self.dt, 2 * np.pi)
+
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+        if ax is None:
+            _, ax = plt.subplots(figsize=(6, 6))
+
+        if colorsBy == "freq":
+            colors = (
+                ["red"] * (self.freqOmega >= 0).sum() +
+                ["#414CC7"] * (self.freqOmega < 0).sum()
+            )
+        elif colorsBy == "phase":
+            colors = [hexCmap(i) for i in
+                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
+            ]
+
+        ax.quiver(
+            self.positionX[:, 0], self.positionX[:, 1],
+            np.cos(self.phaseTheta), np.sin(self.phaseTheta),
+            scale_units='inches', scale=15.0, width=0.002,
+            color=colors
+        )
+
+        boundary = np.vstack([self.boundaryVertices, self.boundaryVertices[0]])
+        ax.plot(boundary[:, 0], boundary[:, 1], color="black", linewidth=1.2)
+
+        pad = 0.1
+        ax.set_xlim(np.min(self.boundaryVertices[:, 0]) - pad, np.max(self.boundaryVertices[:, 0]) + pad)
+        ax.set_ylim(np.min(self.boundaryVertices[:, 1]) - pad, np.max(self.boundaryVertices[:, 1]) + pad)
+        ax.set_aspect("equal")
+
+    def __str__(self):
+        return (
+            f"{self.__class__.__name__}("
+            f"K={self.strengthK:.3f},D0={self.distanceD0:.3f},"
+            f"A0={self.phaseLagA0:.3f},L={self.boundaryLength:.1f},"
+            f"H={self.protrusionHeight:.3f},W={self.protrusionHalfWidth:.3f},"
+            f"v={self.speedV:.1f},dist={self.freqDist},"
+            f"{'initPhaseTheta,' if self.initPhaseTheta is not None else ''}"
+            f"wMin={self.omegaMin:.3f},dw={self.deltaOmega:.3f},"
+            f"N={self.agentsNum},dt={self.dt:.3f},"
+            f"snap={self.shotsnaps},seed={self.randomSeed}"
+            ")"
+        )
+
+
 class CircularBoundaryPatternFormation(Swarmalators2D):
     def __init__(self, strengthK: float, distanceD0: float, phaseLagA0: float,
                  boundaryLength: float = 7, speedV: float = 3.0,
