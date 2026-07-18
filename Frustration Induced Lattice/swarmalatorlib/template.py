@@ -101,12 +101,42 @@ class Swarmalators:
 
             # self.store = pd.HDFStore(targetPath, mode="a")
 
-            print(f"{targetPath} already exists, skipping.")
+            self.load_last_state(targetPath)
+            print(f"{targetPath} already exists, loaded last state and skipped.")
             return False
 
         self.append()
         return True
 
+    def load_last_state(self, targetPath: str = None) -> None:
+        if targetPath is None:
+            targetPath = f"{self.savePath}/{self}.h5"
+
+        with pd.HDFStore(targetPath, mode="r") as store:
+            if "/phaseTheta" in store.keys():
+                thetaRows = store.get_storer("phaseTheta").nrows
+                phaseTheta = store.select(
+                    "phaseTheta",
+                    start=max(0, thetaRows - self.agentsNum)
+                ).values.reshape(-1)
+                self.phaseTheta = phaseTheta
+
+            if "/positionX" in store.keys() and hasattr(self, "positionX"):
+                positionRows = store.get_storer("positionX").nrows
+                positionX = store.select(
+                    "positionX",
+                    start=max(0, positionRows - self.agentsNum)
+                ).values
+
+                if np.ndim(self.positionX) == 1:
+                    self.positionX = positionX.reshape(-1)
+                else:
+                    self.positionX = positionX.reshape(
+                        self.agentsNum, self.positionX.shape[1]
+                    )
+
+        if hasattr(self, "temp") and hasattr(self, "update_temp"):
+            self.update_temp()
 
     def append(self):
         if self.store is not None:
@@ -114,6 +144,15 @@ class Swarmalators:
                 return
             self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
             self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
+
+    def append_final(self):
+        if self.store is None or self.counts % self.shotsnaps == 0:
+            return
+
+        counts = self.counts
+        self.counts = 0
+        self.append()
+        self.counts = counts
 
     @property
     def deltaTheta(self) -> np.ndarray:
@@ -209,9 +248,10 @@ class Swarmalators:
 
         for idx in iterRange:
             self.update()
+            self.counts = idx + 1
             self.append()
-            self.counts = idx
 
+        self.append_final()
         self.close()
 
     def plot(self) -> None:
@@ -383,4 +423,3 @@ class Swarmalators2D(Swarmalators):
         answer[np.isnan(answer) | np.isinf(answer)] = 0
 
         return answer
-    

@@ -32,6 +32,69 @@ hex_colors_path = os.path.join(script_dir, "swarmalatorlib", "hex_colors.json")
 with open(hex_colors_path, "r", encoding="utf-8") as f:
     hexColors = json.load(f)
 hexCmap = mcolors.LinearSegmentedColormap.from_list("cmap", hexColors)
+phaseCmap = hexCmap.reversed()
+phaseNorm = mcolors.Normalize(vmin=0, vmax=2 * np.pi)
+freqCmap = mcolors.LinearSegmentedColormap.from_list(
+    "freq", ["#414CC7", "#F8F8F8", "#FF0000"]
+)
+
+
+def _freq_norm(freqOmega: np.ndarray) -> mcolors.Normalize:
+    maxAbsFreq = np.max(np.abs(freqOmega)) if freqOmega.size else 1.0
+    if maxAbsFreq == 0:
+        maxAbsFreq = 1.0
+    return mcolors.Normalize(vmin=-maxAbsFreq, vmax=maxAbsFreq)
+
+
+def _plot_colored_quiver(
+    ax: plt.Axes,
+    positionX: np.ndarray,
+    phaseTheta: np.ndarray,
+    freqOmega: np.ndarray,
+    colorsBy: str,
+    scale: float,
+    width: float,
+):
+    assert colorsBy in ["freq", "phase"], "colorsBy must be 'freq' or 'phase'"
+
+    if colorsBy == "freq":
+        colorValues = freqOmega
+        colorCmap = freqCmap
+        colorNorm = _freq_norm(freqOmega)
+    else:
+        colorValues = phaseTheta
+        colorCmap = phaseCmap
+        colorNorm = phaseNorm
+
+    return ax.quiver(
+        positionX[:, 0], positionX[:, 1],
+        np.cos(phaseTheta), np.sin(phaseTheta),
+        colorValues,
+        cmap=colorCmap, norm=colorNorm,
+        scale_units='inches', scale=scale, width=width
+    )
+
+
+def _add_quiver_colorbar(
+    ax: plt.Axes,
+    quiver,
+    colorsBy: str,
+    freqOmega: np.ndarray,
+    showColorbar: bool,
+) -> None:
+    if not showColorbar:
+        return
+
+    cbar = ax.figure.colorbar(quiver, ax=ax)
+    if colorsBy == "phase":
+        cbar.set_ticks([0, np.pi, 2 * np.pi])
+        cbar.ax.set_yticklabels([r"$0$", r"$\pi$", r"$2\pi$"])
+    else:
+        maxAbsFreq = np.max(np.abs(freqOmega)) if freqOmega.size else 0
+        if maxAbsFreq == 0:
+            cbar.set_ticks([0])
+        else:
+            cbar.set_ticks([-maxAbsFreq, 0, maxAbsFreq])
 
 from swarmalatorlib.template import Swarmalators2D
 
@@ -208,26 +271,15 @@ class PhaseLagPatternFormation(Swarmalators2D):
             self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
             self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
     
-    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase", showColorbar: bool = True):
         if ax is None:
             _, ax = plt.subplots(figsize=(5, 5))
-        
-        if colorsBy == "freq":
-            colors = (
-                ["red"] * (self.freqOmega >= 0).sum() + 
-                ["#414CC7"] * (self.freqOmega < 0).sum()
-            )
-        elif colorsBy == "phase":
-            colors = [hexCmap(i) for i in
-                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
-            ]
 
-        ax.quiver(
-            self.positionX[:, 0], self.positionX[:, 1],
-            np.cos(self.phaseTheta), np.sin(self.phaseTheta), 
-            scale_units='inches', scale=15.0, width=0.002,
-            color=colors
+        quiver = _plot_colored_quiver(
+            ax, self.positionX, self.phaseTheta, self.freqOmega,
+            colorsBy, scale=15.0, width=0.002
         )
+        _add_quiver_colorbar(ax, quiver, colorsBy, self.freqOmega, showColorbar)
         ax.set_xlim(0, self.boundaryLength)
         ax.set_ylim(0, self.boundaryLength)
 
@@ -408,26 +460,15 @@ class PhaseLagPatternFormationBigArea(Swarmalators2D):
             self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
             self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
     
-    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase", showColorbar: bool = True):
         if ax is None:
             _, ax = plt.subplots(figsize=(5, 5))
-        
-        if colorsBy == "freq":
-            colors = (
-                ["red"] * (self.freqOmega >= 0).sum() + 
-                ["#414CC7"] * (self.freqOmega < 0).sum()
-            )
-        elif colorsBy == "phase":
-            colors = [hexCmap(i) for i in
-                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
-            ]
 
-        ax.quiver(
-            self.positionX[:, 0], self.positionX[:, 1],
-            np.cos(self.phaseTheta), np.sin(self.phaseTheta), 
-            scale_units='inches', scale=15.0, width=0.002,
-            color=colors
+        quiver = _plot_colored_quiver(
+            ax, self.positionX, self.phaseTheta, self.freqOmega,
+            colorsBy, scale=15.0, width=0.002
         )
+        _add_quiver_colorbar(ax, quiver, colorsBy, self.freqOmega, showColorbar)
         ax.set_xlim(0, self.boundaryLength)
         ax.set_ylim(0, self.boundaryLength)
 
@@ -667,26 +708,15 @@ class CollisionBoundaryPatternFormation(Swarmalators2D):
             self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
             self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
     
-    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase", showColorbar: bool = True):
         if ax is None:
             _, ax = plt.subplots(figsize=(5, 5))
-        
-        if colorsBy == "freq":
-            colors = (
-                ["red"] * (self.freqOmega >= 0).sum() + 
-                ["#414CC7"] * (self.freqOmega < 0).sum()
-            )
-        elif colorsBy == "phase":
-            colors = [hexCmap(i) for i in
-                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
-            ]
 
-        ax.quiver(
-            self.positionX[:, 0], self.positionX[:, 1],
-            np.cos(self.phaseTheta), np.sin(self.phaseTheta), 
-            scale_units='inches', scale=15.0, width=0.002,
-            color=colors
+        quiver = _plot_colored_quiver(
+            ax, self.positionX, self.phaseTheta, self.freqOmega,
+            colorsBy, scale=15.0, width=0.002
         )
+        _add_quiver_colorbar(ax, quiver, colorsBy, self.freqOmega, showColorbar)
         ax.set_xlim(0, self.boundaryLength)
         ax.set_ylim(0, self.boundaryLength)
 
@@ -989,26 +1019,15 @@ class CollisionBoundaryMidpointSpikePatternFormation(CollisionBoundaryPatternFor
 
         self.phaseTheta = np.mod(self.phaseTheta + dotPhase * self.dt, 2 * np.pi)
 
-    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase", showColorbar: bool = True):
         if ax is None:
             _, ax = plt.subplots(figsize=(6, 6))
 
-        if colorsBy == "freq":
-            colors = (
-                ["red"] * (self.freqOmega >= 0).sum() +
-                ["#414CC7"] * (self.freqOmega < 0).sum()
-            )
-        elif colorsBy == "phase":
-            colors = [hexCmap(i) for i in
-                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
-            ]
-
-        ax.quiver(
-            self.positionX[:, 0], self.positionX[:, 1],
-            np.cos(self.phaseTheta), np.sin(self.phaseTheta),
-            scale_units='inches', scale=15.0, width=0.002,
-            color=colors
+        quiver = _plot_colored_quiver(
+            ax, self.positionX, self.phaseTheta, self.freqOmega,
+            colorsBy, scale=15.0, width=0.002
         )
+        _add_quiver_colorbar(ax, quiver, colorsBy, self.freqOmega, showColorbar)
 
         boundary = np.vstack([self.boundaryVertices, self.boundaryVertices[0]])
         ax.plot(boundary[:, 0], boundary[:, 1], color="black", linewidth=1.2)
@@ -1199,28 +1218,25 @@ class CircularBoundaryPatternFormation(Swarmalators2D):
             self.store.append(key="positionX", value=pd.DataFrame(self.positionX))
             self.store.append(key="phaseTheta", value=pd.DataFrame(self.phaseTheta))
     
-    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase"):
+    def plot(self, ax: plt.Axes = None, colorsBy: str = "phase", showColorbar: bool = True):
         if ax is None:
             _, ax = plt.subplots(figsize=(5, 5))
-        
-        if colorsBy == "freq":
-            colors = (
-                ["red"] * (self.freqOmega >= 0).sum() + 
-                ["#414CC7"] * (self.freqOmega < 0).sum()
-            )
-        elif colorsBy == "phase":
-            colors = [hexCmap(i) for i in
-                np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
-            ]
 
-        ax.quiver(
-            self.positionX[:, 0], self.positionX[:, 1],
-            np.cos(self.phaseTheta), np.sin(self.phaseTheta), 
-            scale_units='inches', scale=15.0, width=0.002,
-            color=colors
+        quiver = _plot_colored_quiver(
+            ax, self.positionX, self.phaseTheta, self.freqOmega,
+            colorsBy, scale=15.0, width=0.002
         )
-        ax.set_xlim(0, self.boundaryLength)
-        ax.set_ylim(0, self.boundaryLength)
+        _add_quiver_colorbar(ax, quiver, colorsBy, self.freqOmega, showColorbar)
+        circle = plt.Circle(
+            self.circleCenter, self.circleRadius,
+            fill=False, color="white", linewidth=0.8, zorder=3
+        )
+        ax.add_artist(circle)
+
+        pad = 0.02 * self.boundaryLength
+        ax.set_xlim(-pad, self.boundaryLength + pad)
+        ax.set_ylim(-pad, self.boundaryLength + pad)
+        ax.set_aspect("equal", adjustable="box")
 
     def __str__(self):
         return (
@@ -1493,7 +1509,7 @@ class PhaseLagPatternFormation1D(PhaseLagPatternFormation):
         """Adjacency matrix: 1 if |x_i - x_j| <= d0 else 0"""
         return np.where(np.abs(self.deltaX) <= self.distanceD0, 1, 0)
     
-    def plot(self, ax: plt.Axes = None) -> None:
+    def plot(self, ax: plt.Axes = None, showColorbar: bool = True) -> None:
         colors = [new_cmap(i) for i in
             np.floor(256 - self.phaseTheta / (2 * np.pi) * 256).astype(np.int32)
         ]
@@ -1517,9 +1533,10 @@ class PhaseLagPatternFormation1D(PhaseLagPatternFormation):
 
         plt.grid()
         plt.tick_params(direction='in')
-        plt.scatter(np.full(self.agentsNum, -2), np.full(self.agentsNum, -2),
-                    c=self.phaseTheta, cmap=new_cmap, alpha=0.8, vmin=0, vmax=2*np.pi)
-        plt.colorbar(ticks=[0, np.pi, 2*np.pi], ax=ax).ax.set_yticklabels([r'$0$', r'$\pi$', r'$2\pi$'])
+        if showColorbar:
+            plt.scatter(np.full(self.agentsNum, -2), np.full(self.agentsNum, -2),
+                        c=self.phaseTheta, cmap=new_cmap, alpha=0.8, vmin=0, vmax=2*np.pi)
+            plt.colorbar(ticks=[0, np.pi, 2*np.pi], ax=ax).ax.set_yticklabels([r'$0$', r'$\pi$', r'$2\pi$'])
 
 
 class StateAnalysis:
