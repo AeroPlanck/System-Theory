@@ -87,6 +87,15 @@ TITLE_FONTSIZE = 15.0
 COLORBAR_LABEL_FONTSIZE = 14.0
 FIGURE_DPI = 300
 
+# Monochrome boundary-rotation annotation. The percentages are calculated from
+# terminal-frame particles in the outer shell and normalized over particles
+# with a sufficiently strong tangential heading.
+BOUNDARY_SHELL_FRACTION = 0.01
+TANGENTIAL_THRESHOLD = 0.20
+ROTATION_LABEL_FONTSIZE = 9.0
+ROTATION_LABEL_POSITION = (0.975, 0.025)
+ROTATION_LABEL_BACKGROUND_ALPHA = 0.2
+
 # =============================================================================
 # END USER CONFIGURATION
 # =============================================================================
@@ -350,6 +359,88 @@ def alpha_math_label(phase_lag_a0: float) -> str:
     return rf"$\alpha={value}$"
 
 
+def boundary_rotation_statistics(
+    analysis: LastFrameStateAnalysis,
+) -> tuple[float, float, int, int]:
+    """Return terminal CW/CCW percentages for tangential boundary particles.
+
+    Positive tangential projection is counterclockwise and negative projection
+    is clockwise. Percentages are normalized over the classified tangential
+    particles, so they sum to 100 when at least one particle is classified.
+    """
+
+    if not 0 < BOUNDARY_SHELL_FRACTION <= 1:
+        raise ValueError("BOUNDARY_SHELL_FRACTION must be in (0, 1].")
+    if not 0 <= TANGENTIAL_THRESHOLD < 1:
+        raise ValueError("TANGENTIAL_THRESHOLD must be in [0, 1).")
+
+    position_x, phase_theta = analysis.get_state(-1)
+    relative_position = position_x - analysis.model.circleCenter
+    radial_distance = np.linalg.norm(relative_position, axis=1)
+    shell_width = analysis.model.circleRadius * BOUNDARY_SHELL_FRACTION
+    boundary_mask = radial_distance >= analysis.model.circleRadius - shell_width
+
+    polar_angle = np.arctan2(relative_position[:, 1], relative_position[:, 0])
+    # dot((cos(theta), sin(theta)), (-sin(phi), cos(phi)))
+    tangential_projection = np.sin(phase_theta - polar_angle)
+    tangential_mask = boundary_mask & (
+        np.abs(tangential_projection) >= TANGENTIAL_THRESHOLD
+    )
+
+    boundary_count = int(np.count_nonzero(boundary_mask))
+    tangential_count = int(np.count_nonzero(tangential_mask))
+    if tangential_count == 0:
+        return np.nan, np.nan, boundary_count, tangential_count
+
+    classified = tangential_projection[tangential_mask]
+    clockwise_percent = float(np.mean(classified < 0) * 100)
+    counterclockwise_percent = float(np.mean(classified > 0) * 100)
+    return (
+        clockwise_percent,
+        counterclockwise_percent,
+        boundary_count,
+        tangential_count,
+    )
+
+
+def add_rotation_annotation(
+    axis: plt.Axes,
+    analysis: LastFrameStateAnalysis,
+) -> None:
+    """Add a neutral corner label without competing with the phase colormap."""
+
+    clockwise, counterclockwise, _, tangential_count = (
+        boundary_rotation_statistics(analysis)
+    )
+    if tangential_count == 0:
+        text = "Boundary rotation\nCW   --\nCCW  --"
+    else:
+        text = (
+            f"Boundary rotation  n={tangential_count}\n"
+            f"CW    {clockwise:5.1f}%\n"
+            f"CCW  {counterclockwise:5.1f}%"
+        )
+
+    axis.text(
+        *ROTATION_LABEL_POSITION,
+        text,
+        transform=axis.transAxes,
+        ha="right",
+        va="bottom",
+        fontsize=ROTATION_LABEL_FONTSIZE,
+        color="#202020",
+        linespacing=1.05,
+        zorder=6,
+        bbox={
+            "boxstyle": "round,pad=0.25",
+            "facecolor": "white",
+            "edgecolor": "#707070",
+            "linewidth": 0.6,
+            "alpha": ROTATION_LABEL_BACKGROUND_ALPHA,
+        },
+    )
+
+
 def load_all_terminal_states(
     models: Sequence[CircularBoundaryPatternFormation],
 ) -> list[LastFrameStateAnalysis]:
@@ -424,6 +515,7 @@ def create_integrated_figure(
                 color="black",
                 zorder=5,
             )
+            add_rotation_annotation(axis, analysis)
 
         for unused_axis in axes[panel_count:]:
             unused_axis.set_visible(False)

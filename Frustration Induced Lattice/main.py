@@ -743,7 +743,11 @@ class CollisionBoundaryMidpointSpikePatternFormation(CollisionBoundaryPatternFor
                  agentsNum: int = 1000, dt: float = 0.01,
                  tqdm: bool = False, savePath: str = None, shotsnaps: int = 10,
                  randomSeed: int = 10, overWrite: bool = False) -> None:
-        super().__init__(
+        # Use the circular-boundary model as the base dynamics/initialization.
+        # The class is kept at its historical location/name for API compatibility;
+        # CircularBoundaryPatternFormation is available when instances are created.
+        CircularBoundaryPatternFormation.__init__(
+            self,
             strengthK=strengthK,
             distanceD0=distanceD0,
             phaseLagA0=phaseLagA0,
@@ -765,238 +769,231 @@ class CollisionBoundaryMidpointSpikePatternFormation(CollisionBoundaryPatternFor
         if protrusionHalfWidth is None:
             protrusionHalfWidth = max(1e-6, protrusionHeight * 0.35)
         assert protrusionHeight >= 0.0, "protrusionHeight must be non-negative"
-        assert protrusionHeight < boundaryLength / 2, "protrusionHeight must be < L/2 for inward spikes"
-        assert 0 < protrusionHalfWidth < boundaryLength / 2, "protrusionHalfWidth must be in (0, L/2)"
+        assert protrusionHeight < self.circleRadius, "protrusionHeight must be < circle radius"
+        assert 0 < protrusionHalfWidth < self.circleRadius, "protrusionHalfWidth must be in (0, circle radius)"
 
         self.protrusionHeight = protrusionHeight
         self.protrusionHalfWidth = protrusionHalfWidth
+        self.spikeTip, self.spikeBaseLeft, self.spikeBaseRight = self._build_spike_geometry(
+            self.circleCenter, self.circleRadius,
+            self.protrusionHeight, self.protrusionHalfWidth
+        )
         self.boundaryVertices = self._build_spike_boundary_vertices(
-            self.boundaryLength, self.protrusionHeight, self.protrusionHalfWidth
+            self.circleCenter, self.circleRadius,
+            self.protrusionHeight, self.protrusionHalfWidth
         )
 
-    @staticmethod
-    def _build_spike_boundary_vertices(boundaryLength: float, protrusionHeight: float,
-                                       protrusionHalfWidth: float) -> np.ndarray:
-        L = boundaryLength
-        h = protrusionHeight
-        w = protrusionHalfWidth
-        mid = 0.5 * L
+        # Circular initialization can place particles in the inward spike cut-out.
+        # Rejection-sample only those particles so every initial point is valid.
+        valid = self._points_inside_spiked_circle(
+            self.positionX, self.circleCenter, self.circleRadius,
+            self.spikeBaseLeft, self.spikeTip, self.spikeBaseRight
+        )
+        while not np.all(valid):
+            count = np.count_nonzero(~valid)
+            angles = np.random.random(count) * 2 * np.pi
+            radii = np.sqrt(np.random.random(count)) * self.circleRadius
+            self.positionX[~valid] = self.circleCenter + np.stack(
+                [radii * np.cos(angles), radii * np.sin(angles)], axis=1
+            )
+            valid = self._points_inside_spiked_circle(
+                self.positionX, self.circleCenter, self.circleRadius,
+                self.spikeBaseLeft, self.spikeTip, self.spikeBaseRight
+            )
 
-        return np.array([
-            [0.0, 0.0],
-            [mid - w, 0.0],
-            [mid, h],
-            [mid + w, 0.0],
-            [L, 0.0],
-            [L, mid - w],
-            [L - h, mid],
-            [L, mid + w],
-            [L, L],
-            [mid + w, L],
-            [mid, L - h],
-            [mid - w, L],
-            [0.0, L],
-            [0.0, mid + w],
-            [h, mid],
-            [0.0, mid - w],
+    @staticmethod
+    def _build_spike_geometry(center: np.ndarray, radius: float,
+                              protrusionHeight: float,
+                              protrusionHalfWidth: float) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
+        """Build one inward spike at the bottom of the circle."""
+        base_radial_distance = np.sqrt(
+            radius * radius - protrusionHalfWidth * protrusionHalfWidth
+        )
+        tip = np.array([
+            center[0], center[1] - radius + protrusionHeight
         ], dtype=np.float64)
+        base_left = np.array([
+            center[0] - protrusionHalfWidth,
+            center[1] - base_radial_distance
+        ], dtype=np.float64)
+        base_right = np.array([
+            center[0] + protrusionHalfWidth,
+            center[1] - base_radial_distance
+        ], dtype=np.float64)
+        return tip, base_left, base_right
+
+    @staticmethod
+    def _build_spike_boundary_vertices(center: np.ndarray, radius: float,
+                                       protrusionHeight: float,
+                                       protrusionHalfWidth: float,
+                                       arcPoints: int = 257) -> np.ndarray:
+        """Vertices for plotting: exact circular arc samples plus one spike tip."""
+        tip, _, _ = CollisionBoundaryMidpointSpikePatternFormation._build_spike_geometry(
+            center, radius, protrusionHeight, protrusionHalfWidth
+        )
+        half_angle = np.arcsin(protrusionHalfWidth / radius)
+        angles = np.linspace(
+            -0.5 * np.pi + half_angle,
+            1.5 * np.pi - half_angle,
+            arcPoints
+        )
+        arc = center + radius * np.stack([np.cos(angles), np.sin(angles)], axis=1)
+        return np.vstack([arc, tip])
+
+    @staticmethod
+    def _points_inside_spiked_circle(points: np.ndarray, center: np.ndarray,
+                                     radius: float, baseLeft: np.ndarray,
+                                     tip: np.ndarray, baseRight: np.ndarray) -> np.ndarray:
+        """Return the mask for the circle after cutting out the spike notch."""
+        relative = points - center
+        inside_circle = np.sum(relative * relative, axis=1) <= radius * radius
+
+        left_edge = tip - baseLeft
+        from_left = points - baseLeft
+        left_cross = left_edge[0] * from_left[:, 1] - left_edge[1] * from_left[:, 0]
+
+        right_edge = baseRight - tip
+        from_tip = points - tip
+        right_cross = right_edge[0] * from_tip[:, 1] - right_edge[1] * from_tip[:, 0]
+        # The spike is a concave notch: a point is retained when it lies on the
+        # interior side of either spike edge.  Requiring both would incorrectly
+        # remove two large wedges on the left and right of the spike.
+        return inside_circle & ((left_cross >= -1e-12) | (right_cross >= -1e-12))
 
     @staticmethod
     @nb.njit
-    def _point_in_polygon(point: np.ndarray, vertices: np.ndarray) -> bool:
-        x = point[0]
-        y = point[1]
-        inside = False
-        n = vertices.shape[0]
-
-        for i in range(n):
-            j = (i - 1 + n) % n
-            xi, yi = vertices[i, 0], vertices[i, 1]
-            xj, yj = vertices[j, 0], vertices[j, 1]
-            intersects = (yi > y) != (yj > y)
-            if intersects:
-                x_cross = (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi
-                if x < x_cross:
-                    inside = not inside
-        return inside
-
-    @staticmethod
-    @nb.njit
-    def _closest_point_on_segment(point: np.ndarray, a: np.ndarray, b: np.ndarray) -> np.ndarray:
-        ab = b - a
-        ab2 = ab[0] * ab[0] + ab[1] * ab[1]
-        if ab2 < 1e-15:
-            return a.copy()
-        ap = point - a
-        t = (ap[0] * ab[0] + ap[1] * ab[1]) / ab2
-        if t < 0.0:
-            t = 0.0
-        elif t > 1.0:
-            t = 1.0
-        return a + t * ab
-
-    @staticmethod
-    @nb.njit
-    def _reflect_by_polygon(point: np.ndarray, velocity: np.ndarray,
-                            vertices: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
-        n = vertices.shape[0]
-        best_idx = 0
-        min_dist2 = 1e30
-
-        for i in range(n):
-            j = (i + 1) % n
-            a = vertices[i]
-            b = vertices[j]
-            proj = CollisionBoundaryMidpointSpikePatternFormation._closest_point_on_segment(point, a, b)
-            dx = point[0] - proj[0]
-            dy = point[1] - proj[1]
-            dist2 = dx * dx + dy * dy
-            if dist2 < min_dist2:
-                min_dist2 = dist2
-                best_idx = i
-
-        a = vertices[best_idx]
-        b = vertices[(best_idx + 1) % n]
-        proj = CollisionBoundaryMidpointSpikePatternFormation._closest_point_on_segment(point, a, b)
-        normal = point - proj
-        norm = np.sqrt(normal[0] * normal[0] + normal[1] * normal[1])
-
-        if norm < 1e-12:
-            edge = b - a
-            normal = np.array([-edge[1], edge[0]], dtype=np.float64)
-            norm = np.sqrt(normal[0] * normal[0] + normal[1] * normal[1]) + 1e-15
-
-        unit_normal = normal / norm
-        dot_p = (point[0] - proj[0]) * unit_normal[0] + (point[1] - proj[1]) * unit_normal[1]
-        reflected_point = point - 2.0 * dot_p * unit_normal
-        reflected_velocity = velocity - 2.0 * (
-            velocity[0] * unit_normal[0] + velocity[1] * unit_normal[1]
-        ) * unit_normal
-
-        return reflected_point, reflected_velocity
-
-    @staticmethod
-    @nb.njit
-    def _handle_collision_spiked(positionX: np.ndarray, velocity: np.ndarray,
-                                 vertices: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+    def _handle_collision_spiked_circle(positionX: np.ndarray, velocity: np.ndarray,
+                                         center: np.ndarray, radius: float,
+                                         baseLeft: np.ndarray, tip: np.ndarray,
+                                         baseRight: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
+        """Reflect particles from a circle whose bottom arc is replaced by one spike."""
         agentsNum = positionX.shape[0]
         newPositionX = positionX.copy()
         newVelocity = velocity.copy()
-        n = vertices.shape[0]
+        radius2 = radius * radius
+        tolerance = 1e-12
 
         for i in range(agentsNum):
             point = newPositionX[i].copy()
             vel = newVelocity[i].copy()
 
-            # point-in-polygon (ray casting)
-            x = point[0]
-            y = point[1]
-            inside = False
-            for k in range(n):
-                j = (k - 1 + n) % n
-                xi = vertices[k, 0]
-                yi = vertices[k, 1]
-                xj = vertices[j, 0]
-                yj = vertices[j, 1]
-                intersects = (yi > y) != (yj > y)
-                if intersects:
-                    x_cross = (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi
-                    if x < x_cross:
-                        inside = not inside
-            if inside:
-                continue
+            # More than one reflection is only needed for a large integration step
+            # that overshoots a spike side and then the circular arc.
+            for _ in range(8):
+                dx = point[0] - center[0]
+                dy = point[1] - center[1]
+                r2 = dx * dx + dy * dy
 
-            for _ in range(4):
-                # find closest edge to current point
-                best_idx = 0
-                min_dist2 = 1e30
-                for k in range(n):
-                    j = (k + 1) % n
-                    ax = vertices[k, 0]
-                    ay = vertices[k, 1]
-                    bx = vertices[j, 0]
-                    by = vertices[j, 1]
-                    abx = bx - ax
-                    aby = by - ay
-                    ab2 = abx * abx + aby * aby
-                    if ab2 < 1e-15:
-                        px = ax
-                        py = ay
-                    else:
-                        apx = point[0] - ax
-                        apy = point[1] - ay
-                        t = (apx * abx + apy * aby) / ab2
-                        if t < 0.0:
-                            t = 0.0
-                        elif t > 1.0:
-                            t = 1.0
-                        px = ax + t * abx
-                        py = ay + t * aby
-                    dx = point[0] - px
-                    dy = point[1] - py
-                    dist2 = dx * dx + dy * dy
-                    if dist2 < min_dist2:
-                        min_dist2 = dist2
-                        best_idx = k
+                left_edge_x = tip[0] - baseLeft[0]
+                left_edge_y = tip[1] - baseLeft[1]
+                left_point_x = point[0] - baseLeft[0]
+                left_point_y = point[1] - baseLeft[1]
+                left_cross = left_edge_x * left_point_y - left_edge_y * left_point_x
 
-                # reflect point and velocity by closest edge normal
-                j = (best_idx + 1) % n
-                ax = vertices[best_idx, 0]
-                ay = vertices[best_idx, 1]
-                bx = vertices[j, 0]
-                by = vertices[j, 1]
-                abx = bx - ax
-                aby = by - ay
-                ab2 = abx * abx + aby * aby
-                if ab2 < 1e-15:
-                    px = ax
-                    py = ay
-                else:
-                    apx = point[0] - ax
-                    apy = point[1] - ay
-                    t = (apx * abx + apy * aby) / ab2
-                    if t < 0.0:
-                        t = 0.0
-                    elif t > 1.0:
-                        t = 1.0
-                    px = ax + t * abx
-                    py = ay + t * aby
+                right_edge_x = baseRight[0] - tip[0]
+                right_edge_y = baseRight[1] - tip[1]
+                right_point_x = point[0] - tip[0]
+                right_point_y = point[1] - tip[1]
+                right_cross = right_edge_x * right_point_y - right_edge_y * right_point_x
 
-                nx = point[0] - px
-                ny = point[1] - py
-                norm = np.sqrt(nx * nx + ny * ny)
-                if norm < 1e-12:
-                    nx = -aby
-                    ny = abx
-                    norm = np.sqrt(nx * nx + ny * ny) + 1e-15
-                ux = nx / norm
-                uy = ny / norm
-
-                dot_p = (point[0] - px) * ux + (point[1] - py) * uy
-                point[0] = point[0] - 2.0 * dot_p * ux
-                point[1] = point[1] - 2.0 * dot_p * uy
-
-                dot_v = vel[0] * ux + vel[1] * uy
-                vel[0] = vel[0] - 2.0 * dot_v * ux
-                vel[1] = vel[1] - 2.0 * dot_v * uy
-
-                # check if inside after reflection
-                x = point[0]
-                y = point[1]
-                inside = False
-                for k in range(n):
-                    jj = (k - 1 + n) % n
-                    xi = vertices[k, 0]
-                    yi = vertices[k, 1]
-                    xj = vertices[jj, 0]
-                    yj = vertices[jj, 1]
-                    intersects = (yi > y) != (yj > y)
-                    if intersects:
-                        x_cross = (xj - xi) * (y - yi) / (yj - yi + 1e-15) + xi
-                        if x < x_cross:
-                            inside = not inside
-                if inside:
+                if (r2 <= radius2 + tolerance and
+                        (left_cross >= -tolerance or right_cross >= -tolerance)):
                     break
+
+                best_kind = -1  # 0: circular arc, 1: left side, 2: right side
+                best_dist2 = 1e300
+                best_px = 0.0
+                best_py = 0.0
+
+                # The circular projection is a candidate only on the retained
+                # (major) arc, never on the arc removed to make the spike.
+                r = np.sqrt(r2)
+                if r > 1e-15:
+                    circle_px = center[0] + radius * dx / r
+                    circle_py = center[1] + radius * dy / r
+
+                    circle_left_x = circle_px - baseLeft[0]
+                    circle_left_y = circle_py - baseLeft[1]
+                    circle_left_cross = (
+                        left_edge_x * circle_left_y - left_edge_y * circle_left_x
+                    )
+                    circle_right_x = circle_px - tip[0]
+                    circle_right_y = circle_py - tip[1]
+                    circle_right_cross = (
+                        right_edge_x * circle_right_y - right_edge_y * circle_right_x
+                    )
+                    if circle_left_cross >= -tolerance or circle_right_cross >= -tolerance:
+                        circle_dist = r - radius
+                        best_dist2 = circle_dist * circle_dist
+                        best_kind = 0
+                        best_px = circle_px
+                        best_py = circle_py
+
+                # Compare the closest points on both straight spike sides.
+                for side in range(2):
+                    if side == 0:
+                        ax = baseLeft[0]
+                        ay = baseLeft[1]
+                        bx = tip[0]
+                        by = tip[1]
+                    else:
+                        ax = tip[0]
+                        ay = tip[1]
+                        bx = baseRight[0]
+                        by = baseRight[1]
+
+                    edge_x = bx - ax
+                    edge_y = by - ay
+                    edge2 = edge_x * edge_x + edge_y * edge_y
+                    projection = (
+                        ((point[0] - ax) * edge_x + (point[1] - ay) * edge_y) / edge2
+                    )
+                    if projection < 0.0:
+                        projection = 0.0
+                    elif projection > 1.0:
+                        projection = 1.0
+                    px = ax + projection * edge_x
+                    py = ay + projection * edge_y
+                    distance_x = point[0] - px
+                    distance_y = point[1] - py
+                    distance2 = distance_x * distance_x + distance_y * distance_y
+                    if distance2 < best_dist2:
+                        best_dist2 = distance2
+                        best_kind = side + 1
+                        best_px = px
+                        best_py = py
+
+                if best_kind == 0:
+                    # Exact circular reflection, matching CircularBoundaryPatternFormation.
+                    nx = dx / r
+                    ny = dy / r
+                    point[0] = center[0] + (2.0 * radius - r) * nx
+                    point[1] = center[1] + (2.0 * radius - r) * ny
+                else:
+                    nx = point[0] - best_px
+                    ny = point[1] - best_py
+                    normal_length = np.sqrt(nx * nx + ny * ny)
+                    if normal_length < 1e-15:
+                        if best_kind == 1:
+                            edge_x = tip[0] - baseLeft[0]
+                            edge_y = tip[1] - baseLeft[1]
+                        else:
+                            edge_x = baseRight[0] - tip[0]
+                            edge_y = baseRight[1] - tip[1]
+                        nx = -edge_y
+                        ny = edge_x
+                        normal_length = np.sqrt(nx * nx + ny * ny)
+                    nx /= normal_length
+                    ny /= normal_length
+                    signed_distance = (
+                        (point[0] - best_px) * nx + (point[1] - best_py) * ny
+                    )
+                    point[0] -= 2.0 * signed_distance * nx
+                    point[1] -= 2.0 * signed_distance * ny
+
+                velocity_normal = vel[0] * nx + vel[1] * ny
+                vel[0] -= 2.0 * velocity_normal * nx
+                vel[1] -= 2.0 * velocity_normal * ny
 
             newPositionX[i] = point
             newVelocity[i] = vel
@@ -1008,8 +1005,9 @@ class CollisionBoundaryMidpointSpikePatternFormation(CollisionBoundaryPatternFor
         dotPhase = self.dotPhase
 
         newPositionX = self.positionX + dotPos * self.dt
-        self.positionX, correctedVelocity = self._handle_collision_spiked(
-            newPositionX, dotPos, self.boundaryVertices
+        self.positionX, correctedVelocity = self._handle_collision_spiked_circle(
+            newPositionX, dotPos, self.circleCenter, self.circleRadius,
+            self.spikeBaseLeft, self.spikeTip, self.spikeBaseRight
         )
 
         collision_mask = ~np.isclose(correctedVelocity[:, 0], dotPos[:, 0]) | ~np.isclose(correctedVelocity[:, 1], dotPos[:, 1])
@@ -1032,9 +1030,11 @@ class CollisionBoundaryMidpointSpikePatternFormation(CollisionBoundaryPatternFor
         boundary = np.vstack([self.boundaryVertices, self.boundaryVertices[0]])
         ax.plot(boundary[:, 0], boundary[:, 1], color="black", linewidth=1.2)
 
-        pad = 0.1
-        ax.set_xlim(np.min(self.boundaryVertices[:, 0]) - pad, np.max(self.boundaryVertices[:, 0]) + pad)
-        ax.set_ylim(np.min(self.boundaryVertices[:, 1]) - pad, np.max(self.boundaryVertices[:, 1]) + pad)
+        pad = 0.02 * self.boundaryLength
+        ax.set_xlim(self.circleCenter[0] - self.circleRadius - pad,
+                    self.circleCenter[0] + self.circleRadius + pad)
+        ax.set_ylim(self.circleCenter[1] - self.circleRadius - pad,
+                    self.circleCenter[1] + self.circleRadius + pad)
         ax.set_aspect("equal")
 
     def __str__(self):
@@ -1589,7 +1589,11 @@ class StateAnalysis:
         
 
     def _is_circular_boundary(self) -> bool:
-        return isinstance(self.model, CircularBoundaryPatternFormation)
+        return isinstance(
+            self.model,
+            (CircularBoundaryPatternFormation,
+             CollisionBoundaryMidpointSpikePatternFormation)
+        )
 
     def _calc_delta_x(self, positionX: np.ndarray, others: np.ndarray) -> np.ndarray:
         if self._is_circular_boundary():
@@ -1646,7 +1650,11 @@ class StateAnalysis:
             scale_units='inches', scale=15.0, width=0.005,
             color=colors
         )
-        if self._is_circular_boundary():
+        if isinstance(self.model, CollisionBoundaryMidpointSpikePatternFormation):
+            boundary = self.model.boundaryVertices + shift
+            boundary = np.vstack([boundary, boundary[0]])
+            ax.plot(boundary[:, 0], boundary[:, 1], color="black", linewidth=1.0)
+        elif self._is_circular_boundary():
             circle = plt.Circle(self.model.circleCenter + shift, self.model.circleRadius, fill=False, lw=1.0)
             ax.add_artist(circle)
         ax.set_xlim(0, self.model.boundaryLength)
