@@ -125,12 +125,11 @@ def draw_frame(sa: StateAnalysis):
 
 if __name__ == "__main__":
 
-    model = CollisionBoundaryMidpointSpikePatternFormation(
-    strengthK=20.75, distanceD0=1.0, phaseLagA0=1 * np.pi,
-    omegaMin=0, deltaOmega=0, protrusionHeight=3.0, protrusionHalfWidth=0.25,
-    agentsNum=2000, dt=0.005, freqDist="uniform",
+    model = CollisionBoundaryPatternFormation(
+    strengthK=20.75, distanceD0=1, phaseLagA0=0.2 * np.pi,
+    omegaMin=0, deltaOmega=0, agentsNum=2000, dt=0.005, freqDist="uniform",
     tqdm=True, savePath=SAVE_PATH, shotsnaps=10, 
-    randomSeed=9, overWrite=True
+    randomSeed=1, overWrite=True
     )
 
     # model = PhaseLagPatternFormation1D(strengthK=20, distanceD0=1, phaseLagA0=0.6*np.pi, 

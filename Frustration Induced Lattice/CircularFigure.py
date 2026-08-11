@@ -1,4 +1,4 @@
-"""Plot terminal states of a circular-boundary phase-lag sweep.
+"""Plot terminal states of a fixed-size 2D phase-lag model sweep.
 
 Workflow
 --------
@@ -17,6 +17,7 @@ are plotted at their unambiguous last saved frame.
 from __future__ import annotations
 
 import argparse
+import inspect
 import math
 import multiprocessing as mp
 from pathlib import Path
@@ -28,12 +29,13 @@ import numpy as np
 import pandas as pd
 from tqdm.auto import tqdm
 
+import main as model_library
 from main import (
-    CircularBoundaryPatternFormation,
     StateAnalysis,
     phaseCmap,
     phaseNorm,
 )
+from swarmalatorlib.template import Swarmalators2D
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
@@ -42,6 +44,22 @@ PROJECT_DIR = Path(__file__).resolve().parent
 # =============================================================================
 # USER CONFIGURATION: edit this block; the workflow below normally needs no edit
 # =============================================================================
+
+# Any fixed-size 2D class in main.py whose constructor accepts phaseLagA0 can
+# be selected here. Unsupported 1D, phase-only, or variable-particle models are
+# rejected before any HDF5 generation or plotting begins.
+MODEL_CLASS = model_library.CircularBoundaryPatternFormation
+# Other examples that work with the default MODEL_PARAMETERS:
+# MODEL_CLASS = model_library.PhaseLagPatternFormation
+# MODEL_CLASS = model_library.CollisionBoundaryPatternFormation
+# MODEL_CLASS = model_library.CollisionBoundaryMidpointSpikePatternFormation
+# Most fixed-size 2D subclasses are also supported after MODEL_PARAMETERS is
+# adjusted to match their constructor signature.
+
+# "auto": circle for CircularBoundaryPatternFormation, box for
+# CollisionBoundaryPatternFormation, and no rotation label for periodic models.
+# It may also be forced to "circle", "box", or "none".
+BOUNDARY_ANALYSIS_MODE = "auto"
 
 # Fixed model parameters. phaseLagA0 is intentionally absent because it is the
 # only traversed model parameter.
@@ -71,7 +89,9 @@ PHASE_LAG_A0_VALUES = PHASE_LAG_A0_OVER_PI * np.pi
 
 # Data generation and output.
 DATA_DIR = PROJECT_DIR / "data"
-OUTPUT_PATH = PROJECT_DIR / "figs" / "circular_boundary_phase_lag_terminal_states.pdf"
+OUTPUT_PATH = (
+    PROJECT_DIR / "figs" / f"{MODEL_CLASS.__name__}_phase_lag_terminal_states.pdf"
+)
 SIMULATION_ITERATIONS = 10000
 GENERATE_MISSING = True
 MAX_WORKERS = 2
@@ -105,23 +125,79 @@ class DataPreflightError(RuntimeError):
     """Raised when the all-or-nothing data preflight cannot be satisfied."""
 
 
+def validate_model_class() -> None:
+    """Reject model families that cannot use the fixed-N 2D HDF5 workflow."""
+
+    if not inspect.isclass(MODEL_CLASS) or not issubclass(MODEL_CLASS, Swarmalators2D):
+        raise ValueError("MODEL_CLASS must be a Swarmalators2D class from main.py.")
+
+    unsupported_classes = (
+        model_library.PhaseLagPatternFormationBigArea,
+        model_library.PhaseLagPatternFormationNoPeriodic,
+        model_library.PurePhaseFrustration,
+        model_library.PhaseLagPatternFormation1D,
+    )
+    if issubclass(MODEL_CLASS, unsupported_classes):
+        raise ValueError(
+            f"{MODEL_CLASS.__name__} is not compatible with the fixed-particle "
+            "2D terminal-frame workflow."
+        )
+
+    if "phaseLagA0" not in inspect.signature(MODEL_CLASS).parameters:
+        raise ValueError(
+            f"{MODEL_CLASS.__name__} does not expose phaseLagA0 as a traversable "
+            "constructor parameter."
+        )
+
+
 def build_model(
     phase_lag_a0: float,
     data_dir: Path = DATA_DIR,
     show_iteration_progress: bool = False,
-) -> CircularBoundaryPatternFormation:
+) -> Swarmalators2D:
     """Construct one model; only ``phaseLagA0`` varies between calls."""
 
-    return CircularBoundaryPatternFormation(
-        phaseLagA0=phase_lag_a0,
-        tqdm=show_iteration_progress,
-        savePath=str(data_dir),
-        overWrite=False,
+    validate_model_class()
+    constructor_parameters = {
         **MODEL_PARAMETERS,
-    )
+        "phaseLagA0": phase_lag_a0,
+        "tqdm": show_iteration_progress,
+        "savePath": str(data_dir),
+        "overWrite": False,
+    }
+    try:
+        inspect.signature(MODEL_CLASS).bind(**constructor_parameters)
+    except TypeError as exc:
+        raise ValueError(
+            f"MODEL_PARAMETERS do not match {MODEL_CLASS.__name__}: {exc}"
+        ) from exc
+
+    try:
+        model = MODEL_CLASS(**constructor_parameters)
+    except (AssertionError, TypeError, ValueError) as exc:
+        raise ValueError(
+            f"Could not construct {MODEL_CLASS.__name__} from MODEL_PARAMETERS: "
+            f"{exc}"
+        ) from exc
+    position_x = np.asarray(getattr(model, "positionX", None))
+    if (
+        position_x.ndim != 2
+        or position_x.shape[1] != 2
+        or position_x.shape[0] != model.agentsNum
+    ):
+        raise ValueError(
+            f"{MODEL_CLASS.__name__} must keep positionX shaped (agentsNum, 2); "
+            f"received {position_x.shape}."
+        )
+    if not np.isfinite(position_x).all():
+        raise ValueError(
+            f"{MODEL_CLASS.__name__} produced non-finite initial positions for "
+            "the configured phaseLagA0 sweep."
+        )
+    return model
 
 
-def expected_data_path(model: CircularBoundaryPatternFormation) -> Path:
+def expected_data_path(model: Swarmalators2D) -> Path:
     """Use the exact naming contract implemented by ``main.py``."""
 
     return Path(model.savePath) / f"{model}.h5"
@@ -130,7 +206,7 @@ def expected_data_path(model: CircularBoundaryPatternFormation) -> Path:
 def build_sweep_models(
     phase_lag_values: Sequence[float] = PHASE_LAG_A0_VALUES,
     data_dir: Path = DATA_DIR,
-) -> list[CircularBoundaryPatternFormation]:
+) -> list[Swarmalators2D]:
     phase_lag_values = tuple(float(value) for value in phase_lag_values)
     if not phase_lag_values:
         raise ValueError("PHASE_LAG_A0_VALUES must contain at least one value.")
@@ -164,13 +240,13 @@ def _run_generation_job(job: tuple[float, Path, int, bool]) -> tuple[float, str]
 
 
 def _missing_models(
-    models: Sequence[CircularBoundaryPatternFormation],
-) -> list[CircularBoundaryPatternFormation]:
+    models: Sequence[Swarmalators2D],
+) -> list[Swarmalators2D]:
     return [model for model in models if not expected_data_path(model).is_file()]
 
 
 def ensure_data_files(
-    models: Sequence[CircularBoundaryPatternFormation],
+    models: Sequence[Swarmalators2D],
     *,
     data_dir: Path = DATA_DIR,
     generate_missing: bool = GENERATE_MISSING,
@@ -255,7 +331,7 @@ def ensure_data_files(
 class LastFrameStateAnalysis(StateAnalysis):
     """Memory-efficient StateAnalysis that contains one complete terminal frame."""
 
-    def __init__(self, model: CircularBoundaryPatternFormation):
+    def __init__(self, model: Swarmalators2D):
         self.model = model
         target_path = expected_data_path(model)
 
@@ -359,13 +435,35 @@ def alpha_math_label(phase_lag_a0: float) -> str:
     return rf"$\alpha={value}$"
 
 
+def resolve_boundary_analysis_mode(model: Swarmalators2D) -> str:
+    """Resolve an explicit or model-aware terminal boundary analysis mode."""
+
+    valid_modes = {"auto", "circle", "box", "none"}
+    if BOUNDARY_ANALYSIS_MODE not in valid_modes:
+        raise ValueError(
+            f"BOUNDARY_ANALYSIS_MODE must be one of {sorted(valid_modes)}."
+        )
+    if BOUNDARY_ANALYSIS_MODE != "auto":
+        return BOUNDARY_ANALYSIS_MODE
+
+    circular_classes = (
+        model_library.CircularBoundaryPatternFormation,
+        model_library.CollisionBoundaryMidpointSpikePatternFormation,
+    )
+    if isinstance(model, circular_classes):
+        return "circle"
+    if isinstance(model, model_library.CollisionBoundaryPatternFormation):
+        return "box"
+    return "none"
+
+
 def boundary_rotation_statistics(
     analysis: LastFrameStateAnalysis,
 ) -> tuple[float, float, int, int]:
-    """Return terminal CW/CCW percentages for tangential boundary particles.
+    """Return terminal CW/CCW percentages under the selected boundary mode.
 
     Positive tangential projection is counterclockwise and negative projection
-    is clockwise. Percentages are normalized over the classified tangential
+    is clockwise. Percentages are normalized over classified tangential
     particles, so they sum to 100 when at least one particle is classified.
     """
 
@@ -374,15 +472,53 @@ def boundary_rotation_statistics(
     if not 0 <= TANGENTIAL_THRESHOLD < 1:
         raise ValueError("TANGENTIAL_THRESHOLD must be in [0, 1).")
 
-    position_x, phase_theta = analysis.get_state(-1)
-    relative_position = position_x - analysis.model.circleCenter
-    radial_distance = np.linalg.norm(relative_position, axis=1)
-    shell_width = analysis.model.circleRadius * BOUNDARY_SHELL_FRACTION
-    boundary_mask = radial_distance >= analysis.model.circleRadius - shell_width
+    model = analysis.model
+    mode = resolve_boundary_analysis_mode(model)
+    if mode == "none":
+        raise ValueError("Boundary rotation statistics are disabled for this model.")
 
-    polar_angle = np.arctan2(relative_position[:, 1], relative_position[:, 0])
-    # dot((cos(theta), sin(theta)), (-sin(phi), cos(phi)))
-    tangential_projection = np.sin(phase_theta - polar_angle)
+    position_x, phase_theta = analysis.get_state(-1)
+    heading = np.column_stack([np.cos(phase_theta), np.sin(phase_theta)])
+
+    if mode == "circle":
+        if not hasattr(model, "circleCenter") or not hasattr(model, "circleRadius"):
+            raise ValueError(
+                f"{model.__class__.__name__} has no circleCenter/circleRadius for "
+                "circle boundary analysis."
+            )
+        relative_position = position_x - model.circleCenter
+        radial_distance = np.linalg.norm(relative_position, axis=1)
+        shell_width = model.circleRadius * BOUNDARY_SHELL_FRACTION
+        boundary_mask = radial_distance >= model.circleRadius - shell_width
+        polar_angle = np.arctan2(relative_position[:, 1], relative_position[:, 0])
+        counterclockwise_tangent = np.column_stack(
+            [-np.sin(polar_angle), np.cos(polar_angle)]
+        )
+        tangential_projection = np.einsum(
+            "ij,ij->i", heading, counterclockwise_tangent
+        )
+    else:  # mode == "box"
+        boundary_length = model.boundaryLength
+        shell_width = model.halfBoundaryLength * BOUNDARY_SHELL_FRACTION
+        x_position, y_position = position_x[:, 0], position_x[:, 1]
+        # Bottom, right, top, left walls in counterclockwise traversal order.
+        wall_distances = np.column_stack(
+            [
+                y_position,
+                boundary_length - x_position,
+                boundary_length - y_position,
+                x_position,
+            ]
+        )
+        wall_tangents = np.array(
+            [[1.0, 0.0], [0.0, 1.0], [-1.0, 0.0], [0.0, -1.0]]
+        )
+        nearest_wall = np.argmin(wall_distances, axis=1)
+        boundary_mask = np.min(wall_distances, axis=1) <= shell_width
+        tangential_projection = np.einsum(
+            "ij,ij->i", heading, wall_tangents[nearest_wall]
+        )
+
     tangential_mask = boundary_mask & (
         np.abs(tangential_projection) >= TANGENTIAL_THRESHOLD
     )
@@ -409,14 +545,24 @@ def add_rotation_annotation(
 ) -> None:
     """Add a neutral corner label without competing with the phase colormap."""
 
+    mode = resolve_boundary_analysis_mode(analysis.model)
+    if mode == "none":
+        return
+
     clockwise, counterclockwise, _, tangential_count = (
         boundary_rotation_statistics(analysis)
     )
+    title = "Boundary"
+    if isinstance(
+        analysis.model,
+        model_library.CollisionBoundaryMidpointSpikePatternFormation,
+    ):
+        title = "Outer boundary"
     if tangential_count == 0:
-        text = "Boundary rotation\nCW   --\nCCW  --"
+        text = f"{title}\nCW   --\nCCW  --"
     else:
         text = (
-            f"Boundary rotation  n={tangential_count}\n"
+            f"{title}  n={tangential_count}\n"
             f"CW    {clockwise:5.1f}%\n"
             f"CCW  {counterclockwise:5.1f}%"
         )
@@ -442,7 +588,7 @@ def add_rotation_annotation(
 
 
 def load_all_terminal_states(
-    models: Sequence[CircularBoundaryPatternFormation],
+    models: Sequence[Swarmalators2D],
 ) -> list[LastFrameStateAnalysis]:
     """Load every panel before creating a figure, preventing partial output."""
 
@@ -577,7 +723,7 @@ def run_workflow(
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Plot last-frame circular-boundary states while traversing phaseLagA0."
+            "Plot fixed-size 2D terminal states while traversing phaseLagA0."
         )
     )
     parser.add_argument(
