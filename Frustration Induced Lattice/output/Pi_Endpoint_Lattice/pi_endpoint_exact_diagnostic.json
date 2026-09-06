@@ -1,0 +1,49 @@
+{
+  "mathematical_alpha_pi": {
+    "sin_pi": 0.0,
+    "D0_denominator": 0.0,
+    "status": "undefined: the v^2 k^2/(4 D0) coefficient divides by zero"
+  },
+  "floating_point_artifact": [
+    {
+      "representation": "nextafter_below",
+      "alpha": 3.1415926535897927,
+      "sin_alpha": 5.66553889764798e-16,
+      "D0_denominator": -2.3511986425239117e-14,
+      "max_abs_matrix_entry": 2523941868961593.5,
+      "finite_matrix": true
+    },
+    {
+      "representation": "np.pi",
+      "alpha": 3.141592653589793,
+      "sin_alpha": 1.2246467991473532e-16,
+      "D0_denominator": -5.082284216461516e-15,
+      "max_abs_matrix_entry": 1.1676420371947332e+16,
+      "finite_matrix": true
+    },
+    {
+      "representation": "nextafter_above",
+      "alpha": 3.1415926535897936,
+      "sin_alpha": -3.216245299353273e-16,
+      "D0_denominator": 1.3347417992316084e-14,
+      "max_abs_matrix_entry": 4446019971449195.5,
+      "finite_matrix": true
+    }
+  ],
+  "reference_hashes": {
+    "D:\\PrivatePythonProject\\Math\\Lattice\\Dispersion.py": "A1FC299F4AB13F9997BDF0EBA993C6BA12054500134A8617180F572F3732B89D",
+    "D:\\LaTex\\Boundary Flow\\PRL.tex": "8265AF6394ACD421FDE1E1163DC42B126AB33A8EEC0F019D91D4B4D5537BD7A6",
+    "D:\\LaTex\\Boundary Flow\\Methods Appendix.tex": "CB0A459012329E1CCE7584152E55333467F8A48E1317C04DCA3DCCA72D07F7A8"
+  },
+  "one_sided_limit": {
+    "derivation": "For fixed k>0 and alpha->pi-, the two fast eigenvalues have Re sigma -> a(k)=-K J1(k d0)/(k d0), while the density branch has Re sigma -> 0.  Therefore d[J1(x)/x]/dx=-J2(x)/x gives the first positive maximum at the first zero of J2.",
+    "j2_first_zero_x": 5.135622301840683,
+    "k_star_limit": 5.135622301840683,
+    "max_growth_limit": 1.3723996817345379,
+    "wavelength_limit_2pi_over_k": 1.2234515970786246,
+    "continuous_boundary_mode_Rk": 17.97467805644239,
+    "nearest_integer_boundary_mode": 18,
+    "quantized_arc_spacing": 1.2217304763960306,
+    "quantized_wall_chord": 1.2155372436685123
+  }
+}

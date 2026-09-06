@@ -1,0 +1,166 @@
+PHASE-INFORMED RELAY-COMPATIBLE BOUNDARY FLOW
+
+Basic HDF5 data
+---------------
+X_i^n = (x_i^n,y_i^n): row i of positionX at saved frame n.
+theta_i^n: row i of phaseTheta at saved frame n.
+Delta t_s = dt * shotsnaps: time between saved frames.
+u_i^n = (cos(theta_i^n), sin(theta_i^n)): phase-defined heading.
+
+Boundary coordinates and phase support
+--------------------------------------
+Pi(X_i^n) = (d_i^n,s_i^n,t_i^n,kappa_(b,i)^n,e_i^n) is the unique regular
+closest-boundary projection.  s increases counterclockwise, t is its unit
+tangent, d is wall distance, kappa_b is signed boundary curvature, and e is
+the regular boundary component.  Non-unique projections are invalid.  For
+polygonal and arc-line boundaries, the regularity mask also excludes an
+arclength neighborhood 0.05 D0 on every incident
+component next to a vertex/join.  The separate distance-tie tolerance is
+1e-07 D0; on a circle this excludes only the center
+up to that tolerance.
+
+q_i^n = u_i^n dot t_i^n.
+Delta s_i^n = wrap_P(s_i^(n+1)-s_i^n) in [-P/2,P/2).
+
+For component e of length L_e, set
+
+N_e = ceil[L_e / (0.5 D0)]
+
+and divide it into N_e equal cells of exact length ell_e=L_e/N_e.  Thus no cell
+crosses a vertex or arc-line join, and the exact ell_k are retained in every
+geometric sum.
+
+At each frame n and cell k, choose the smallest-d regular candidate satisfying
+|q| >= q0 = 0.05.  For 0<alpha<pi/2, candidates
+come from the complete unique regular nearest-boundary coordinate domain; no
+fixed radial cutoff is imposed because this regime has a broad boundary-flow
+layer.  For pi/2<alpha<pi, candidates additionally require d<=D0 and the W
+condition below.  q0 is a pre-registered directional-resolution dead band: it
+is not a tangential-dominance criterion and is never used as a current weight.
+Let Q_nk=sign(q) for the nearest representative.  If the candidate set is empty,
+Q_nk=0.  An opposite-sign tie within the registered distance tolerance also
+gives Q_nk=0.
+
+The main table uses q0=0.05.  Robustness is
+reported separately for q0 in (0.02, 0.05, 0.1); sensitivity values never
+replace or enter the two headline observables.
+
+High-alpha phase/curvature filter (alpha > pi/2 only)
+-----------------------------------------------------
+N_i^n = {j != i : ||X_j^n-X_i^n|| <= D0}.
+
+omega_i^n = omega_i + K * [
+    mean_(j in N_i^n) sin(theta_j^n-theta_i^n+alpha) - sin(alpha)
+].
+
+If N_i^n is empty, the bracketed coupling is zero, exactly as in main.py.
+This omega is recomputed from each saved (positionX,phaseTheta) state; it is
+not a finite difference of phaseTheta.
+
+kappa_d,i^n = kappa_b,i^n / (1-kappa_b,i^n d_i^n).
+W_i^n = kappa_d,i^n v (q_i^n)^2 - omega_i^n q_i^n.
+
+For alpha > pi/2, a frame candidate must additionally satisfy
+
+d_i^n <= D0,   1-kappa_(b,i)^n d_i^n > 0,   W_i^n > epsilon_W,
+
+where
+epsilon_W = 0.02 v/D0.
+W is a candidate filter, not a third observable.  It selects the conservative
+free-turning-deficit branch; W<=epsilon_W is not asserted to classify all Bulk
+motion, and W is not itself a topology test.
+
+Direction-neutral kinematic calibration (not a headline metric)
+---------------------------------------------------------------
+Track only frame n's gate representative to n+1.  A calibration trial T_nk=1
+requires regular same-component projections at both endpoints, the regime's
+spatial/W conditions, |q| >= q0, equal endpoint phase signs, and a unique
+geometry-bounded wrapped increment.  A success E_nk=1 additionally requires
+
+|Delta s|/(v Delta t_s) >= 0.02
+
+and sign(Delta s)=Q_nk.  Positive and negative trials are pooled: no majority
+direction is learned or imposed.  Gate k is calibrated only when
+
+sum_n T_nk >= 3
+
+and
+
+C_k = sum_n E_nk / sum_n T_nk >=
+0.66666667.
+
+Calibration counts and C_k are quality control only; they never multiply either
+headline observable.  Insufficient calibration is reported as unavailable,
+not as zero transport.
+
+Two-frame phase support and short-block coherence
+-------------------------------------------------
+The minimum non-instantaneous Eulerian support is
+
+Y_nk = Q_nk when Q_nk=Q_(n+1)k != 0; otherwise Y_nk=0.
+
+The two representatives may have different particle identities, which permits
+relay transport.  The target block time is
+
+tau_target = 1 D0/v.
+
+For saved spacing Delta t_s the actual integer block is
+
+m = ceil(tau_target/Delta t_s),   Delta T_b = m Delta t_s.
+
+For the analyzed files m=7 and Delta T_b=0.35 (tau_target=1/3).  Within block b
+define
+
+N_bk^+ = #{n in b : Y_nk=+1},
+N_bk^- = #{n in b : Y_nk=-1},
+p_bk = |N_bk^+-N_bk^-|/(N_bk^++N_bk^-).
+
+Z_bk = sign(N_bk^+-N_bk^-) only when N_bk^++N_bk^->0,
+p_bk >= 0.66666667, and gate k is calibrated;
+otherwise Z_bk=0.  Counts decide only whether the observed directions conflict;
+they do not weight any later sum.
+
+Spatial validity gate (not a headline metric)
+----------------------------------------------
+Let A_b={k:Z_bk != 0}.  The union over the complete terminal observation
+window is valid only when
+
+max_(C in Conn(union_b A_b)) Length(C) >=
+2 D0.
+
+Length means the largest contiguous periodic arclength component; disconnected
+gate fragments are never added together.  Adjacent component-end cells remain
+adjacent along the physical closed boundary, so a macroscopic arc may pass a
+zero-measure vertex/join even though no individual cell or calibration interval
+crosses that join.  The reported extent consequently has gate-scale and
+join-exclusion-scale discretization uncertainty.
+
+The only two headline observables
+---------------------------------
+M_b = 1 when the spatial validity gate passes and A_b is nonempty; otherwise 0.
+If the calibration or spatial validity gate is insufficient, the state is NA,
+not zero.
+
+Xi_Persist = (1/B) sum_b M_b.
+
+With physical gate lengths ell_k,
+
+chi_b = [sum_k ell_k Z_bk] / [sum_k ell_k |Z_bk|] in [-1,1]
+
+for active blocks, including chi_b=0 ties, and
+
+Xi_Sign = | sum_b M_b chi_b / sum_b M_b |.
+
+Xi_Sign is NA when fewer than 3 blocks
+are active.  Neither headline observable is multiplied by carrier fraction,
+particle count, event count, crossing rate, or current strength.  Different
+particles may therefore supply consecutive Eulerian phase supports.  The result
+is consistent with relay transport but does not reconstruct a unique causal
+relay trajectory.
+
+Interpretation protocol
+-----------------------
+The alpha=pi/2 Pattern-Formation boundary is an experimental prior, not an
+output of these observables.  alpha=0 is a singular endpoint and alpha=pi is a
+separate bidirectional boundary-lattice-flow problem; both endpoints are
+excluded from the two single-handed observables and reported as NA.

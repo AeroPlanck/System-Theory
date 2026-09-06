@@ -1,0 +1,38 @@
+[
+  {
+    "stem": "Boundary_Projection_And_W_Filter_Schematic",
+    "width_inches": 6.5,
+    "height_inches": 6.9,
+    "png_dpi": 600,
+    "png_width_pixels": 3900,
+    "png_height_pixels": 4140,
+    "minimum_declared_text_points": 8.3,
+    "text_outside_page": [],
+    "pdf": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Publication_Figure_Quality_2026-09-03\\schematics\\Boundary_Projection_And_W_Filter_Schematic.pdf",
+    "png": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Publication_Figure_Quality_2026-09-03\\schematics\\Boundary_Projection_And_W_Filter_Schematic.png"
+  },
+  {
+    "stem": "Relay_Signal_Construction_Schematic",
+    "width_inches": 6.5,
+    "height_inches": 7.35,
+    "png_dpi": 600,
+    "png_width_pixels": 3900,
+    "png_height_pixels": 4410,
+    "minimum_declared_text_points": 8.5,
+    "text_outside_page": [],
+    "pdf": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Publication_Figure_Quality_2026-09-03\\schematics\\Relay_Signal_Construction_Schematic.pdf",
+    "png": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Publication_Figure_Quality_2026-09-03\\schematics\\Relay_Signal_Construction_Schematic.png"
+  },
+  {
+    "stem": "Long_Time_Stability_Measures_Schematic",
+    "width_inches": 6.5,
+    "height_inches": 7.45,
+    "png_dpi": 600,
+    "png_width_pixels": 3900,
+    "png_height_pixels": 4470,
+    "minimum_declared_text_points": 8.5,
+    "text_outside_page": [],
+    "pdf": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Publication_Figure_Quality_2026-09-03\\schematics\\Long_Time_Stability_Measures_Schematic.pdf",
+    "png": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Publication_Figure_Quality_2026-09-03\\schematics\\Long_Time_Stability_Measures_Schematic.png"
+  }
+]

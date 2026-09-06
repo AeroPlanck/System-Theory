@@ -1,0 +1,29 @@
+{
+  "spectral_prediction": {
+    "alpha_over_pi": 0.6,
+    "elimination_denominator_D0": -39.468845426248876,
+    "k_star": 5.091025339652966,
+    "max_Re_sigma": 0.37419249696887746,
+    "plane_spacing_2pi_over_k_star": 1.234168932187614,
+    "hex_nearest_neighbor_prediction": 1.425095530447984
+  },
+  "reference_hashes": {
+    "D:\\PrivatePythonProject\\Math\\Lattice\\Dispersion.py": "A1FC299F4AB13F9997BDF0EBA993C6BA12054500134A8617180F572F3732B89D",
+    "D:\\LaTex\\Boundary Flow\\PRL.tex": "8265AF6394ACD421FDE1E1163DC42B126AB33A8EEC0F019D91D4B4D5537BD7A6",
+    "D:\\LaTex\\Boundary Flow\\Methods Appendix.tex": "CB0A459012329E1CCE7584152E55333467F8A48E1317C04DCA3DCCA72D07F7A8"
+  },
+  "measurement_configuration": {
+    "N": 2000,
+    "steps": 50000,
+    "K": 20.75,
+    "d0": 1.0,
+    "v": 3.0,
+    "diameter": 7.0,
+    "alpha_over_pi": 0.6,
+    "terminal_time": 50.0,
+    "sample_dt": 0.5,
+    "dbscan_eps": 0.152018634829629,
+    "bulk_wall_exclusion": 0.5,
+    "first_shell_factor": 1.45
+  }
+}

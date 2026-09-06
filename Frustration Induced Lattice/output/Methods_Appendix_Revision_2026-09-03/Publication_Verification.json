@@ -1,0 +1,31 @@
+{
+  "date": "2026-09-03",
+  "status": "published_and_readback_verified",
+  "all_13_files_match_reviewed_staging": true,
+  "canonical_import_probes": {
+    "positive_D0_Chern": 2,
+    "EP_single_band_status": "invalid_target_complement_gap",
+    "independent_bulk_matrices_match": true
+  },
+  "reviewer_decisions": {
+    "particle_crosscheck": "pass_for_revision_scope",
+    "theory_crosscheck": "pass_for_revision_scope",
+    "topology_crosscheck": "pass_for_revision_scope"
+  },
+  "pytest_passed": 41,
+  "files": [
+    {"path": "D:/LaTex/Boundary Flow/Methods Appendix.tex", "sha256": "3F1A314DDDFA4E0F798274348CE31346221478FF5A79F87E7EC20AEDC8B82B7D"},
+    {"path": "D:/LaTex/Boundary Flow/PRL.tex", "sha256": "953177E44F3633F7A11B90D0F88F3E6947C2747A79A2B990C3B046EEA986A6E6"},
+    {"path": "D:/LaTex/Boundary Flow/Methods Appendix.pdf", "sha256": "2DFF3AD09FDC4173735F4A1A575BD7E14BFD7C3F992E4115C6E0E4094F3A930A"},
+    {"path": "D:/PrivatePythonProject/Math/Lattice/ChernNumberCompute.py", "sha256": "680E30CB0935549D05228EACEB81D297F8BD0836E172FC7C7116E3B4B63FE810"},
+    {"path": "D:/PrivatePythonProject/Math/Lattice/ChernParamScan.py", "sha256": "2DC75FEEB4C1F3653B4D538ECB764B2D98AD00E1B15EC0C1A6BB05EA5DFA983B"},
+    {"path": "D:/PrivatePythonProject/Math/Lattice/Dispersion.py", "sha256": "EAD29D34D504392019407C868A908C4A2853346D5DF30277B0F311A2B37F6FB6"},
+    {"path": "D:/PrivatePythonProject/Math/Lattice/SpectralFlow.py", "sha256": "94200A4CB00A31AFD6DCB8E104AE719A7914003E1163156166E1BEDE04B3EA11"},
+    {"path": "D:/PrivatePythonProject/Math/Lattice/run_strip_matched_sweep.py", "sha256": "64596E1DC51DA77F51F6498DAB8443B3322031F82CB7D00A4F3E8F60D1585119"},
+    {"path": "D:/LaTex/Boundary Flow/Figures/strip_circle_matched_alpha_sweep.pdf", "sha256": "CB33E75C907C02FCC9E089238C9EFEDBDD43051483B7C12FB26014C1CBAAE855"},
+    {"path": "D:/LaTex/Boundary Flow/Figures/strip_circle_matched_alpha_sweep.png", "sha256": "461D94AF114046E38DE4299D62C2BC6E6ED1F2EBBEDC87883799793B87AF9A27"},
+    {"path": "D:/LaTex/Boundary Flow/Figures/strip_circle_matched_alpha_050.png", "sha256": "B685909D2D15C59C54326354F528109462CF58319699A45454EDF629B27528EE"},
+    {"path": "D:/LaTex/Boundary Flow/Figures/single_v_3_omega_0_gap_screened.png", "sha256": "D55168316F984505CC8743E4F18985DB330D3934320AE00783594D625D5AF4E2"},
+    {"path": "D:/LaTex/Boundary Flow/Figures/mixed_v_3_omega_0_gap_screened.png", "sha256": "B51310B99E1482D4AEEC2E763F3BB0E717BE546E5DD5CCE9E07E912413D82719"}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "K_values": [
+    8.0,
+    12.0,
+    20.75,
+    40.0
+  ],
+  "diameters": [
+    3.3,
+    4.58
+  ],
+  "resolutions": [
+    40,
+    50,
+    60,
+    70,
+    80
+  ],
+  "v": 3.0,
+  "d0": 1.0,
+  "alpha_over_pi": 0.5,
+  "edge_width": 0.25,
+  "candidate_filter": "edge_fraction >= 0.5 and |sigma| <= 200",
+  "warning": "Failure of m and growth to converge means the three-field wall closure is not numerically predictive at this discretization."
+}

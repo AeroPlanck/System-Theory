@@ -1,0 +1,33 @@
+{
+  "wall_switch_source_time": 250.0,
+  "continuation_steps": 20000,
+  "continuation_time": 100.0,
+  "snapshot_interval": 100,
+  "conditions": [
+    {
+      "alpha_over_pi": 0.5,
+      "diameter": 3.0,
+      "seed": 9
+    },
+    {
+      "alpha_over_pi": 0.5,
+      "diameter": 3.0,
+      "seed": 11
+    },
+    {
+      "alpha_over_pi": 0.5,
+      "diameter": 5.0,
+      "seed": 9
+    },
+    {
+      "alpha_over_pi": 0.5,
+      "diameter": 5.0,
+      "seed": 10
+    }
+  ],
+  "protocols": [
+    "retained",
+    "removed"
+  ],
+  "reference_files_modified": false
+}

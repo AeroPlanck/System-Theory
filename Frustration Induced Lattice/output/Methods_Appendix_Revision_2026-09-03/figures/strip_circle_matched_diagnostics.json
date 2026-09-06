@@ -1,0 +1,2327 @@
+{
+  "particle_parameters": {
+    "N": 2000,
+    "L": 7.0,
+    "R": 3.5,
+    "K": 20.75,
+    "v": 3.0,
+    "omega": 0.0,
+    "d0": 1.0
+  },
+  "normalization": "rho0=N/[pi*(L/2)^2]; lambda=K/(rho0*pi*d0^2)",
+  "geometry_source": "main.py:1409-1411: circleRadius=halfBoundaryLength=boundaryLength/2",
+  "reference_level_selection": "Fixed empirical levels +/-10 retained unchanged; no selection to obtain any target integer",
+  "excluded_phase_lag_endpoints": [
+    0.0,
+    1.0
+  ],
+  "records": [
+    {
+      "alpha_over_pi": 0.2,
+      "params_v_omega_lambda_alpha_rho0_d0": [
+        3.0,
+        0.0,
+        0.12709375,
+        0.6283185307179586,
+        51.96896100959848,
+        1.0
+      ],
+      "lambda_rho0_G0": 20.75,
+      "D0": -24.393087970137636,
+      "bulk_reference_diagnostics": {
+        "10.0": {
+          "reference_level": 10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 2.3132223277666957,
+              "example_kx": 0.0,
+              "example_ky": 2.3132223277666957,
+              "sigma_real": 3.481610418282857,
+              "sigma_imag": 10.00000000000001,
+              "level_residual_abs": 1.0658141036401503e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.0006136343610272377,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "reference_level": -10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 2.313222327766697,
+              "example_kx": 0.0,
+              "example_ky": 2.313222327766697,
+              "sigma_real": 3.481610418282855,
+              "sigma_imag": -10.000000000000016,
+              "level_residual_abs": 1.5987211554602254e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.000613634361029014,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        }
+      },
+      "coarse": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 3.73469750368868e-08,
+          "normalized_self_overlap_min": 0.022941575511318816,
+          "assignment_margin_min": -0.30359578739169935,
+          "near_degenerate_mode_sample_count": 2,
+          "ambiguous_assignment_count": 882,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 101,
+          "delta_ky": 1.0,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": 4.713708776688982,
+                "sigma_real": -0.18461828539744424,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9958174297265082,
+                "mean_right_weight": 0.00019761094954223236
+              },
+              {
+                "mode": 71,
+                "ky": -19.205121934504035,
+                "sigma_real": 0.0022689919905883537,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9734862364106485,
+                "mean_right_weight": 0.00205746411904042
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 71,
+                "ky": 19.205121934503975,
+                "sigma_real": 0.002268991990584802,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0020573305524332016,
+                "mean_right_weight": 0.9734842518015163
+              },
+              {
+                "mode": 72,
+                "ky": -4.71370877668898,
+                "sigma_real": -0.18461828539743974,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00019830433015818376,
+                "mean_right_weight": 0.9958273643999147
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 71,
+                "ky": -2.111189750832286,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.13979421303059664,
+                  0.10380817133413396
+                ],
+                "right_endpoint_weights": [
+                  0.030121655571626438,
+                  0.0457201442158177
+                ]
+              },
+              {
+                "mode": 71,
+                "ky": 2.111189750832291,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.045528547599722934,
+                  0.02970074689001409
+                ],
+                "right_endpoint_weights": [
+                  0.10412175614875366,
+                  0.1405245097489999
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": -1.2260585932111434,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.260262651892499,
+                  0.22211821034429213
+                ],
+                "right_endpoint_weights": [
+                  0.13064642252203904,
+                  0.16461330215540992
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": 1.2260585932111487,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.16519136356542208,
+                  0.1314199088010569
+                ],
+                "right_endpoint_weights": [
+                  0.22151117781123644,
+                  0.25939947013039705
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": -4.713708776688975,
+                "sigma_real": -0.1846182853974297,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9958273643999147,
+                "mean_right_weight": 0.0001983043301581904
+              },
+              {
+                "mode": 36,
+                "ky": 19.205121934503943,
+                "sigma_real": 0.002268991990583249,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9734842518015165,
+                "mean_right_weight": 0.002057330552433188
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -19.205121934504074,
+                "sigma_real": 0.0022689919905913175,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0020574641190404305,
+                "mean_right_weight": 0.9734862364106485
+              },
+              {
+                "mode": 72,
+                "ky": 4.713708776688975,
+                "sigma_real": -0.18461828539743694,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00019761094954222274,
+                "mean_right_weight": 0.9958174297265084
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 34,
+                "ky": -1.22605859321114,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.1306464225220401,
+                  0.16461330215541076
+                ],
+                "right_endpoint_weights": [
+                  0.2602626518924985,
+                  0.2221182103442909
+                ]
+              },
+              {
+                "mode": 34,
+                "ky": 1.2260585932111436,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.22151117781123192,
+                  0.2593994701304019
+                ],
+                "right_endpoint_weights": [
+                  0.1651913635654252,
+                  0.13141990880105667
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": -2.111189750832293,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.03012165557162633,
+                  0.045720144215817674
+                ],
+                "right_endpoint_weights": [
+                  0.13979421303059672,
+                  0.10380817133413385
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": 2.111189750832297,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.10412175614875309,
+                  0.14052450974899144
+                ],
+                "right_endpoint_weights": [
+                  0.04552854759972243,
+                  0.02970074689001585
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 4.884600099991076
+      },
+      "fine": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 3.73469750368868e-08,
+          "normalized_self_overlap_min": 0.022941575511318816,
+          "assignment_margin_min": -0.46608114880906343,
+          "near_degenerate_mode_sample_count": 6,
+          "ambiguous_assignment_count": 1301,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 201,
+          "delta_ky": 0.5,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": 4.713723733686919,
+                "sigma_real": -0.19810571448000666,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9956161024506002,
+                "mean_right_weight": 0.00021415129117179717
+              },
+              {
+                "mode": 71,
+                "ky": -19.203521420918374,
+                "sigma_real": 0.0027505731101296164,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9736163262800788,
+                "mean_right_weight": 0.002063356770855014
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 71,
+                "ky": 19.203521420918342,
+                "sigma_real": 0.0027505731101234734,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.002063226441460316,
+                "mean_right_weight": 0.9736132154115427
+              },
+              {
+                "mode": 72,
+                "ky": -4.713723733686921,
+                "sigma_real": -0.19810571448000613,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00021481199674746134,
+                "mean_right_weight": 0.9956272952340047
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 71,
+                "ky": -2.107464085926942,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.11608337198504279,
+                  0.10380817133413396
+                ],
+                "right_endpoint_weights": [
+                  0.03785640901642534,
+                  0.0457201442158177
+                ]
+              },
+              {
+                "mode": 71,
+                "ky": 2.107464085926945,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.045528547599722934,
+                  0.037579340926532104
+                ],
+                "right_endpoint_weights": [
+                  0.10412175614875366,
+                  0.11654956888720837
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": -1.2478099533142644,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.23910114447743255,
+                  0.22211821034429213
+                ],
+                "right_endpoint_weights": [
+                  0.14811999888773272,
+                  0.16461330215540992
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": 1.2478099533142664,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.16519136356542208,
+                  0.14877819886106675
+                ],
+                "right_endpoint_weights": [
+                  0.22151117781123644,
+                  0.23839271432465264
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": -4.713723733686912,
+                "sigma_real": -0.1981057144800074,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9956272952340046,
+                "mean_right_weight": 0.0002148119967474641
+              },
+              {
+                "mode": 36,
+                "ky": 19.203521420918346,
+                "sigma_real": 0.002750573110125634,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9736132154115422,
+                "mean_right_weight": 0.002063226441460386
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -19.203521420918385,
+                "sigma_real": 0.002750573110129418,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0020633567708550297,
+                "mean_right_weight": 0.9736163262800789
+              },
+              {
+                "mode": 72,
+                "ky": 4.7137237336869084,
+                "sigma_real": -0.19810571448000325,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0002141512911718091,
+                "mean_right_weight": 0.9956161024506004
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 34,
+                "ky": -1.247809953314256,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.14811999888773414,
+                  0.16461330215541076
+                ],
+                "right_endpoint_weights": [
+                  0.23910114447743122,
+                  0.2221182103442909
+                ]
+              },
+              {
+                "mode": 34,
+                "ky": 1.2478099533142517,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.22151117781123192,
+                  0.23839271432465106
+                ],
+                "right_endpoint_weights": [
+                  0.1651913635654252,
+                  0.14877819886106702
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": -2.1074640859269476,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.037856409016424356,
+                  0.045720144215817674
+                ],
+                "right_endpoint_weights": [
+                  0.11608337198504415,
+                  0.10380817133413385
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": 2.10746408592695,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.10412175614875309,
+                  0.11654956888720619
+                ],
+                "right_endpoint_weights": [
+                  0.04552854759972243,
+                  0.03757934092653249
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 13.277490899985423
+      },
+      "edge_threshold_sensitivity": {
+        "0.4": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.45": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.5": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        }
+      },
+      "ky_refinement_comparison": {
+        "10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0016005135856609343,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.0016005135856325126
+        },
+        "-10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0016005135855969854,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.001600513585689356
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.4,
+      "params_v_omega_lambda_alpha_rho0_d0": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.2566370614359172,
+        51.96896100959848,
+        1.0
+      ],
+      "lambda_rho0_G0": 20.75,
+      "D0": -39.46884542624887,
+      "bulk_reference_diagnostics": {
+        "10.0": {
+          "reference_level": 10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 0.3106290686734263,
+              "example_kx": 0.0,
+              "example_ky": 0.3106290686734263,
+              "sigma_real": 3.1612852946092524,
+              "sigma_imag": 10.000000000000007,
+              "level_residual_abs": 7.105427357601002e-15
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.00010980966204776621,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "reference_level": -10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 0.3106290686734367,
+              "example_kx": 0.0,
+              "example_ky": 0.3106290686734367,
+              "sigma_real": 3.1612852946092467,
+              "sigma_imag": -10.000000000000018,
+              "level_residual_abs": 1.7763568394002505e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.0001098096620442135,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        }
+      },
+      "coarse": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 1.8273913639925094e-08,
+          "normalized_self_overlap_min": 0.04831959997802919,
+          "assignment_margin_min": -0.45498198665470885,
+          "near_degenerate_mode_sample_count": 2,
+          "ambiguous_assignment_count": 821,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 101,
+          "delta_ky": 1.0,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": 4.731807645706115,
+                "sigma_real": -0.03347017986346633,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857879370383642,
+                "mean_right_weight": 0.003763387208860533
+              },
+              {
+                "mode": 71,
+                "ky": -27.28983468646,
+                "sigma_real": 0.0028388535281554635,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9485279365227743,
+                "mean_right_weight": 0.005067307794840945
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": 27.28983468645994,
+                "sigma_real": 0.002838853528120144,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0050678374271007545,
+                "mean_right_weight": 0.9485212632108082
+              },
+              {
+                "mode": 71,
+                "ky": -4.731807645706096,
+                "sigma_real": -0.03347017986346062,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0037638931360242664,
+                "mean_right_weight": 0.9857945432194898
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": -4.731807645706115,
+                "sigma_real": -0.033470179863458335,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857945432194897,
+                "mean_right_weight": 0.0037638931360242803
+              },
+              {
+                "mode": 71,
+                "ky": 27.28983468646004,
+                "sigma_real": 0.0028388535281706887,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9485212632108084,
+                "mean_right_weight": 0.005067837427100864
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -27.289834686459844,
+                "sigma_real": 0.0028388535281657443,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005067307794840981,
+                "mean_right_weight": 0.9485279365227746
+              },
+              {
+                "mode": 71,
+                "ky": 4.731807645706108,
+                "sigma_real": -0.03347017986346357,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0037633872088605348,
+                "mean_right_weight": 0.9857879370383642
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 6.415736499999184
+      },
+      "fine": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 1.8273913639925094e-08,
+          "normalized_self_overlap_min": 0.04831959997802919,
+          "assignment_margin_min": -0.42538328562049865,
+          "near_degenerate_mode_sample_count": 6,
+          "ambiguous_assignment_count": 1211,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 201,
+          "delta_ky": 0.5,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": 4.731727606024677,
+                "sigma_real": -0.035954554229580306,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857922791328027,
+                "mean_right_weight": 0.00386945054078341
+              },
+              {
+                "mode": 71,
+                "ky": -27.28647341178347,
+                "sigma_real": 0.002986023085121683,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9483369659576818,
+                "mean_right_weight": 0.005130888242644995
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": 27.28647341178356,
+                "sigma_real": 0.0029860230851280903,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00513143663586422,
+                "mean_right_weight": 0.9483302188928269
+              },
+              {
+                "mode": 71,
+                "ky": -4.731727606024648,
+                "sigma_real": -0.03595455422956596,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0038699693158909037,
+                "mean_right_weight": 0.9857990335572433
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": -4.731727606024652,
+                "sigma_real": -0.035954554229575456,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857990335572433,
+                "mean_right_weight": 0.0038699693158908877
+              },
+              {
+                "mode": 71,
+                "ky": 27.286473411783597,
+                "sigma_real": 0.0029860230851560324,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9483302188928266,
+                "mean_right_weight": 0.005131436635864316
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -27.286473411783444,
+                "sigma_real": 0.0029860230851395993,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005130888242644814,
+                "mean_right_weight": 0.9483369659576828
+              },
+              {
+                "mode": 71,
+                "ky": 4.731727606024652,
+                "sigma_real": -0.035954554229575435,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0038694505407834475,
+                "mean_right_weight": 0.9857922791328029
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 12.970577500003856
+      },
+      "edge_threshold_sensitivity": {
+        "0.4": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.45": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.5": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        }
+      },
+      "ky_refinement_comparison": {
+        "10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0033612746765321333,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.0033612746763793666
+        },
+        "-10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0033612746764433155,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.003361274676400683
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.5,
+      "params_v_omega_lambda_alpha_rho0_d0": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.5707963267948966,
+        51.96896100959848,
+        1.0
+      ],
+      "lambda_rho0_G0": 20.75,
+      "D0": -41.5,
+      "bulk_reference_diagnostics": {
+        "10.0": {
+          "reference_level": 10.0,
+          "intersections_detected": false,
+          "roots": [],
+          "sampled_min_imaginary_distance": 0.37499999999999645,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk line gap certified at alpha=pi/2",
+          "bulk_line_gap_certified": true,
+          "minimum_oscillatory_frequency": 10.375,
+          "certificate": "For omega=0, alpha=pi/2, K>0: a=0, w^2=b^2+v^2*k^2/2. Ghat/G0<=1 gives b>=K/2-v^2*k^2/(8K). For k<=2K/v this implies w>=K/2; for k>=2K/v, w>=v*k/sqrt(2)>=sqrt(2)*K. Equality w=K/2 occurs at k=0."
+        },
+        "-10.0": {
+          "reference_level": -10.0,
+          "intersections_detected": false,
+          "roots": [],
+          "sampled_min_imaginary_distance": 0.375,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk line gap certified at alpha=pi/2",
+          "bulk_line_gap_certified": true,
+          "minimum_oscillatory_frequency": 10.375,
+          "certificate": "For omega=0, alpha=pi/2, K>0: a=0, w^2=b^2+v^2*k^2/2. Ghat/G0<=1 gives b>=K/2-v^2*k^2/(8K). For k<=2K/v this implies w>=K/2; for k>=2K/v, w>=v*k/sqrt(2)>=sqrt(2)*K. Equality w=K/2 occurs at k=0."
+        }
+      },
+      "coarse": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 4.158050194287702e-16,
+          "normalized_self_overlap_min": 0.06059592367286436,
+          "assignment_margin_min": -0.3405462388626701,
+          "near_degenerate_mode_sample_count": 2004,
+          "ambiguous_assignment_count": 631,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 101,
+          "delta_ky": 1.0,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 60,
+                "ky": 4.7403970939725,
+                "sigma_real": -9.07528872639592e-15,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9808352237317034,
+                "mean_right_weight": 0.005387072227706111
+              },
+              {
+                "mode": 71,
+                "ky": -27.948839500345848,
+                "sigma_real": -7.104772564991451e-16,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9445471629370688,
+                "mean_right_weight": 0.005787068870430907
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 60,
+                "ky": 27.948839500345926,
+                "sigma_real": 3.691828399970907e-14,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00578706887043098,
+                "mean_right_weight": 0.9445471629370688
+              },
+              {
+                "mode": 71,
+                "ky": -4.740397093972519,
+                "sigma_real": -2.2881681283711464e-15,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005387072227706095,
+                "mean_right_weight": 0.9808352237317035
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": -4.740397093972524,
+                "sigma_real": -8.508773667052681e-15,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9808352237317034,
+                "mean_right_weight": 0.005387072227706076
+              },
+              {
+                "mode": 54,
+                "ky": 27.948839500346136,
+                "sigma_real": -1.8366544413692242e-14,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9445471629370688,
+                "mean_right_weight": 0.005787068870430919
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -27.948839500345883,
+                "sigma_real": -1.5953639361055734e-14,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005787068870431023,
+                "mean_right_weight": 0.9445471629370688
+              },
+              {
+                "mode": 54,
+                "ky": 4.7403970939725415,
+                "sigma_real": 1.2667992434923558e-15,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0053870722277060655,
+                "mean_right_weight": 0.9808352237317035
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 6.346255999989808
+      },
+      "fine": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 4.158050194287702e-16,
+          "normalized_self_overlap_min": 0.06059592367286436,
+          "assignment_margin_min": -0.4461664531672911,
+          "near_degenerate_mode_sample_count": 3976,
+          "ambiguous_assignment_count": 1133,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 201,
+          "delta_ky": 0.5,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 43,
+                "ky": 4.740292160284775,
+                "sigma_real": 1.0260743562577627e-15,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9808184538027109,
+                "mean_right_weight": 0.0055341616084334695
+              },
+              {
+                "mode": 71,
+                "ky": -27.948223928596693,
+                "sigma_real": 4.310004311945237e-15,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9447896611293314,
+                "mean_right_weight": 0.0057067034684055275
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 43,
+                "ky": 27.948223928596793,
+                "sigma_real": 3.283019792494607e-14,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005706703468405495,
+                "mean_right_weight": 0.944789661129331
+              },
+              {
+                "mode": 71,
+                "ky": -4.740292160284781,
+                "sigma_real": -8.943797034692452e-16,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005534161608433387,
+                "mean_right_weight": 0.9808184538027109
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": -4.740292160284772,
+                "sigma_real": -6.010478964703421e-15,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9808184538027109,
+                "mean_right_weight": 0.00553416160843343
+              },
+              {
+                "mode": 56,
+                "ky": 27.948223928596992,
+                "sigma_real": -2.0785712060621027e-14,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9447896611293309,
+                "mean_right_weight": 0.005706703468405572
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -27.948223928596764,
+                "sigma_real": -1.4307029839695556e-14,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005706703468405568,
+                "mean_right_weight": 0.9447896611293308
+              },
+              {
+                "mode": 56,
+                "ky": 4.7402921602847865,
+                "sigma_real": 3.1069625606007367e-15,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0055341616084333784,
+                "mean_right_weight": 0.980818453802711
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 12.791603599995142
+      },
+      "edge_threshold_sensitivity": {
+        "0.4": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.45": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.5": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        }
+      },
+      "ky_refinement_comparison": {
+        "10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0006155717491544976,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.0006155717491331814
+        },
+        "-10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0006155717491438395,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.0006155717491189705
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.6,
+      "params_v_omega_lambda_alpha_rho0_d0": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.8849555921538759,
+        51.96896100959848,
+        1.0
+      ],
+      "lambda_rho0_G0": 20.75,
+      "D0": -39.468845426248876,
+      "bulk_reference_diagnostics": {
+        "10.0": {
+          "reference_level": 10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 0.3106290686734274,
+              "example_kx": 0.0,
+              "example_ky": 0.3106290686734274,
+              "sigma_real": -3.161285294609248,
+              "sigma_imag": 10.000000000000012,
+              "level_residual_abs": 1.2434497875801753e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.00010980966204243714,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "reference_level": -10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 0.3106290686734341,
+              "example_kx": 0.0,
+              "example_ky": 0.3106290686734341,
+              "sigma_real": -3.1612852946092476,
+              "sigma_imag": -10.000000000000018,
+              "level_residual_abs": 1.7763568394002505e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.0001098096620442135,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        }
+      },
+      "coarse": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 1.8273914870219493e-08,
+          "normalized_self_overlap_min": 0.04831958568942668,
+          "assignment_margin_min": -0.36270129452576205,
+          "near_degenerate_mode_sample_count": 2,
+          "ambiguous_assignment_count": 821,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 101,
+          "delta_ky": 1.0,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": 4.731807645706101,
+                "sigma_real": 0.03347017986345294,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857945432194897,
+                "mean_right_weight": 0.0037638931360242907
+              },
+              {
+                "mode": 71,
+                "ky": -27.289834686460036,
+                "sigma_real": -0.0028388535281515426,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9485212632108083,
+                "mean_right_weight": 0.005067837427100855
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": 27.2898346864599,
+                "sigma_real": -0.002838853528130848,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00506730779484083,
+                "mean_right_weight": 0.9485279365227748
+              },
+              {
+                "mode": 71,
+                "ky": -4.731807645706114,
+                "sigma_real": 0.03347017986345349,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0037633872088605417,
+                "mean_right_weight": 0.9857879370383643
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": -4.731807645706097,
+                "sigma_real": 0.033470179863456226,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857879370383642,
+                "mean_right_weight": 0.003763387208860547
+              },
+              {
+                "mode": 71,
+                "ky": 27.289834686459976,
+                "sigma_real": -0.0028388535281467465,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9485279365227746,
+                "mean_right_weight": 0.005067307794840931
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -27.28983468645995,
+                "sigma_real": -0.0028388535281279915,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00506783742710081,
+                "mean_right_weight": 0.9485212632108082
+              },
+              {
+                "mode": 71,
+                "ky": 4.731807645706111,
+                "sigma_real": 0.03347017986345603,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.003763893136024327,
+                "mean_right_weight": 0.9857945432194898
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 6.45883440002217
+      },
+      "fine": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 1.8273914870219493e-08,
+          "normalized_self_overlap_min": 0.04831958568942668,
+          "assignment_margin_min": -0.38338454780590253,
+          "near_degenerate_mode_sample_count": 6,
+          "ambiguous_assignment_count": 1208,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 201,
+          "delta_ky": 0.5,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": 4.731727606024629,
+                "sigma_real": 0.03595455422956492,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857990335572433,
+                "mean_right_weight": 0.003869969315890918
+              },
+              {
+                "mode": 71,
+                "ky": -27.286473411783454,
+                "sigma_real": -0.002986023085126223,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9483302188928269,
+                "mean_right_weight": 0.0051314366358643036
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": 27.286473411783557,
+                "sigma_real": -0.0029860230851172192,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005130888242645037,
+                "mean_right_weight": 0.9483369659576821
+              },
+              {
+                "mode": 71,
+                "ky": -4.731727606024652,
+                "sigma_real": 0.03595455422956528,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0038694505407834393,
+                "mean_right_weight": 0.9857922791328029
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 36,
+                "ky": -4.7317276060246485,
+                "sigma_real": 0.035954554229570355,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9857922791328029,
+                "mean_right_weight": 0.0038694505407833955
+              },
+              {
+                "mode": 71,
+                "ky": 27.28647341178354,
+                "sigma_real": -0.00298602308511558,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9483369659576824,
+                "mean_right_weight": 0.005130888242644927
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -27.28647341178349,
+                "sigma_real": -0.00298602308511064,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.005131436635864314,
+                "mean_right_weight": 0.9483302188928263
+              },
+              {
+                "mode": 71,
+                "ky": 4.731727606024649,
+                "sigma_real": 0.03595455422956706,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.003869969315890939,
+                "mean_right_weight": 0.9857990335572434
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 13.286287199996877
+      },
+      "edge_threshold_sensitivity": {
+        "0.4": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.45": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.5": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        }
+      },
+      "ky_refinement_comparison": {
+        "10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0033612746765818713,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.0033612746763438395
+        },
+        "-10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.00336127467643621,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.003361274676461079
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.8,
+      "params_v_omega_lambda_alpha_rho0_d0": [
+        3.0,
+        0.0,
+        0.12709375,
+        2.5132741228718345,
+        51.96896100959848,
+        1.0
+      ],
+      "lambda_rho0_G0": 20.75,
+      "D0": -24.39308797013764,
+      "bulk_reference_diagnostics": {
+        "10.0": {
+          "reference_level": 10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 2.3132223277666966,
+              "example_kx": 0.0,
+              "example_ky": 2.3132223277666966,
+              "sigma_real": -3.4816104182828607,
+              "sigma_imag": 10.000000000000014,
+              "level_residual_abs": 1.4210854715202004e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.0006136343610219086,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "reference_level": -10.0,
+          "intersections_detected": true,
+          "roots": [
+            {
+              "k": 2.313222327766697,
+              "example_kx": 0.0,
+              "example_ky": 2.313222327766697,
+              "sigma_real": -3.4816104182828527,
+              "sigma_imag": -10.000000000000016,
+              "level_residual_abs": 1.5987211554602254e-14
+            }
+          ],
+          "sampled_min_imaginary_distance": 0.000613634361023685,
+          "radial_max": 400.0,
+          "sample_count": 24001,
+          "status": "bulk intersection detected",
+          "bulk_line_gap_certified": false
+        }
+      },
+      "coarse": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 3.7346970825919474e-08,
+          "normalized_self_overlap_min": 0.022941574938102657,
+          "assignment_margin_min": -0.3049009671036985,
+          "near_degenerate_mode_sample_count": 2,
+          "ambiguous_assignment_count": 893,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 101,
+          "delta_ky": 1.0,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": 4.713708776688979,
+                "sigma_real": 0.18461828539742703,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9958273643999147,
+                "mean_right_weight": 0.00019830433015819777
+              },
+              {
+                "mode": 71,
+                "ky": -19.20512193450388,
+                "sigma_real": -0.0022689919905902454,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9734842518015168,
+                "mean_right_weight": 0.0020573305524331743
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 71,
+                "ky": 19.20512193450418,
+                "sigma_real": -0.0022689919905851796,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.002057464119040449,
+                "mean_right_weight": 0.9734862364106484
+              },
+              {
+                "mode": 72,
+                "ky": -4.713708776688979,
+                "sigma_real": 0.18461828539743697,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00019761094954223512,
+                "mean_right_weight": 0.9958174297265083
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 71,
+                "ky": -2.111189750832299,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.14052450974899286,
+                  0.10412175614875442
+                ],
+                "right_endpoint_weights": [
+                  0.029700746890014548,
+                  0.04552854759972234
+                ]
+              },
+              {
+                "mode": 71,
+                "ky": 2.111189750832286,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.04572014421581769,
+                  0.030121655571626132
+                ],
+                "right_endpoint_weights": [
+                  0.10380817133413311,
+                  0.13979421303059666
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": -1.2260585932111405,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.2593994701304007,
+                  0.22151117781123247
+                ],
+                "right_endpoint_weights": [
+                  0.1314199088010559,
+                  0.16519136356542521
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": 1.2260585932111434,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.16461330215541167,
+                  0.1306464225220407
+                ],
+                "right_endpoint_weights": [
+                  0.22211821034429027,
+                  0.2602626518924954
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": -4.713708776688976,
+                "sigma_real": 0.18461828539743516,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9958174297265083,
+                "mean_right_weight": 0.00019761094954224483
+              },
+              {
+                "mode": 36,
+                "ky": 19.205121934503993,
+                "sigma_real": -0.002268991990587597,
+                "sigma_imag": -9.999999999999998,
+                "orientation": 1,
+                "mean_left_weight": 0.9734862364106487,
+                "mean_right_weight": 0.002057464119040391
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -19.205121934504017,
+                "sigma_real": -0.002268991990587145,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0020573305524331604,
+                "mean_right_weight": 0.9734842518015165
+              },
+              {
+                "mode": 72,
+                "ky": 4.713708776688965,
+                "sigma_real": 0.18461828539743472,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0001983043301581768,
+                "mean_right_weight": 0.9958273643999147
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 34,
+                "ky": -1.226058593211142,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.1314199088010567,
+                  0.16519136356542322
+                ],
+                "right_endpoint_weights": [
+                  0.25939947013040004,
+                  0.2215111778112357
+                ]
+              },
+              {
+                "mode": 34,
+                "ky": 1.2260585932111547,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.2221182103442933,
+                  0.2602626518924974
+                ],
+                "right_endpoint_weights": [
+                  0.16461330215540976,
+                  0.1306464225220404
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": -2.1111897508322914,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.029700746890014704,
+                  0.04552854759972218
+                ],
+                "right_endpoint_weights": [
+                  0.14052450974899994,
+                  0.10412175614875557
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": 2.1111897508322888,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.10380817133413127,
+                  0.13979421303059059
+                ],
+                "right_endpoint_weights": [
+                  0.04572014421581866,
+                  0.030121655571628613
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 7.35597350000171
+      },
+      "fine": {
+        "diagnostics": {
+          "tracking_method": "individual biorthogonal eigenvector Hungarian assignment; no subspace continuation",
+          "relative_gap_tol": 1e-07,
+          "self_overlap_tol": 1e-08,
+          "assignment_margin_tol": 1e-06,
+          "relative_eigenvalue_separation_min": 3.7346970825919474e-08,
+          "normalized_self_overlap_min": 0.022941574938102657,
+          "assignment_margin_min": -0.452813014113774,
+          "near_degenerate_mode_sample_count": 6,
+          "ambiguous_assignment_count": 1304,
+          "n_cells": 36,
+          "kx_cut": 40.0,
+          "n_kx": 384,
+          "hop_cut": 35,
+          "edge_width": 6,
+          "ky_max": 50.0,
+          "n_ky": 201,
+          "delta_ky": 0.5,
+          "eig_weight": 0.25
+        },
+        "reference_counts": {
+          "10.0": {
+            "c": 10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": 4.7137237336869156,
+                "sigma_real": 0.1981057144799977,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9956272952340047,
+                "mean_right_weight": 0.0002148119967474879
+              },
+              {
+                "mode": 71,
+                "ky": -19.20352142091824,
+                "sigma_real": -0.0027505731101294052,
+                "sigma_imag": 10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9736132154115427,
+                "mean_right_weight": 0.0020632264414603496
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 71,
+                "ky": 19.203521420918516,
+                "sigma_real": -0.0027505731101286476,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0020633567708550717,
+                "mean_right_weight": 0.9736163262800788
+              },
+              {
+                "mode": 72,
+                "ky": -4.713723733686911,
+                "sigma_real": 0.19810571448000508,
+                "sigma_imag": 10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.0002141512911718221,
+                "mean_right_weight": 0.9956161024506003
+              }
+            ],
+            "level": 10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 71,
+                "ky": -2.107464085926953,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.11654956888720738,
+                  0.10412175614875442
+                ],
+                "right_endpoint_weights": [
+                  0.037579340926533415,
+                  0.04552854759972234
+                ]
+              },
+              {
+                "mode": 71,
+                "ky": 2.107464085926941,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.04572014421581769,
+                  0.037856409016423516
+                ],
+                "right_endpoint_weights": [
+                  0.10380817133413311,
+                  0.11608337198504562
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": -1.2478099533142601,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.23839271432465078,
+                  0.22151117781123247
+                ],
+                "right_endpoint_weights": [
+                  0.148778198861067,
+                  0.16519136356542521
+                ]
+              },
+              {
+                "mode": 73,
+                "ky": 1.2478099533142637,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.16461330215541167,
+                  0.14811999888773492
+                ],
+                "right_endpoint_weights": [
+                  0.22211821034429027,
+                  0.23910114447742825
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          },
+          "-10.0": {
+            "c": -10.0,
+            "count_left": 2,
+            "count_right": -2,
+            "crossings_left": [
+              {
+                "mode": 35,
+                "ky": -4.713723733686917,
+                "sigma_real": 0.19810571448001335,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9956161024506002,
+                "mean_right_weight": 0.00021415129117182747
+              },
+              {
+                "mode": 36,
+                "ky": 19.20352142091821,
+                "sigma_real": -0.0027505731101290626,
+                "sigma_imag": -10.0,
+                "orientation": 1,
+                "mean_left_weight": 0.9736163262800788,
+                "mean_right_weight": 0.0020633567708550015
+              }
+            ],
+            "crossings_right": [
+              {
+                "mode": 36,
+                "ky": -19.20352142091845,
+                "sigma_real": -0.0027505731101303095,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.002063226441460319,
+                "mean_right_weight": 0.9736132154115427
+              },
+              {
+                "mode": 72,
+                "ky": 4.713723733686913,
+                "sigma_real": 0.19810571448000164,
+                "sigma_imag": -10.0,
+                "orientation": -1,
+                "mean_left_weight": 0.00021481199674746194,
+                "mean_right_weight": 0.9956272952340047
+              }
+            ],
+            "level": -10.0,
+            "edge_threshold": 0.45,
+            "two_sided_persistent_label_required": true,
+            "zero_tol": 1e-10,
+            "excluded_crossings": [
+              {
+                "mode": 34,
+                "ky": -1.2478099533142588,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.14877819886106822,
+                  0.16519136356542322
+                ],
+                "right_endpoint_weights": [
+                  0.2383927143246487,
+                  0.2215111778112357
+                ]
+              },
+              {
+                "mode": 34,
+                "ky": 1.247809953314271,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.2221182103442933,
+                  0.23910114447742972
+                ],
+                "right_endpoint_weights": [
+                  0.16461330215540976,
+                  0.14811999888773428
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": -2.1074640859269467,
+                "sign": 1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.037579340926533505,
+                  0.04552854759972218
+                ],
+                "right_endpoint_weights": [
+                  0.11654956888720676,
+                  0.10412175614875557
+                ]
+              },
+              {
+                "mode": 36,
+                "ky": 2.107464085926942,
+                "sign": -1,
+                "near_degenerate": false,
+                "ambiguous_assignment": false,
+                "persistent_edge_label": false,
+                "left_endpoint_weights": [
+                  0.10380817133413127,
+                  0.1160833719850417
+                ],
+                "right_endpoint_weights": [
+                  0.04572014421581866,
+                  0.03785640901642566
+                ]
+              }
+            ],
+            "endpoint_contact_count": 0,
+            "interpretation": "finite-cutoff resolved reference-line crossing count, not a certified bulk line-gap invariant"
+          }
+        },
+        "elapsed_seconds": 12.97960520000197
+      },
+      "edge_threshold_sensitivity": {
+        "0.4": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.45": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        },
+        "0.5": {
+          "10.0": {
+            "count_left": 2,
+            "count_right": -2
+          },
+          "-10.0": {
+            "count_left": 2,
+            "count_right": -2
+          }
+        }
+      },
+      "ky_refinement_comparison": {
+        "10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.001600513585639618,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.001600513585664487
+        },
+        "-10.0": {
+          "signed_counts_equal": true,
+          "left_crossing_lists_compatible": true,
+          "left_max_abs_ky_shift": 0.0016005135857817265,
+          "right_crossing_lists_compatible": true,
+          "right_max_abs_ky_shift": 0.0016005135855685637
+        }
+      }
+    }
+  ],
+  "validation_scope": "ky step 1 to 0.5 and eta 0.40/0.45/0.50 only; not joint UV/width/cutoff convergence or subspace continuation",
+  "elapsed_seconds": 112.09623419999843,
+  "source_sha256": {
+    "SpectralFlow.py": "94200a4cb00a31afd6dcb8e104ae719a7914003e1163156166e1bede04b3ea11",
+    "run_strip_matched_sweep.py": "64596e1dc51da77f51f6498dab8443b3322031f82cb7d00a4f3e8f60d1585119"
+  }
+}

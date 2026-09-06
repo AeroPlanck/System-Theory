@@ -1,0 +1,28 @@
+{
+  "warning": "Intervention trajectories; not spontaneous crystallization.",
+  "strength_k": 20.75,
+  "d0": 1.0,
+  "alpha_over_pi": 0.5,
+  "diameter": 4.5,
+  "seed": 11,
+  "geometric_mode": 14,
+  "target_modes": [
+    5,
+    7,
+    21,
+    28
+  ],
+  "key_times": [
+    0.0,
+    0.5,
+    2.5,
+    10.0,
+    50.0,
+    125.0,
+    250.0
+  ],
+  "agents_num": 2000,
+  "dt": 0.005,
+  "iterations": 50000,
+  "snapshot_interval": 100
+}

@@ -40,6 +40,12 @@ LIGHT_RERENDER_DIR = (
 
 # Existing-data contract.  phaseLagA0 is the only swept parameter.
 ALPHA_OVER_PI = np.array([0.0, 0.2, 0.4, 0.6, 0.8, 1.0])
+# Terminal-state comparisons additionally show the independently classified
+# pattern-formation threshold alpha = pi/2.  Keep this grid separate so that a
+# morphology-only panel cannot silently change any metric sweep.
+TERMINAL_COMPARISON_ALPHA_OVER_PI = np.array(
+    [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0]
+)
 COMMON_PARAMETERS = {
     "strengthK": 20.75,
     "distanceD0": 1.0,
@@ -605,9 +611,23 @@ def state_sweep_figure(
     validate_exact_files(models)
     if iterations is None:
         iterations = [None] * len(models)
-    columns = min(PLOT_COLUMNS, len(models)) if row_labels is None else len(ALPHA_OVER_PI)
+    if row_labels is None:
+        columns = min(PLOT_COLUMNS, len(models))
+    else:
+        if not row_labels or len(models) % len(row_labels):
+            raise ValueError(
+                "A labeled state sweep requires an equal number of panels in every row."
+            )
+        columns = len(models) // len(row_labels)
     rows = math.ceil(len(models) / columns)
-    with mpl.rc_context({"font.family": "STIXGeneral", "mathtext.fontset": "stix"}):
+    with mpl.rc_context(
+        {
+            "font.family": "STIXGeneral",
+            "mathtext.fontset": "stix",
+            "pdf.fonttype": 42,
+            "ps.fonttype": 42,
+        }
+    ):
         fig, axes = plt.subplots(
             rows, columns,
             figsize=(3.0 * columns + 0.55, 3.05 * rows),
@@ -936,18 +956,42 @@ trajectory are used.  Files are never continued, regenerated, or overwritten.
 
 
 def create_comparison_states() -> None:
-    square_models, circle_models = metric_models()
-    square_models = square_models[: 2 * len(ALPHA_OVER_PI)]
+    square_models = [
+        build_model(model_library.CollisionBoundaryPatternFormation, alpha)
+        for alpha in TERMINAL_COMPARISON_ALPHA_OVER_PI
+    ]
+    square_models.extend(
+        build_model(
+            model_library.CollisionBoundaryFourSpikePatternFormation,
+            alpha,
+            protrusionHeight=1.0,
+            protrusionHalfWidth=SPIKE_HALF_WIDTH,
+        )
+        for alpha in TERMINAL_COMPARISON_ALPHA_OVER_PI
+    )
+    circle_models = [
+        build_model(model_library.CircularBoundaryPatternFormation, alpha)
+        for alpha in TERMINAL_COMPARISON_ALPHA_OVER_PI
+    ]
+    circle_models.extend(
+        build_model(
+            model_library.CollisionBoundaryMidpointSpikePatternFormation,
+            alpha,
+            protrusionHeight=ASYMMETRIC_SPIKE_HEIGHT,
+            protrusionHalfWidth=SPIKE_HALF_WIDTH,
+        )
+        for alpha in TERMINAL_COMPARISON_ALPHA_OVER_PI
+    )
     state_sweep_figure(
         square_models,
-        OUTPUT_DIR / "Square_Boundary_And_Four_Symmetric_Defects_Alpha_Sweep_Terminal_States.pdf",
+        OUTPUT_DIR / "Square_Boundary_And_Four_Symmetric_Defects_Alpha_Sweep_Terminal_States_V2.pdf",
         row_labels=("No defect", r"Four defects: $H=1.0$"),
         save_png=True,
         figure_title="Square Boundary: No Defect vs Four Symmetric Defects",
     )
     state_sweep_figure(
         circle_models,
-        OUTPUT_DIR / "Circular_Boundary_And_Single_Defect_Alpha_Sweep_Terminal_States.pdf",
+        OUTPUT_DIR / "Circular_Boundary_And_Single_Defect_Alpha_Sweep_Terminal_States_V2.pdf",
         row_labels=("No defect", r"Single defect: $H=3.0$"),
         save_png=True,
         figure_title="Circular Boundary: No Defect vs Single Defect",

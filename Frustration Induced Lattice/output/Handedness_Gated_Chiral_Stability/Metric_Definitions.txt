@@ -1,0 +1,106 @@
+HANDEDNESS-GATED CHIRAL BOUNDARY-FLOW STABILITY: DISCRETE DEFINITIONS
+======================================================================
+
+1. Stored data and indices
+--------------------------
+n = 0,...,T-1 indexes saved frames in the final 10
+model-time-unit window, so T is the number of selected saved frames;
+i = 1,...,N indexes particles, so N is the particle count.  The HDF5 field
+positionX gives r_i^n = (x_i^n,y_i^n), and phaseTheta gives theta_i^n.
+The saved-frame interval is Delta_t_s = dt * shotsnaps, where dt is the
+model integrator step and shotsnaps is the number of integrator steps
+between two stored frames.
+
+2. Boundary projection and signed tangential velocity
+-----------------------------------------------------
+p_i^n = argmin_{p on boundary} ||r_i^n-p|| is the closest boundary
+point, d_i^n = ||r_i^n-p_i^n|| is wall distance, s_i^n is the CCW
+boundary arclength of p_i^n, and t_hat_i^n is the local CCW unit tangent.
+The boundary is reconstructed from the exact model class and parameters
+encoded by the matched HDF5 filename.
+The stored phase defines u_i^n=(cos(theta_i^n),sin(theta_i^n)), hence
+    q_i^n = u_i^n dot t_hat_i^n in [-1,1].
+q_i^n>0 is CCW, q_i^n<0 is CW, and |q_i^n| is tangential alignment.
+
+3. Adaptive wall-connected layer
+---------------------------------
+Let L be model boundaryLength and R=48.  The scalar
+r=0,...,R is a radial-bin-edge index (distinct from bold particle position).
+Radial edges are
+rho_r=0.45 L r/R.  The discrete radial signed-current profile is
+    h_r=(1/(TN)) sum_(n,i) q_i^n 1[rho_r <= d_i^n < rho_(r+1)].
+It is smoothed with the normalized kernel (1,2,3,2,1)/9 using edge
+padding.  sigma_0 is the sign of sum q_i^n for d_i^n<=0.06L; if that
+sum vanishes, the first R/8 smoothed bins are used.  The first maximum
+of sigma_0*h_r within 0.16L is the wall-connected peak.  Moving outward,
+the layer stops immediately before the first 3
+consecutive bins satisfying sigma_0*h_r<=0 or
+sigma_0*h_r<0.12 times the peak.  Its outer edge is d_e.
+The instantaneous boundary mask is e_i^n=1[d_i^n<=d_e].
+
+4. Accepted transport episodes
+------------------------------
+For each particle, split e_i^n=1 into maximal contiguous runs R_i,l,
+where l labels runs of that particle and |R_i,l| is a run's frame count.
+A run needs at least ell_min=max(2,ceil(0.5/Delta_t_s))
+saved frames.  For each run define
+    P_i,l = |sum_(n in R_i,l) q_i^n| / sum_(n in R_i,l) |q_i^n|,
+    A_i,l = mean_(n in R_i,l) |q_i^n|.
+The run is accepted when P_i,l>=0.75 and
+A_i,l>=0.35.  z_i^n=1 only for frames in accepted runs;
+otherwise z_i^n=0.  No particle-population fraction multiplies any metric.
+
+5. Block and arc-bin fluxes
+---------------------------
+The T saved frames are split in order into B=20 blocks and the
+boundary perimeter P is split into K=64 equal arclength bins.
+Here b=0,...,B-1 is a time-block index, k=0,...,K-1 is an arc-bin index,
+and kappa_i^n=floor(K*(s_i^n mod P)/P) is the bin containing s_i^n.
+For block b,
+    F_bk = sum_(n in b,i) z_i^n 1[kappa_i^n=k] q_i^n,
+    A_bk = sum_(n in b,i) z_i^n 1[kappa_i^n=k] |q_i^n|,
+    J_b  = sum_k F_bk / sum_k A_bk,
+    j_bk = F_bk/A_bk when A_bk>0, otherwise 0.
+Thus J_b and j_bk lie in [-1,1]; positive is CCW and negative is CW.
+
+6. Four components and final score
+-----------------------------------
+Let sigma=sign(sum_b J_b), with sigma=0 if the sum vanishes, and let
+epsilon be floating-point machine epsilon.  The positive-part operator
+is [x]_+=max(x,0).
+
+Handedness fixedness:
+    D_chi = |sum_b J_b| / (sum_b |J_b| + epsilon).
+D_chi=1 means one fixed handedness; D_chi=0 means cancellation or no flow.
+
+Block-current strength:
+    M_chi = (1/B) sum_b |J_b|.
+This is normalized current strength, not the fraction of carrier particles.
+
+Magnitude continuity:
+    U_t = (sum_b |J_b|)^2 / (B sum_b J_b^2 + epsilon).
+U_t=1 for equal block magnitudes.  Direction reversals are not hidden here:
+they are penalized separately and linearly by D_chi.
+
+Cumulative perimeter coverage:
+    g_k = sum_b max(sigma F_bk,0),
+    C_s = (sum_k g_k)^2 / (K sum_k g_k^2 + epsilon).
+C_s=1 for uniform full-perimeter coherent flux and approaches 1/K when
+the cumulative coherent flux is confined to one bin.
+
+Handedness-gated stability:
+    S_tilde_chi = D_chi * (M_chi U_t C_s)^(1/3).
+D_chi is a linear gate.  A direction-switching flow therefore cannot
+obtain a high score merely because |J_b| is strong and temporally uniform.
+
+7. Traceability chain
+---------------------
+(positionX, phaseTheta, dt, shotsnaps, matched model boundary)
+-> (r_i^n,theta_i^n,Delta_t_s,p_i^n,d_i^n,s_i^n,t_hat_i^n)
+-> q_i^n -> d_e and z_i^n -> (F_bk,A_bk,J_b,j_bk)
+-> (D_chi,M_chi,U_t,C_s) -> S_tilde_chi.
+
+Operator conventions: 1[condition] is an indicator; ||.|| is Euclidean
+norm; |x| is absolute value; |R| is set cardinality; floor rounds down;
+mod is the periodic remainder; sign returns -1, 0, or +1; and all sums
+run only over the explicitly displayed discrete indices.

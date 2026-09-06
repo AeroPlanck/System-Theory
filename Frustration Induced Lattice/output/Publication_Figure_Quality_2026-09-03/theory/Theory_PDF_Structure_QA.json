@@ -1,0 +1,87 @@
+[
+  {
+    "pdf": "plot_1d_dispersion_alpha_0.40pi.pdf",
+    "pages": 1,
+    "raster_images": 0,
+    "all_fonts_embedded": true,
+    "font_resources": 2,
+    "vector_path_operations": 6075,
+    "page_size_points": [
+      122.4,
+      195.84
+    ],
+    "extracted_text_characters": 60,
+    "PNG_dpi": [
+      599.9988,
+      599.9988
+    ]
+  },
+  {
+    "pdf": "plot_1d_dispersion_alpha_0.60pi.pdf",
+    "pages": 1,
+    "raster_images": 0,
+    "all_fonts_embedded": true,
+    "font_resources": 2,
+    "vector_path_operations": 6075,
+    "page_size_points": [
+      122.4,
+      195.84
+    ],
+    "extracted_text_characters": 64,
+    "PNG_dpi": [
+      599.9988,
+      599.9988
+    ]
+  },
+  {
+    "pdf": "mixed_v_3_omega_0_gap_screened.pdf",
+    "pages": 1,
+    "raster_images": 0,
+    "all_fonts_embedded": true,
+    "font_resources": 4,
+    "vector_path_operations": 1434,
+    "page_size_points": [
+      246.96,
+      241.92
+    ],
+    "extracted_text_characters": 299,
+    "PNG_dpi": [
+      599.9988,
+      599.9988
+    ]
+  },
+  {
+    "pdf": "single_v_3_omega_0_gap_screened.pdf",
+    "pages": 1,
+    "raster_images": 0,
+    "all_fonts_embedded": true,
+    "font_resources": 4,
+    "vector_path_operations": 1125,
+    "page_size_points": [
+      246.96,
+      241.92
+    ],
+    "extracted_text_characters": 280,
+    "PNG_dpi": [
+      599.9988,
+      599.9988
+    ]
+  },
+  {
+    "pdf": "strip_circle_matched_alpha_050.pdf",
+    "pages": 1,
+    "raster_images": 0,
+    "all_fonts_embedded": true,
+    "font_resources": 2,
+    "vector_path_operations": 112,
+    "page_size_points": [
+      246.96,
+      211.68
+    ],
+    "extracted_text_characters": 149,
+    "PNG_dpi": [
+      599.9988,
+      599.9988
+    ]
+  }
+]

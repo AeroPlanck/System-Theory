@@ -1,22 +1,22 @@
-"""Analyze the stability of identity-independent chiral boundary transport.
+"""Measure handedness-gated chiral boundary-flow stability from HDF5 data.
 
-The script only reads exact parameter-matched HDF5 trajectories.  It computes
-one corrected stability index,
+The complete discrete definition is
 
-    S_chi = (G_chi * U_t * C_s) ** (1 / 3),
+    S_chi = D_chi * (M_chi * U_t * C_s) ** (1 / 3),
 
-where C_s is the perimeter participation ratio of the cumulative coherent
-flux, so a translating packet or a remote same-chirality relay is not punished
-merely for changing location.  G_chi = abs(mean(J_b)) = D_chi * M_chi is the
-directed net-current strength; M_chi is the mean magnitude of the normalized
-block current, not a carrier-population fraction.  The script writes CSV data
-and publication-ready PNG/PDF figures and never edits PRL.tex or HDF5.
+where D_chi is a hard handedness gate, M_chi measures block-current strength,
+U_t measures continuity of that strength, and C_s measures cumulative
+perimeter coverage.  Every plotted symbol is derived explicitly from the
+stored positionX and phaseTheta arrays.  This script only reads HDF5 files and
+only writes new analysis products below output/Handedness_Gated_Chiral_Stability.
 """
 
 from __future__ import annotations
 
+import json
 import math
 from pathlib import Path
+from textwrap import dedent
 
 import matplotlib as mpl
 
@@ -26,13 +26,17 @@ import numpy as np
 import pandas as pd
 
 import boundary_defect_analysis as bda
-import two_metric_boundary_transport_report as report
+import main as model_library
 
 
 ROOT = Path(__file__).resolve().parent
-OUTPUT = ROOT / "output" / "Chiral_Boundary_Stability_Corrected"
+OUTPUT = ROOT / "output" / "Handedness_Gated_Chiral_Stability"
 BLOCK_COUNT = 20
 ARC_BIN_COUNT = 64
+ALPHAS = tuple(float(value) for value in bda.ALPHA_OVER_PI)
+MIN_TRANSPORT_EPISODE_TIME = 0.5
+MIN_DIRECTIONAL_PERSISTENCE = 0.75
+MIN_TANGENTIALITY = 0.35
 EPS = np.finfo(float).eps
 
 NAVY = "#18344F"
@@ -42,6 +46,67 @@ RED = "#A64545"
 MUTED = "#5D6873"
 GRID = "#DCE2E7"
 PALE_GOLD = "#FBF3E3"
+
+
+CASE_SPECS = (
+    ("Square", "square", 0.0, "Square - no defect"),
+    ("Square", "square_defect", 1.0, "Square - four defects H=1"),
+    ("Square", "square_defect", 1.5, "Square - four defects H=1.5"),
+    ("Square", "square_defect", 3.0, "Square - four defects H=3"),
+    ("Circular", "circle", 0.0, "Circular - no defect"),
+    ("Circular", "circle_defect", 3.0, "Circular - single defect H=3"),
+)
+
+
+def build_model(label: str, alpha_over_pi: float, height: float):
+    """Build one exact existing-data model; alpha is the only sweep variable."""
+    if label == "circle":
+        return bda.build_model(model_library.CircularBoundaryPatternFormation, alpha_over_pi)
+    if label == "circle_defect":
+        return bda.build_model(
+            model_library.CollisionBoundaryMidpointSpikePatternFormation,
+            alpha_over_pi,
+            protrusionHeight=height,
+            protrusionHalfWidth=bda.SPIKE_HALF_WIDTH,
+        )
+    if label == "square":
+        return bda.build_model(model_library.CollisionBoundaryPatternFormation, alpha_over_pi)
+    if label == "square_defect":
+        return bda.build_model(
+            model_library.CollisionBoundaryFourSpikePatternFormation,
+            alpha_over_pi,
+            protrusionHeight=height,
+            protrusionHalfWidth=bda.SPIKE_HALF_WIDTH,
+        )
+    raise ValueError(f"Unsupported model label: {label}")
+
+
+def transport_episode_mask(
+    edge: np.ndarray, tangential_velocity: np.ndarray, saved_dt: float,
+) -> np.ndarray:
+    """Return z[n,i]: frames belonging to an accepted boundary episode."""
+    frames, particles = edge.shape
+    minimum_frames = max(2, int(math.ceil(MIN_TRANSPORT_EPISODE_TIME / saved_dt)))
+    accepted = np.zeros((frames, particles), dtype=bool)
+    for particle in range(particles):
+        padded = np.concatenate(([False], edge[:, particle], [False]))
+        changes = np.diff(padded.astype(np.int8))
+        starts = np.flatnonzero(changes == 1)
+        stops = np.flatnonzero(changes == -1)
+        for start, stop in zip(starts, stops):
+            if stop - start < minimum_frames:
+                continue
+            segment = tangential_velocity[start:stop, particle]
+            signed_sum = float(segment.sum())
+            absolute_sum = float(np.abs(segment).sum())
+            persistence = abs(signed_sum) / absolute_sum if absolute_sum > EPS else 0.0
+            tangentiality = float(np.mean(np.abs(segment)))
+            if (
+                persistence >= MIN_DIRECTIONAL_PERSISTENCE
+                and tangentiality >= MIN_TANGENTIALITY
+            ):
+                accepted[start:stop, particle] = True
+    return accepted
 
 
 def versioned_path(base: Path) -> Path:
@@ -69,7 +134,7 @@ def configure_plotting() -> None:
     mpl.rcParams.update(
         {
             "font.family": "sans-serif",
-            "font.sans-serif": ["Microsoft YaHei", "SimHei", "DejaVu Sans"],
+            "font.sans-serif": ["DejaVu Sans"],
             "mathtext.fontset": "stix",
             "axes.unicode_minus": False,
             "pdf.fonttype": 42,
@@ -88,8 +153,7 @@ def _block_arc_flux(model) -> tuple[dict[str, float | int | str], dict[str, np.n
     width, _, _, _, _ = bda.adaptive_edge_width(distance, q, geometry.length_scale)
     edge = distance <= width
     saved_dt = model.dt * model.shotsnaps
-    episode_sign = report._transport_episode_field(edge, q, saved_dt)
-    valid = episode_sign != 0
+    valid = transport_episode_mask(edge, q, saved_dt)
 
     arc_index = np.floor(np.mod(arc, geometry.perimeter) / geometry.perimeter * ARC_BIN_COUNT).astype(int)
     arc_index = np.clip(arc_index, 0, ARC_BIN_COUNT - 1)
@@ -114,7 +178,7 @@ def _block_arc_flux(model) -> tuple[dict[str, float | int | str], dict[str, np.n
         )
 
     direction_sum = float(block_current.sum())
-    direction = 1.0 if direction_sum >= 0 else -1.0
+    direction = 0.0 if abs(direction_sum) <= EPS else float(np.sign(direction_sum))
     direction_fixedness = float(
         abs(direction_sum) / (np.abs(block_current).sum() + EPS)
     )
@@ -137,10 +201,12 @@ def _block_arc_flux(model) -> tuple[dict[str, float | int | str], dict[str, np.n
         where=coherent_total > EPS,
     )
     current_strength = float(magnitude.mean())
-    directed_current = float(abs(block_current.mean()))
-    stability = float(
-        np.cbrt(max(0.0, directed_current * temporal_uniformity * spatial_coverage))
+    signed_mean_current = float(block_current.mean())
+    directed_current = float(abs(signed_mean_current))
+    stability_core = float(
+        np.cbrt(max(0.0, current_strength * temporal_uniformity * spatial_coverage))
     )
+    stability = float(direction_fixedness * stability_core)
     normalized_arc_current = np.divide(
         signed_flux,
         absolute_flux,
@@ -151,15 +217,17 @@ def _block_arc_flux(model) -> tuple[dict[str, float | int | str], dict[str, np.n
     summary = {
         "alpha_over_pi": float(model.phaseLagA0 / np.pi),
         "defect_height": float(getattr(model, "protrusionHeight", 0.0)),
-        "direction": "CCW" if direction > 0 else "CW",
+        "majority_direction": "CCW" if direction > 0 else ("CW" if direction < 0 else "None"),
         "direction_fixedness": direction_fixedness,
+        "current_strength": current_strength,
         "temporal_uniformity": temporal_uniformity,
         "spatial_coverage": spatial_coverage,
-        "current_strength": current_strength,
+        "signed_mean_block_current": signed_mean_current,
         "directed_current": directed_current,
-        "chiral_flow_stability": stability,
-        "mean_abs_block_current": current_strength,
+        "stability_core": stability_core,
+        "handedness_gated_stability": stability,
         "active_blocks": int(np.count_nonzero(magnitude > EPS)),
+        "accepted_particle_frames": int(np.count_nonzero(valid)),
         "adaptive_edge_width_over_L": width / geometry.length_scale,
         "terminal_saved_frame": int(window.total_frames - 1),
         "hdf5_file": bda.data_path(model).name,
@@ -179,9 +247,9 @@ def _block_arc_flux(model) -> tuple[dict[str, float | int | str], dict[str, np.n
 def compute_all() -> tuple[pd.DataFrame, dict[tuple[str, float], dict[str, np.ndarray]]]:
     specifications = []
     models = []
-    for group, label, height, condition in report.non_pi_specs():
-        for alpha in report.ALPHAS:
-            model = report.build_model(label, alpha, height)
+    for group, label, height, condition in CASE_SPECS:
+        for alpha in ALPHAS:
+            model = build_model(label, alpha, height)
             models.append(model)
             specifications.append((group, label, height, condition, alpha, model))
     bda.validate_exact_files(models)
@@ -204,33 +272,20 @@ def compute_all() -> tuple[pd.DataFrame, dict[tuple[str, float], dict[str, np.nd
     table = pd.DataFrame(rows).sort_values(
         ["geometry_group", "defect_height", "alpha_over_pi"]
     )
-    transport_path = report.DATA_OUT / "two_metric_values.csv"
-    if transport_path.is_file():
-        transport = pd.read_csv(transport_path)[
-            ["geometry_group", "condition", "defect_height", "alpha_over_pi", "long_time_chiral_transport"]
-        ]
-        table = table.merge(
-            transport,
-            on=["geometry_group", "condition", "defect_height", "alpha_over_pi"],
-            how="left",
-            validate="one_to_one",
-        )
-    else:
-        table["long_time_chiral_transport"] = np.nan
     OUTPUT.mkdir(parents=True, exist_ok=True)
-    table.to_csv(OUTPUT / "Chiral_Boundary_Stability_Values.csv", index=False)
+    table.to_csv(OUTPUT / "Handedness_Gated_Chiral_Stability_Values.csv", index=False)
     return table, details
 
 
 def _condition_series(group: str):
-    if group == "symmetric_square":
+    if group == "Square":
         return [
-            (0.0, "无缺陷", NAVY),
+            (0.0, "No defect", NAVY),
             (1.0, "H=1", "#2E6F89"),
             (1.5, "H=1.5", TEAL),
             (3.0, "H=3", "#8FBF26"),
         ]
-    return [(0.0, "无缺陷", NAVY), (3.0, "H=3", GOLD)]
+    return [(0.0, "No defect", NAVY), (3.0, "H=3", GOLD)]
 
 
 def plot_sweep_and_phase(table: pd.DataFrame) -> tuple[Path, Path]:
@@ -240,8 +295,8 @@ def plot_sweep_and_phase(table: pd.DataFrame) -> tuple[Path, Path]:
         height_ratios=[1.0, 1.15],
     )
     for key, group, title in (
-        ("square", "symmetric_square", "方形与四个对称缺陷"),
-        ("circle", "asymmetric_circle", "圆形与单个非对称缺陷"),
+        ("square", "Square", "Square boundary and four symmetric defects"),
+        ("circle", "Circular", "Circular boundary and one defect"),
     ):
         axis = axes[key]
         subset = table[table.geometry_group == group]
@@ -249,18 +304,19 @@ def plot_sweep_and_phase(table: pd.DataFrame) -> tuple[Path, Path]:
             part = subset[np.isclose(subset.defect_height, height)].sort_values("alpha_over_pi")
             axis.plot(
                 part.alpha_over_pi,
-                part.chiral_flow_stability,
+                part.handedness_gated_stability,
                 marker="o", ms=5, lw=2, color=color, label=label,
             )
-        axis.axvspan(0.5, 0.9, color=PALE_GOLD, alpha=0.65, zorder=-5)
-        axis.axhline(0.8, color=RED, lw=0.9, ls=":")
         axis.set(
             title=title,
-            xlabel=r"相位滞后 $\alpha$",
-            ylabel=r"手性边界流稳定度 $\mathcal{S}_{\chi}$",
-            xlim=(-0.02, 0.82), ylim=(-0.03, 1.03),
+            xlabel=r"Phase lag $\alpha$",
+            ylabel=r"Handedness-gated stability $\widetilde{\mathcal{S}}_{\chi}$",
+            xlim=(-0.02, 1.02), ylim=(-0.03, 1.03),
         )
-        axis.set_xticks(np.arange(0, 0.81, 0.2), ["0", r"$0.2\pi$", r"$0.4\pi$", r"$0.6\pi$", r"$0.8\pi$"])
+        axis.set_xticks(
+            np.arange(0, 1.01, 0.2),
+            ["0", r"$0.2\pi$", r"$0.4\pi$", r"$0.6\pi$", r"$0.8\pi$", r"$\pi$"],
+        )
         axis.grid(True, color=GRID, lw=0.6)
         axis.spines[["top", "right"]].set_visible(False)
         axis.legend(frameon=False, fontsize=8, ncol=2)
@@ -270,52 +326,52 @@ def plot_sweep_and_phase(table: pd.DataFrame) -> tuple[Path, Path]:
         "circle": "o", "circle_defect": "D", "square": "s", "square_defect": "^",
     }
     labels_used = set()
-    norm = mpl.colors.Normalize(vmin=0.0, vmax=0.8)
+    norm = mpl.colors.Normalize(vmin=0.0, vmax=1.0)
     cmap = mpl.colormaps["viridis"]
     for _, item in table.iterrows():
         label = item.condition if item.condition not in labels_used else None
         labels_used.add(item.condition)
         axis.scatter(
-            abs(item.long_time_chiral_transport), item.chiral_flow_stability,
+            item.direction_fixedness, item.handedness_gated_stability,
             s=54, marker=markers[item.model_label],
             color=cmap(norm(item.alpha_over_pi)), edgecolor="white", linewidth=0.55,
             label=label, zorder=3,
         )
-    axis.axvline(0.64, color=RED, lw=0.9, ls=":")
-    axis.axhline(0.8, color=RED, lw=0.9, ls=":")
     axis.set(
-        xlabel=r"长时单手性输运 $|\mathcal{T}_{\rm LT}|$",
-        ylabel=r"手性边界流稳定度 $\mathcal{S}_{\chi}$",
+        xlabel=r"Handedness fixedness $D_\chi$",
+        ylabel=r"Handedness-gated stability $\widetilde{\mathcal{S}}_{\chi}$",
         xlim=(-0.03, 1.03), ylim=(-0.03, 1.03),
-        title="输运存在性—稳定性相图",
+        title="Fixed-handedness gate versus final stability",
     )
     axis.grid(True, color=GRID, lw=0.6)
     axis.spines[["top", "right"]].set_visible(False)
     axis.legend(frameon=False, fontsize=7.5, ncol=3, loc="lower right")
     colorbar = fig.colorbar(mpl.cm.ScalarMappable(norm=norm, cmap=cmap), ax=axis, pad=0.015)
-    colorbar.set_label(r"$\alpha/\pi$")
-    fig.suptitle("手性边界流稳定性随相位滞后与边界缺陷的变化", fontsize=14, fontweight="bold")
-    return save_figure(fig, "Stability_Sweep_And_Phase")
+    colorbar.set_label(r"Phase lag $\alpha/\pi$")
+    fig.suptitle("Handedness-Gated Chiral Boundary-Flow Stability", fontsize=14, fontweight="bold")
+    return save_figure(fig, "Handedness_Gated_Stability_Alpha_Sweep")
 
 
 def plot_component_heatmaps(table: pd.DataFrame) -> tuple[Path, Path]:
     order = [
-        "圆形无缺陷", "圆形单缺陷 H=3", "方形无缺陷",
-        "方形四缺陷 H=1", "方形四缺陷 H=1.5", "方形四缺陷 H=3",
+        "Circular - no defect", "Circular - single defect H=3",
+        "Square - no defect", "Square - four defects H=1",
+        "Square - four defects H=1.5", "Square - four defects H=3",
     ]
     metrics = [
-        ("directed_current", r"定向净流强度 $G_\chi$"),
-        ("temporal_uniformity", r"时间连续性 $U_t$"),
-        ("spatial_coverage", r"全边界覆盖 $C_s$"),
-        ("chiral_flow_stability", r"综合稳定度 $\mathcal{S}_\chi$"),
+        ("direction_fixedness", r"Handedness fixedness $D_\chi$"),
+        ("current_strength", r"Current strength $M_\chi$"),
+        ("temporal_uniformity", r"Magnitude continuity $U_t$"),
+        ("spatial_coverage", r"Perimeter coverage $C_s$"),
+        ("handedness_gated_stability", r"Final stability $\widetilde{\mathcal{S}}_\chi$"),
     ]
-    fig, axes = plt.subplots(1, 4, figsize=(12.4, 4.6), constrained_layout=True, sharey=True)
+    fig, axes = plt.subplots(1, 5, figsize=(15.2, 4.8), constrained_layout=True, sharey=True)
     image = None
     for axis, (metric, title) in zip(axes, metrics):
         matrix = table.pivot(index="condition", columns="alpha_over_pi", values=metric).reindex(order)
         image = axis.imshow(matrix.to_numpy(), vmin=0, vmax=1, cmap="viridis", aspect="auto")
         axis.set_title(title, fontsize=11)
-        axis.set_xticks(range(len(matrix.columns)), ["0", ".2", ".4", ".6", ".8"])
+        axis.set_xticks(range(len(matrix.columns)), ["0", ".2", ".4", ".6", ".8", "1"])
         axis.set_xlabel(r"$\alpha/\pi$")
         for row in range(matrix.shape[0]):
             for column in range(matrix.shape[1]):
@@ -327,14 +383,18 @@ def plot_component_heatmaps(table: pd.DataFrame) -> tuple[Path, Path]:
         axis.grid(which="minor", color="white", linewidth=1.0)
         axis.tick_params(which="minor", bottom=False, left=False)
     axes[0].set_yticks(range(len(order)), order)
-    fig.colorbar(image, ax=list(axes), fraction=0.018, pad=0.015, label="0（不稳定）—1（稳定）")
-    fig.suptitle("修正稳定度的三因素分解：定向净流、时间与全边界覆盖", fontsize=14, fontweight="bold")
-    return save_figure(fig, "Stability_Component_Heatmaps")
+    fig.colorbar(image, ax=list(axes), fraction=0.018, pad=0.015, label="Metric value: 0 to 1")
+    fig.suptitle(
+        r"Complete decomposition: $\widetilde{\mathcal{S}}_\chi"
+        r"=D_\chi(M_\chi U_t C_s)^{1/3}$",
+        fontsize=14, fontweight="bold",
+    )
+    return save_figure(fig, "Handedness_Gated_Stability_Component_Heatmaps")
 
 
 def _choose_representatives(table: pd.DataFrame) -> list[tuple[str, pd.Series]]:
     eligible = table[
-        table.long_time_chiral_transport.abs().ge(0.30)
+        table.current_strength.ge(0.10)
         & table.active_blocks.ge(max(3, BLOCK_COUNT // 4))
     ].copy()
     chosen: list[tuple[str, pd.Series]] = []
@@ -348,10 +408,20 @@ def _choose_representatives(table: pd.DataFrame) -> list[tuple[str, pd.Series]]:
         used.add(item.name)
         chosen.append((label, item))
 
-    take("稳定参照", "chiral_flow_stability", True)
-    take("净流衰减型", "directed_current", False)
-    take("时间间歇型", "temporal_uniformity", False)
-    take("空间局域型", "spatial_coverage", False)
+    take("Stable reference", "handedness_gated_stability", True)
+
+    switching = eligible[
+        eligible.model_label.eq("circle_defect")
+        & np.isclose(eligible.defect_height, 3.0)
+        & np.isclose(eligible.alpha_over_pi, 0.0)
+    ]
+    if not switching.empty:
+        item = switching.iloc[0]
+        used.add(item.name)
+        chosen.append(("Handedness switching", item))
+
+    take("Magnitude intermittency", "temporal_uniformity", False)
+    take("Spatial localization", "spatial_coverage", False)
     return chosen
 
 
@@ -375,51 +445,199 @@ def plot_representative_spacetime(
             cmap="coolwarm", vmin=-1, vmax=1,
         )
         axis.set_title(
-            f"{category}\n{item.condition},  α={item.alpha_over_pi:g}π\n"
-            rf"$\mathcal{{S}}_\chi={item.chiral_flow_stability:.2f}$",
+            f"{category}\n{item.condition},  "
+            rf"$\alpha={item.alpha_over_pi:g}\pi$" + "\n" +
+            rf"$\widetilde{{\mathcal{{S}}}}_\chi={item.handedness_gated_stability:.2f}$",
             fontsize=9.5,
         )
-        axis.set_xlabel(r"归一化边界弧长 $s/P$")
+        axis.set_xlabel(r"Normalized boundary arclength $s/P$")
         if column == 0:
-            axis.set_ylabel("末端窗口时间")
+            axis.set_ylabel(r"Terminal-window time $t$")
         axis = axes[1, column]
         axis.plot(detail["block_time"], detail["block_current"], color=NAVY, marker="o", ms=3, lw=1.5)
         axis.axhline(0, color="#9AA2A9", lw=0.8)
         axis.set_ylim(-1.05, 1.05)
         axis.grid(True, color=GRID, lw=0.55)
         axis.spines[["top", "right"]].set_visible(False)
-        axis.set_xlabel("末端窗口时间")
+        axis.set_xlabel(r"Terminal-window time $t$")
         if column == 0:
-            axis.set_ylabel(r"分块手性流 $J_b$")
+            axis.set_ylabel(r"Block current $J_b$")
         axis.text(
             0.03, 0.04,
-            rf"$G_\chi={item.directed_current:.2f}$  $U_t={item.temporal_uniformity:.2f}$  "
+            rf"$D_\chi={item.direction_fixedness:.2f}$  "
+            rf"$M_\chi={item.current_strength:.2f}$  "
+            rf"$U_t={item.temporal_uniformity:.2f}$  "
             rf"$C_s={item.spatial_coverage:.2f}$",
             transform=axis.transAxes, fontsize=7.6, va="bottom",
         )
     fig.colorbar(image, ax=list(axes[0]), fraction=0.018, pad=0.012,
-                 label="局部归一化切向流（CW ← 0 → CCW）")
-    fig.suptitle("代表性状态的边界流时空结构与稳定性失效方式", fontsize=14, fontweight="bold")
-    return save_figure(fig, "Representative_Stability_Spacetime")
+                 label=r"Normalized local current $j_{bk}$ (CW $<0<$ CCW)")
+    fig.suptitle(
+        "Block-Resolved Boundary Current and Stability Failure Modes",
+        fontsize=14, fontweight="bold",
+    )
+    return save_figure(fig, "Representative_Handedness_Gated_Stability_Spacetime")
+
+
+def write_metric_dictionary() -> tuple[Path, Path]:
+    """Write machine-readable constants and a complete plain-text derivation."""
+    OUTPUT.mkdir(parents=True, exist_ok=True)
+    configuration = {
+        "raw_hdf5_fields": {
+            "positionX": "Flattened saved positions; reshaped to r[n,i]=(x[n,i],y[n,i]).",
+            "phaseTheta": "Flattened saved headings theta[n,i] in radians.",
+        },
+        "saved_time_step": "Delta_t_s = model.dt * model.shotsnaps",
+        "terminal_window_time": bda.ANALYSIS_WINDOW_TIME,
+        "block_count_B": BLOCK_COUNT,
+        "arc_bin_count_K": ARC_BIN_COUNT,
+        "minimum_episode_time": MIN_TRANSPORT_EPISODE_TIME,
+        "minimum_episode_directional_persistence": MIN_DIRECTIONAL_PERSISTENCE,
+        "minimum_episode_tangentiality": MIN_TANGENTIALITY,
+        "radial_bin_count_R": bda.RADIAL_BIN_COUNT,
+        "maximum_radial_depth_over_L": bda.MAX_ANALYSIS_DEPTH_FRACTION,
+        "direction_probe_depth_over_L": bda.DIRECTION_PROBE_FRACTION,
+        "peak_search_depth_over_L": bda.PEAK_SEARCH_DEPTH_FRACTION,
+        "edge_floor_fraction": bda.EDGE_FLOOR_FRACTION,
+        "edge_floor_consecutive_bins": bda.EDGE_FLOOR_CONSECUTIVE_BINS,
+        "alpha_over_pi": list(ALPHAS),
+    }
+    json_path = OUTPUT / "Metric_Configuration.json"
+    json_path.write_text(json.dumps(configuration, indent=2), encoding="utf-8")
+
+    text = dedent(
+        f"""
+        HANDEDNESS-GATED CHIRAL BOUNDARY-FLOW STABILITY: DISCRETE DEFINITIONS
+        ======================================================================
+
+        1. Stored data and indices
+        --------------------------
+        n = 0,...,T-1 indexes saved frames in the final {bda.ANALYSIS_WINDOW_TIME:g}
+        model-time-unit window, so T is the number of selected saved frames;
+        i = 1,...,N indexes particles, so N is the particle count.  The HDF5 field
+        positionX gives r_i^n = (x_i^n,y_i^n), and phaseTheta gives theta_i^n.
+        The saved-frame interval is Delta_t_s = dt * shotsnaps, where dt is the
+        model integrator step and shotsnaps is the number of integrator steps
+        between two stored frames.
+
+        2. Boundary projection and signed tangential velocity
+        -----------------------------------------------------
+        p_i^n = argmin_{{p on boundary}} ||r_i^n-p|| is the closest boundary
+        point, d_i^n = ||r_i^n-p_i^n|| is wall distance, s_i^n is the CCW
+        boundary arclength of p_i^n, and t_hat_i^n is the local CCW unit tangent.
+        The boundary is reconstructed from the exact model class and parameters
+        encoded by the matched HDF5 filename.
+        The stored phase defines u_i^n=(cos(theta_i^n),sin(theta_i^n)), hence
+            q_i^n = u_i^n dot t_hat_i^n in [-1,1].
+        q_i^n>0 is CCW, q_i^n<0 is CW, and |q_i^n| is tangential alignment.
+
+        3. Adaptive wall-connected layer
+        ---------------------------------
+        Let L be model boundaryLength and R={bda.RADIAL_BIN_COUNT}.  The scalar
+        r=0,...,R is a radial-bin-edge index (distinct from bold particle position).
+        Radial edges are
+        rho_r=0.45 L r/R.  The discrete radial signed-current profile is
+            h_r=(1/(TN)) sum_(n,i) q_i^n 1[rho_r <= d_i^n < rho_(r+1)].
+        It is smoothed with the normalized kernel (1,2,3,2,1)/9 using edge
+        padding.  sigma_0 is the sign of sum q_i^n for d_i^n<=0.06L; if that
+        sum vanishes, the first R/8 smoothed bins are used.  The first maximum
+        of sigma_0*h_r within 0.16L is the wall-connected peak.  Moving outward,
+        the layer stops immediately before the first {bda.EDGE_FLOOR_CONSECUTIVE_BINS}
+        consecutive bins satisfying sigma_0*h_r<=0 or
+        sigma_0*h_r<{bda.EDGE_FLOOR_FRACTION:.2f} times the peak.  Its outer edge is d_e.
+        The instantaneous boundary mask is e_i^n=1[d_i^n<=d_e].
+
+        4. Accepted transport episodes
+        ------------------------------
+        For each particle, split e_i^n=1 into maximal contiguous runs R_i,l,
+        where l labels runs of that particle and |R_i,l| is a run's frame count.
+        A run needs at least ell_min=max(2,ceil({MIN_TRANSPORT_EPISODE_TIME:g}/Delta_t_s))
+        saved frames.  For each run define
+            P_i,l = |sum_(n in R_i,l) q_i^n| / sum_(n in R_i,l) |q_i^n|,
+            A_i,l = mean_(n in R_i,l) |q_i^n|.
+        The run is accepted when P_i,l>={MIN_DIRECTIONAL_PERSISTENCE:.2f} and
+        A_i,l>={MIN_TANGENTIALITY:.2f}.  z_i^n=1 only for frames in accepted runs;
+        otherwise z_i^n=0.  No particle-population fraction multiplies any metric.
+
+        5. Block and arc-bin fluxes
+        ---------------------------
+        The T saved frames are split in order into B={BLOCK_COUNT} blocks and the
+        boundary perimeter P is split into K={ARC_BIN_COUNT} equal arclength bins.
+        Here b=0,...,B-1 is a time-block index, k=0,...,K-1 is an arc-bin index,
+        and kappa_i^n=floor(K*(s_i^n mod P)/P) is the bin containing s_i^n.
+        For block b,
+            F_bk = sum_(n in b,i) z_i^n 1[kappa_i^n=k] q_i^n,
+            A_bk = sum_(n in b,i) z_i^n 1[kappa_i^n=k] |q_i^n|,
+            J_b  = sum_k F_bk / sum_k A_bk,
+            j_bk = F_bk/A_bk when A_bk>0, otherwise 0.
+        Thus J_b and j_bk lie in [-1,1]; positive is CCW and negative is CW.
+
+        6. Four components and final score
+        -----------------------------------
+        Let sigma=sign(sum_b J_b), with sigma=0 if the sum vanishes, and let
+        epsilon be floating-point machine epsilon.  The positive-part operator
+        is [x]_+=max(x,0).
+
+        Handedness fixedness:
+            D_chi = |sum_b J_b| / (sum_b |J_b| + epsilon).
+        D_chi=1 means one fixed handedness; D_chi=0 means cancellation or no flow.
+
+        Block-current strength:
+            M_chi = (1/B) sum_b |J_b|.
+        This is normalized current strength, not the fraction of carrier particles.
+
+        Magnitude continuity:
+            U_t = (sum_b |J_b|)^2 / (B sum_b J_b^2 + epsilon).
+        U_t=1 for equal block magnitudes.  Direction reversals are not hidden here:
+        they are penalized separately and linearly by D_chi.
+
+        Cumulative perimeter coverage:
+            g_k = sum_b max(sigma F_bk,0),
+            C_s = (sum_k g_k)^2 / (K sum_k g_k^2 + epsilon).
+        C_s=1 for uniform full-perimeter coherent flux and approaches 1/K when
+        the cumulative coherent flux is confined to one bin.
+
+        Handedness-gated stability:
+            S_tilde_chi = D_chi * (M_chi U_t C_s)^(1/3).
+        D_chi is a linear gate.  A direction-switching flow therefore cannot
+        obtain a high score merely because |J_b| is strong and temporally uniform.
+
+        7. Traceability chain
+        ---------------------
+        (positionX, phaseTheta, dt, shotsnaps, matched model boundary)
+        -> (r_i^n,theta_i^n,Delta_t_s,p_i^n,d_i^n,s_i^n,t_hat_i^n)
+        -> q_i^n -> d_e and z_i^n -> (F_bk,A_bk,J_b,j_bk)
+        -> (D_chi,M_chi,U_t,C_s) -> S_tilde_chi.
+
+        Operator conventions: 1[condition] is an indicator; ||.|| is Euclidean
+        norm; |x| is absolute value; |R| is set cardinality; floor rounds down;
+        mod is the periodic remainder; sign returns -1, 0, or +1; and all sums
+        run only over the explicitly displayed discrete indices.
+        """
+    ).strip() + "\n"
+    text_path = OUTPUT / "Metric_Definitions.txt"
+    text_path.write_text(text, encoding="utf-8")
+    return text_path, json_path
 
 
 def main() -> int:
     configure_plotting()
     table, details = compute_all()
+    definition_text, configuration_json = write_metric_dictionary()
     outputs = [
         *plot_sweep_and_phase(table),
         *plot_component_heatmaps(table),
         *plot_representative_spacetime(table, details),
+        definition_text,
+        configuration_json,
     ]
     print(table[
-         ["condition", "alpha_over_pi", "direction_fixedness", "temporal_uniformity",
-         "spatial_coverage", "current_strength", "directed_current",
-         "chiral_flow_stability",
-         "long_time_chiral_transport"]
+         ["condition", "alpha_over_pi", "direction_fixedness", "current_strength",
+          "temporal_uniformity", "spatial_coverage", "handedness_gated_stability"]
     ].to_string(index=False))
     for path in outputs:
         print(f"FIGURE={path}")
-    print(f"CSV={OUTPUT / 'Chiral_Boundary_Stability_Values.csv'}")
+    print(f"CSV={OUTPUT / 'Handedness_Gated_Chiral_Stability_Values.csv'}")
     return 0
 
 

@@ -1,0 +1,306 @@
+[
+  {
+    "name": "Circular_Boundary_Terminal_States_Vector",
+    "size_inches": [
+      6.5,
+      2.4
+    ],
+    "png_dpi": 600,
+    "source_figure_function": "boundary_defect_analysis.create_comparison_states",
+    "same_terminal_frame_selection_as_V2": true,
+    "panels": [
+      {
+        "panel": "a",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=0.000,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 500,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.0,
+        "positions_sha256": "40dc97c8bb68b7aec9271c8db71724002ebac49645cb82f544734dee4cd2543a",
+        "phases_sha256": "6bbb82fd3ccb5d625e88fb6c71e06494ef385e9cd3a0bc388e6c0f9014dedbc8",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "b",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=0.628,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 1000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.2,
+        "positions_sha256": "8ed7bc33a594ad138fcb4c18cc84ed9589766a0aeb4ed62149ca53599fd7046f",
+        "phases_sha256": "8b69231c9e1b1357be683178a656c4c8cd7eea4e21e07b0971825df3ef52e52a",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "c",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.257,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 250,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.4,
+        "positions_sha256": "15ee130815189976812bacf77044dff1ee2aef06f65ee465b50395efd1fa8cb0",
+        "phases_sha256": "7b9d8b07a0c668132e182d84fada6495872ae664f8e78a260b0e12b6c747dab3",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "d",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.5,
+        "positions_sha256": "990afe429e4960bb547a4b4aa93ac49782c6dd36c41aefde0f8e5c188cfeec44",
+        "phases_sha256": "b6902e2ec3e03416a80153418ac1dc8453dbfebfae80e219db7c88ae83618df6",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "e",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5001,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.6,
+        "positions_sha256": "2cdea82b3e9be0bb2c996149e4d8a7a56bf72b6642278c5c57d41d301f737f79",
+        "phases_sha256": "3f9fd4f5beaa6d34c1366d6a857405a43363cfc12720b0d1c706f777062ef3f4",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "f",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=2.513,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 1000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.8,
+        "positions_sha256": "a34acb0a4a284b2ca785475ef2aa771e2ba6edef2112036755b7d45868d4f48d",
+        "phases_sha256": "796f8e730af4b1c5dad797cfb4c3a2a7a01bae05dd75333eab319b142d6e7316",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "g",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=3.142,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 1001,
+        "particle_count": 2000,
+        "alpha_over_pi": 1.0,
+        "positions_sha256": "92c93b5f05b58bc4fdd6b18768ec6ff03502ce91377951db2d0555023fa7df3f",
+        "phases_sha256": "7776b0a59698edbec6ca6e67d42d4b44b751d3c42a7408d397fd6f7c3afd64ca",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "h",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=0.000,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.0,
+        "positions_sha256": "2fda01e2e3a75fd3bafc8fcaaf76b646f9f8f3a1b741252303b59474701888ef",
+        "phases_sha256": "056affeafcdfc01cb08c58a5d9fd9582d457c105160088288baf72cbcd8dd338",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "i",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=0.628,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 1000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.2,
+        "positions_sha256": "eea99a5d4a7cbd0361752a3705b87a67c1e057101d60ef4b5bbcc1be6579c82c",
+        "phases_sha256": "ce591e7c933d0496caeeddd0f79d11e84cfc206a73526cd3e2558eecd60eb824",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "j",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=1.257,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.4,
+        "positions_sha256": "8f192d8eacb1d0368a82bada80d47c8e8d0bcf3a883d04e250ec8e0c7c23916f",
+        "phases_sha256": "d0a12ff9e5127c8a7e284d1701ba88f5bb561d2dbd73a7fb6d9da7dd4296dd7b",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "k",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=1.571,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.5,
+        "positions_sha256": "81f068a897f015ed91bfc86cd3672abb27f1d910d0067b0accca3f355b938b9b",
+        "phases_sha256": "0d2fc8a789cdc873bdbb5d999a48d2a65534c6f86c720c9884f1b45ae348d742",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "l",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.6,
+        "positions_sha256": "cc839dc05003c136a385e587349d2aa9d63d6fbd44468f53604ea4745a27ee0f",
+        "phases_sha256": "af8bcf9deb4d8ba07a0257ea840659394296ac2b5fa537d2ef2204cabd250ad1",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "m",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=2.513,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.8,
+        "positions_sha256": "d2a413810d48ccfafea61e67fda96f89f6823565e018a6ff70cbfa2289812b07",
+        "phases_sha256": "5a57ceedc01f9d496d403be1f802701ad8c76c5e2df6c740d1a621af170e2147",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "n",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryMidpointSpikePatternFormation(K=20.750,D0=1.000,A0=3.142,L=7.0,H=3.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 1.0,
+        "positions_sha256": "617ddf06e60b6d04625320fd9443daa59ee6f86b428af4732ddc4b6d244ee9a5",
+        "phases_sha256": "fcc1e4aba250898a05af8cd69b664863110d95dba8c54fc2d28227eba4602929",
+        "all_particles_drawn": true
+      }
+    ]
+  },
+  {
+    "name": "Square_Boundary_Terminal_States_Vector",
+    "size_inches": [
+      6.5,
+      2.4
+    ],
+    "png_dpi": 600,
+    "source_figure_function": "boundary_defect_analysis.create_comparison_states",
+    "same_terminal_frame_selection_as_V2": true,
+    "panels": [
+      {
+        "panel": "a",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=0.000,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.0,
+        "positions_sha256": "d54238c87d7491a79b75f3ad0b047b3810547ce079583e8b6665cbd0f789b600",
+        "phases_sha256": "fa0546ed995a1b5ddd53bfc91d023c028d1f721c65d8d68b390126c46e5cb9b7",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "b",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=0.628,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.2,
+        "positions_sha256": "cca0d3c2e6def672d799c57b8d72b503397ba927e3d17699cb6ee2e4f8b93948",
+        "phases_sha256": "6a2c83041b860513fd4d8549f758e29afcd43f2a9378e94209ecd39d6dd6d51b",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "c",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.257,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.4,
+        "positions_sha256": "b3f89f08378223b742a87aa92a65bac4ef018478547e11af006b2e286ca1d8d8",
+        "phases_sha256": "a442d82309eebd184659e70b72a7df30a63347680e2c03d24cd34df2f4ed36cb",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "d",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.5,
+        "positions_sha256": "793830253f11cb4adba9f5802e0f5e84f99e88e80931dc66fdec3e2ed3b7c1ad",
+        "phases_sha256": "04a9197cbe9f28d91a7ad69aa52c7b67f5c5d521ac44f61f5abcd1cfca2117a3",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "e",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.6,
+        "positions_sha256": "b68faca9aa7f31b8a141696d68d8c346c92783447f8225eb5d3df7425a96527a",
+        "phases_sha256": "4efe5880376951f08cdc09ff83bf3a10763db032e2a439fba3a301f850971a1a",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "f",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=2.513,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.8,
+        "positions_sha256": "b25806d2c114917f94d2aca31a06d02f69b63b5b261f97e2ff5b12af3e6dd71c",
+        "phases_sha256": "9b0db43bd2c224ffde80a0eb3121f19110a7a73d35a306cb190ff752d74a0dd2",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "g",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryPatternFormation(K=20.750,D0=1.000,A0=3.142,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 5000,
+        "particle_count": 2000,
+        "alpha_over_pi": 1.0,
+        "positions_sha256": "3e9b328be8b250a4bd5418af60cc32b00928c6205301d5f2c46d7af7b9415029",
+        "phases_sha256": "5099267b3983fd2e106d90b4ce8d4106fe7a036918ecf221cfc01f22898e1450",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "h",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=0.000,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.0,
+        "positions_sha256": "3c725efe96e0b76c9affc9b4798613fed4a9e25e1a6a2a4de7df2a1b7ff7ab00",
+        "phases_sha256": "4da47a536b9626a458eb03d6396366e8ec49befee957e0da0a8127d7bdd4b2b1",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "i",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=0.628,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.2,
+        "positions_sha256": "24cc5b7f9b15eaf63e640e24b79ec73fd44ce05193c29081e2174c4fe0dc1cb7",
+        "phases_sha256": "1069e1542c5ddfea534a88efabdb80c7099c70cab9966d345c002a34874a7f9c",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "j",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=1.257,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.4,
+        "positions_sha256": "3a22d3784fcdb864c6159de4bb264b6483a5875209a54dc9c96e32f34935cd7b",
+        "phases_sha256": "d34dfbc8c0e83a8cbe323ba8eaea22f2bd0349148ad998e3ad27ca38afe102f1",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "k",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=1.571,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.5,
+        "positions_sha256": "819687d32d732763c18a98ae167c49be778877f1dbfa06bab4e8956b4e52fdc0",
+        "phases_sha256": "0f5567e54f0d932c59d9437ccd65cc82375f96d991f2b07ee90fc89ab7ea33ce",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "l",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.6,
+        "positions_sha256": "9b9046ea7fb57a70f0b4a23752a400fe6800096b6f089ad3623c4056232031f8",
+        "phases_sha256": "69f8eda69e7c7c8caf072d4f79da03214204cdef83dd79760ed94b7946ea2fda",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "m",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=2.513,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 0.8,
+        "positions_sha256": "e129b501ce98615436e9637627e80b18dae87c6efe00011f7cfbfc4a2b8031bd",
+        "phases_sha256": "51da874c451a86caa2df2ba55d8d840c2f620c8fe576ff737a19943d11476715",
+        "all_particles_drawn": true
+      },
+      {
+        "panel": "n",
+        "source_hdf5": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\CollisionBoundaryFourSpikePatternFormation(K=20.750,D0=1.000,A0=3.142,L=7.0,H=1.000,W=0.250,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5",
+        "saved_frame": 8000,
+        "particle_count": 2000,
+        "alpha_over_pi": 1.0,
+        "positions_sha256": "f5dbe53eb29a0d1508b4915788974e80e2b45923e3ce4654d5ae72aac5a09a80",
+        "phases_sha256": "9a3d1df8cd5a47045063864012f2e3f65439041189eacc097a508a8f08b29816",
+        "all_particles_drawn": true
+      }
+    ]
+  }
+]

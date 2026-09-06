@@ -1,0 +1,22 @@
+v,omega,lambda,d0,rho0,alpha_over_pi,bands,C_raw,C_integer,valid,status,reason,min_relative_gap,validation_scope
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,0,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,1,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,0+1,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,0+2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,1+2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.0,0+1+2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,0,-2.000000000000001,-2,True,valid_numerical,"radial screening, UV cap, determinant links and pole cross-check passed",0.4999999999999999,finite radial sampling/root refinement; bounded UV tail
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,1,1.1750799433475755e-30,0,True,valid_numerical,"radial screening, UV cap, determinant links and pole cross-check passed",0.49999999999999983,finite radial sampling/root refinement; bounded UV tail
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,2,2.0000000000000013,2,True,valid_numerical,"radial screening, UV cap, determinant links and pole cross-check passed",0.49999999999999983,finite radial sampling/root refinement; bounded UV tail
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,0+1,-2.0000000000000004,-2,True,valid_numerical,"radial screening, UV cap, determinant links and pole cross-check passed",0.49999999999999983,finite radial sampling/root refinement; bounded UV tail
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,0+2,-4.064297028054744e-16,0,True,valid_numerical,"radial screening, UV cap, determinant links and pole cross-check passed",0.49999999999999983,finite radial sampling/root refinement; bounded UV tail
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,1+2,2.0,2,True,valid_numerical,"radial screening, UV cap, determinant links and pole cross-check passed",0.4999999999999999,finite radial sampling/root refinement; bounded UV tail
+3.0,0.0,312.06851586646144,1.0,0.0204,0.5,0+1+2,0.0,0,True,valid_full_space,P=I3; no complementary spectrum,nan,identity bundle of a finite closed matrix
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,0,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,1,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,0+1,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,0+2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,1+2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked
+3.0,0.0,312.06851586646144,1.0,0.0204,1.0,0+1+2,NA,NA,False,invalid,singular_or_unresolved_closure: D0 is zero within relative tolerance,nan,not_checked

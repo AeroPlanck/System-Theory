@@ -1,0 +1,118 @@
+LONG-TIME BOUNDARY-FLOW STABILITY
+
+Symbols and raw data
+--------------------
+X_i^n=(x_i^n,y_i^n) and theta_i^n are rows of positionX and phaseTheta at saved
+frame n.  theta is the microscopic phase and the free-flight heading angle:
+u_i^n=(cos(theta_i^n),sin(theta_i^n)).  Delta t_s=dt*shotsnaps.
+
+The particle interaction distance is d0=model.distanceD0.  Capital D0 is
+reserved for the continuum closure denominator and is never used as a particle
+distance in this analysis.
+
+Boundary coordinate and grid index g
+------------------------------------
+Pi(X_i^n)=(d_i^n,s_i^n,t_i^n,kappa_(b,i)^n,e_i^n) is the unique regular
+closest-boundary projection; s and t are counterclockwise.  Polygonal and
+arc-line components omit 0.05 d0 at each incident
+vertex/join.  The independent closest-distance tie tolerance is
+1e-07 d0.  Let P_reg be the retained perimeter.
+
+For retained component e of length L_e:
+N_e=ceil[L_e/(0.5 d0)], ell_g=L_e/N_e.
+No grid cell I_g crosses a join and sum_g ell_g=P_reg.
+
+q_i^n=u_i^n dot t_i^n.  In each grid cell, Q_ng is the sign of q for the
+nearest retained candidate with |q|>=q0=0.05;
+Q_ng=0 for an empty candidate set or an opposite-sign nearest-distance tie.
+Low-alpha candidates have no radial cutoff.  High-alpha candidates also require
+d<=d0, 1-kappa_b*d>0, and W>epsilon_W.
+
+The critical point alpha=pi/2 is assigned to neither open regime.  Its isolated
+estimate uses the broad no-radial-cutoff construction and no W selection; it is
+not an estimate obtained with either open-regime rule.
+
+High-alpha W particle-selection rule
+------------------------------------
+N_i^n={j!=i:||X_j^n-X_i^n||<=d0} and
+Omega_i^n=omega_i+K[mean_(j in N_i^n)sin(theta_j^n-theta_i^n+alpha)-sin(alpha)],
+with Omega_i^n=omega_i when N_i^n is empty.  This heading angular velocity is
+recomputed from the saved state using the main.py phase RHS.
+
+kappa_d=kappa_b/(1-kappa_b*d),
+W_i^n=kappa_d*v*(q_i^n)^2-Omega_i^n*q_i^n,
+epsilon_W=0.02 v/d0.
+
+W is only a conditional selection score.  Its acceleration interpretation is
+valid for approximately tangent motion along a constant-distance parallel
+curve, not generally during oblique wall approach or reflection.  It is not a
+force measurement, topology test, or headline observable.
+
+Heading-displacement check
+--------------------------
+Track frame n's representative to n+1.  T_ng=1 requires valid same-component
+endpoints, the regime filters at both endpoints, equal nonzero heading signs,
+and a unique geometry-bounded wrapped increment.  E_ng=T_ng only if
+|Delta s|/(v Delta t_s)>=0.02 and
+sign(Delta s)=Q_ng; otherwise E_ng=0.  Grid g is calibrated when
+sum_n T_ng>=3 and
+C_g=sum_n E_ng/sum_n T_ng>=0.66666667.
+This is internal quality control, not independent validation.
+
+Two-frame signal and block index n_blk
+--------------------------------------
+Y_ng=Q_ng when Q_ng=Q_(n+1)g!=0; otherwise Y_ng=0.  The representatives may be
+different particles.  The target block time is d0/v and the saved-data block is
+n_blk=ceil[(d0/v)/Delta t_s], Delta T_b=n_blk*Delta t_s.  Here n_blk=7.
+
+For F saved frames, the requested terminal duration is T_req=10 P/v and
+N_avail=min[F-1,ceil(T_req/Delta t_s)].  The complete-block count is
+B=floor(N_avail/n_blk), and only frames n0=F-1-B*n_blk through F-1 are used.
+The exported analysis_window_fraction is B*n_blk*Delta t_s/T_req; it identifies
+records shorter than the requested ten-circuit observation window.
+
+Within block b:
+N_bg^+=#{n in b:Y_ng=+1}, N_bg^-=#{n in b:Y_ng=-1},
+p_bg=|N_bg^+-N_bg^-|/(N_bg^++N_bg^-) if the denominator is positive, and
+p_bg=0 otherwise.  Z_bg=sign(N_bg^+-N_bg^-) only if the support count is at
+least 1, p_bg>=0.66666667,
+and g is calibrated; otherwise Z_bg=0.  Sensitivity uses minimum counts
+(1, 2, 3) without weighting either headline score.
+
+The union A={g:exists b,|Z_bg|=1} must contain a connected boundary interval
+of at least 2 d0.  Different cells in this interval
+may be active in different blocks, which allows relay transport.  A second
+export disables cross-join adjacency.
+
+Two stability measures
+----------------------
+M_b=1 if block b contains any Z_bg!=0 after the accumulated-extent check.
+
+Xi_Persist=(1/B)sum_b M_b
+
+is the fraction of time blocks containing a valid directional boundary signal.
+It is not multiplied by particle number or carrier fraction.
+
+chi_b=[sum_g ell_g Z_bg]/[sum_g ell_g |Z_bg|],
+Xi_Sign=|sum_b M_b chi_b/sum_b M_b|.
+
+Xi_Sign is the absolute mean block chirality over all active blocks.  It is one
+only when every active block is entirely clockwise or every active block is
+entirely counterclockwise.  Spatial cancellation and reversal reduce it.
+
+Selection and coverage checks
+-----------------------------
+a_b=[sum_g ell_g|Z_bg|]/P_reg is active arclength fraction.
+f_cal=[sum_g ell_g*1(g calibrated)]/P_reg is calibrated perimeter fraction.
+The export also records pre-W and retained grid coverage, W-retention ratio,
+omitted-perimeter fraction, the no-cross-join extent check, d/d0 representative
+distance quantiles, and lag-one block correlations.
+
+Limitations and endpoints
+-------------------------
+Results use one random seed, unequal terminal-window durations, temporally
+correlated blocks, and same-window calibration.  Finite defect/join masks omit
+strong-scattering neighborhoods.  The low-alpha construction has no radial
+cutoff and may include remote nearest-boundary coordinates; distance quantiles
+must therefore accompany it.  alpha=0 and alpha=pi are independent endpoints
+and are reported as NA for both single-chirality measures.

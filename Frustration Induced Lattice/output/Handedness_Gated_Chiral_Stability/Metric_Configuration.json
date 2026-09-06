@@ -1,0 +1,27 @@
+{
+  "raw_hdf5_fields": {
+    "positionX": "Flattened saved positions; reshaped to r[n,i]=(x[n,i],y[n,i]).",
+    "phaseTheta": "Flattened saved headings theta[n,i] in radians."
+  },
+  "saved_time_step": "Delta_t_s = model.dt * model.shotsnaps",
+  "terminal_window_time": 10.0,
+  "block_count_B": 20,
+  "arc_bin_count_K": 64,
+  "minimum_episode_time": 0.5,
+  "minimum_episode_directional_persistence": 0.75,
+  "minimum_episode_tangentiality": 0.35,
+  "radial_bin_count_R": 48,
+  "maximum_radial_depth_over_L": 0.45,
+  "direction_probe_depth_over_L": 0.06,
+  "peak_search_depth_over_L": 0.16,
+  "edge_floor_fraction": 0.12,
+  "edge_floor_consecutive_bins": 3,
+  "alpha_over_pi": [
+    0.0,
+    0.2,
+    0.4,
+    0.6,
+    0.8,
+    1.0
+  ]
+}

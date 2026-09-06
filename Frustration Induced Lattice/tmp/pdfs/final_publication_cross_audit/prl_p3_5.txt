@@ -1,0 +1,259 @@
+                                                                                                                                                                       3
+
+
+                                 α=0                α = 0.2π                     α = 0.4π           α = 0.5π             α = 0.6π            α = 0.8π           α=π
+                          (a)                 (b)                          (c)                (d)                  (e)                 (f)                (g)
+    No defect
+   Single defect: H = 3
+
+
+
+
+                          (h)                 (i)                          (j)                (k)                  (l)                 (m)                (n)
+
+
+
+
+                                                                          θ
+                                                                                 0                    π                      2π
+
+
+FIG. 2. Circular-boundary terminal states without a defect (a–g) and with one inward triangular defect of height H = 3
+in simulation length units (h–n), for L = 7, N = 2000, K = 20.75, v = 3, and d0 = 1; color gives θ. Columns sweep
+α = 0, 0.2π, 0.4π, 0.5π, 0.6π, 0.8π, π. The associated trajectory analysis assigns no persistent single chirality or topological
+protection at α = 0. For 0 < α < π/2, an all-particle chiral stream forms without an interior pattern but is readily disrupted
+by the isolated defect. At α = π/2, the unidirectional boundary lattice has spacing of order d0 and remains defect-sensitive.
+For π/2 < α < π, the interior vortex lattice supports a highly coherent minority edge stream that survives the defect. At the
+singular phase-lag endpoint α = π, trajectory data show two counterpropagating boundary-lattice streams whose spacing is
+associated with the limiting ﬁnite-wavenumber scale 2π/k∗ rather than the threshold scale d0 ; this bidirectional state is distinct
+from the chiral α = π/2 lattice and carries no Chern label within the continuum closure.
+
+                               (a) α = 0.4π                               (b) α = 0.6π                    The linearized density–polarization dynamics are then
+                                n=1    n=2     n=3                         n=1       n=2    n=3                                                                
+                                                                                                                                              0    −ivkx −ivky
+                           3
+                                                                      0                                    ∂t U = M (k)U,        M (k) = − iv2 kx  a(k) b(k)  .
+                           2
+                                                                     −1
+                                                                                                                                           − iv k
+                                                                                                                                              2 y  −b(k)   a(k)
+          Re σ(k)
+
+
+
+
+                                                           Re σ(k)
+
+
+
+
+                           1
+                                                                                                                                                                 (7)
+                                                                     −2                                                          b
+                                                                                                          For the disk kernel, G(k) = 2πd0 J1 (kd0 )/k. The clo-
+                           0                                                                              sure requires D0 ̸= 0; since ω = 0 here, α = 0 and
+                                                                     −3
+                                                                                                          π are singular phase-lag endpoints rather than topolog-
+                          20                                         20                                   ically trivial points. The generally complex eigenvalues
+                                                                                                          σn have growth rates Re σn and frequencies Im σn . Fig-
+ Im σ(k)
+
+
+
+
+                                                         Im σ(k)
+
+
+
+
+                           0                                          0
+                                                                                                          ure 3 shows that the dominant growth rate moves from
+                                                                                                          k = 0 at 0.4π to a ﬁnite wave number at 0.6π.
+                  −20                                              −20
+                                                                                                             Chern number from isotropy and spin.— Fix an iso-
+                                                                                                          lated band or band cluster I. Its right and left eigenvec-
+                           −10         0            10                −10            0        10
+                                       k                                             k                    tors are deﬁned biorthogonally by
+                                                                                                                       n ⟩ = σn |un ⟩,
+                                                                                                                   M |uR          R
+                                                                                                                                                   n |M = σn ⟨un |,
+                                                                                                                                                 ⟨uL           L
+                                                                                                                                                                      (8)
+FIG. 3. Directional dispersions. Isotropy makes the α = 0.4π                                                        ℓ |un ⟩ = δℓn .
+                                                                                                                  ⟨uL   R
+and 0.6π cuts representative and exposes the zero- to ﬁnite-
+wavenumber instability transition.                                                                        The corresponding spectral projector is
+                                                                                                                                X
+                                                                                                                       PI (k) =    |uR        L
+                                                                                                                                      n (k)⟩⟨un (k)|.                 (9)
+matrix coeﬃcients by                                                                                                                  n∈I
+
+  D0 = 2ω − 2λρ0 G0 sin α,                                                                                Writing d for the exterior derivative on a compact wave-
+                                                                                                          number surface M, its ﬁrst Chern number is
+ a(k) =
+        λρ0 b
+           G(k) cos α,                                                                                                             Z
+                                                                                                                                1
+         2                                                                                                           C(PI ) =          Tr(PI dPI ∧ dPI ) .      (10)
+                                                         λρ0 b           v2 k2                                                 2πi M
+  b(k) = −ω + λρ0 G0 sin α −                                G(k) sin α +       . (6)                      Figure 4 evaluates this projector invariant using the pole
+                                                          2              4D0
+                                                                                                          formula below after numerical spectral-isolation screen-
+                                                                                                          ing; representative values are independently checked with
+                                                                                                          the biorthogonal Fukui–Hatsugai–Suzuki algorithm [36].
+                                                                                                                                                                                    4
+
+                            (a) mixed-band Chern                                                                         (b) single-band Chern
+                             {0, 1}     {0, 2}      {1, 2}     {0, 1, 2}                                                             {0}      {1}     {2}
+                                         ̂                                                                                             ̂
+                               K = λρ0 G(0),    shown in legend                                                              K = λρ0 G(0),  shown in legend
+
+              d0 = 1, K = 10               d0 = 1, K = 20              d0 = 1, K = 30                        d0 = 1, K = 10             d0 = 1, K = 20             d0 = 1, K = 30
+     2                                                                                               2
+
+     0                                                                                               0
+
+    −2                                                                                              −2
+
+              d0 = 2, K = 10               d0 = 2, K = 20              d0 = 2, K = 30                        d0 = 2, K = 10             d0 = 2, K = 20             d0 = 2, K = 30
+     2                                                                                               2
+C
+
+
+
+
+                                                                                                C
+     0                                                                                               0
+
+    −2                                                                                              −2
+
+              d0 = 3, K = 10               d0 = 3, K = 20              d0 = 3, K = 30                        d0 = 3, K = 10             d0 = 3, K = 20             d0 = 3, K = 30
+     2                                                                                               2
+
+     0                                                                                               0
+
+    −2                                                                                              −2
+         0           0.5          1    0         0.5         1     0        0.5             1            0        0.5           1   0         0.5         1    0        0.5         1
+                                                α/π                                                                                          α/π
+                           Gaps: invalid or unresolved target projector.                                                Gaps: invalid or unresolved target projector.
+
+
+FIG. 4. Chern platforms. (a,b) Mixed- and single-band results for v = 3, ω = 0, obtained from the pole formula after
+numerical radial spectral-isolation screening. Gaps in a curve mark an undeﬁned or numerically unresolved target projector,
+including ﬁnite-wavenumber exceptional-point collisions and the singular phase-lag endpoints; they are not zero Chern values.
+Representative values are independently checked by the Fukui discretization.
+
+   It remains to identify M and the integer analytically.                                       has a unique direction-independent asymptotic spectral
+Parameterize the wave vector and deﬁne its induced ac-                                          value at the compactiﬁcation pole. Together with the
+tion on density–polarization space by                                                           direction-independent polar projectors at k = 0, this
+                                                                                              identiﬁes every angular direction at the two poles and
+                                         cos ϕ − sin ϕ
+  k = k(cos ϕ, sin ϕ),    S(ϕ) = 1 ⊕                     .                                      compactiﬁes the wave-number plane as
+                                         sin ϕ cos ϕ
+                                                       (11)                                                                M = R2 ∪ {∞} ≃ S 2 .                                 (15)
+With B(k) = M (k, 0), rotational covariance gives both
+                                                                                                Order the eigenvalues by increasing imaginary part,
+the similarity relation and directional spectral isotropy,
+                                                                                                Im σ1 ≤ Im σ2 ≤ Im σ3 . For the ﬁrst branch in this
+                                M (k, ϕ) = S(ϕ)B(k)S −1 (ϕ),                                    ordering, let P (k) be the target projector of B(k) and
+                                                                                   (12)
+              det[M (k, ϕ) − σI] = det[B(k) − σI].                                              deﬁne the radial-pole coeﬃcients and spin labels
+Thus every continuously labelled branch may be chosen                                                                         λρ0 G0
+                                                                                                                  b0 = −ω +          sin α,
+radial, σn (k, ϕ) = σn (k), up to branch labels at degen-                                                                         2                                             (16)
+eracies. Deﬁne the angular generator J and its density                                                            s0 = − sgn b0 ,    s∞ = − sgn β.
+and circular-polarization eigenvectors by                                                       The eigenvectors at the compactiﬁed wave-number poles
+             −1
+J = iS            ∂ϕ S,         eρ = (1, 0, 0) ,   T
+                                                                 u± = (0, 1, ±i) ,      T       are therefore us0 and us∞ . For ω = 0 and 0 < α < π, the
+                           Jeρ = 0,           Ju± = ±u± .                                       microscopic phase lag enforces their pole-to-pole twist
+                                                                                                through
+                                                  (13)
+ At large k, label the spin sectors by s = 0, ±1. Let                                                         D0 b0 = −(λρ0 G0 )2 sin2 α < 0,
+                                                                                                                                                    (17)
+σs and Ps denote the associated eigenvalue and Riesz                                                           b0 β < 0,     s∞ = −s0 .
+projector, and set β = v 2 /(4D0 ).                                                             Thus microscopic nonreciprocity acts directly on the
+                B(k)                              σs (k, ϕ)                                     eigenvector bundle by forcing a spin reversal between the
+                       −→ iβJ,                              −→ iβs,                             two compactiﬁed wave-number poles. Finally, rotational
+                  k2                                 k2                            (14)
+             Ps (k, ϕ) −→ Ps (∞).                                                               covariance reduces the Chern integral to the diﬀerence of
+                                                                                                the polar spin weights,
+ The branch asymptotics and projector limits are uni-                                                                                               ∞
+form in ϕ. The unscaled oscillatory eigenvalues are un-                                             C ≡ C(PI ) = − [Tr(JP (k))]0 = −(s∞ − s0 ),
+                                                                                                                                                                                (18)
+bounded along the imaginary direction, but each branch                                                            |C| = 2,
+                                                                                                                                                                                                              5
+
+
+                                                                       Dashed line: pattern onset at α = π/2; isolated markers use the critical-point rule
+
+                                             (a) Boundary-flow recurrence                                                                       (b) Selected-signal chirality
+                                       1.0
+      Active-block fraction ΞPersist
+
+
+                                       0.8
+
+
+
+
+                                                                                                                     Mean chirality ΞSign
+                                       0.6
+
+                                       0.4
+
+                                       0.2
+
+                                       0.0
+                                             0.0        0.2      0.4          0.6         0.8         1.0                                       0.0      0.2           0.4          0.6      0.8        1.0
+                                                                 Phase lag α/π                                                                                       Phase lag α/π
+
+                                                                             Circle                                           Square, four defects (H = 1)
+                                                                             Circle, one defect (H = 3)                       Full requested window
+                                                                             Square                                           Shorter available window
+
+
+FIG. 5. Single-realization, terminal-window boundary-ﬂow diagnostics across the phase-lag sweep. (a) The recurrent active-
+block fraction remains high through most of the open interval. (b) Mean chirality is stable on a regular circle below pattern
+onset but is strongly reduced by corners or geometric defects; after the interior pattern forms, all tested geometries retain
+near-unit mean chirality of the selected boundary population. The isolated α = π/2 markers use the critical-point selection
+rule and remain defect-sensitive. Filled markers reach the requested ten-circuit window, whereas open markers use shorter
+records. The singular phase-lag endpoints α = 0, π are excluded from these single-chirality measures; deﬁnitions, coverage
+checks, and numerical limitations are given in the Supplemental Material [35].
+
+up to the orientation convention, provided the target pro-                                                                                                α = π/2, v = 3, ω = 0, K = 20.75, d0 = 1
+jector is isolated for every ﬁnite k. Opposite pole spins                                                                                                  Left edge         Right edge   Other modes
+alone do not establish this condition: ﬁnite-k exceptional                                                                            40
+points exclude portions of the open phase-lag interval.
+Figure 4 marks invalid or unresolved samples as unavail-
+able; at α = 0, π, the closure itself is singular because                                                                             20
+D0 = 0 [35].
+                                                                                                                                      10
+   Boundary spectral ﬂow.— Fixing the tangential
+                                                                                                                  Im σ
+
+
+
+
+wavenumber ky , we construct a strip operator from the                                                                                      0
+Fourier blocks of M (kx , ky ); its spectrum contains bulk-                                                                   −10
+like and boundary-localized modes. For an edge branch
+                                                                                                                              −20
+                                                   σ(ky ) = γ(ky ) + iΩ(ky ),                       (19)
+the oscillatory phase gives group velocity
+                                                                                                                              −40
+                                                                                                                                −50                            −25                 0              25          50
+                                                      vg = −∂ky Ω(ky ).                             (20)                                                                          ky
+In Fig. 6, the left-edge branch has vg < 0, whereas the                                                                                                         c = ±10 : (nL , nR ) = (2, − 2)
+right-edge branch has vg > 0. Under the strip orienta-
+tion used here, mapping the two edges onto a closed two-                                                        FIG. 6. Finite-strip spectrum at α = π2 , with v = 3, ω =
+dimensional collision boundary predicts counterclockwise                                                        0, K = 20.75, and d0 = 1 matched to the circular-particle
+circulation, consistent with the particle simulations. This                                                     runs. The empirical levels Im σ = ±10 lie in bulk line gaps at
+comparison is made at the level of linear selection and                                                         this parameter value. The multi-α comparison and ﬁnite-grid
+nonlinear saturation: the topology belongs to the spec-                                                         diagnostics are given in the Supplemental Material.
+tral projector, while the particle pattern is the ﬁnite-                                                        Discussion.— This work establishes a direct link between
+amplitude carrier of the selected edge branch.                                                                  microscopic nonreciprocity and topological transport in
+                                                                                                                active matter. Within the spectrally isolated regimes of
+                                                                                                                the continuum closure, the phase lag produces a spin
+                                                                                                                twist between the compactiﬁed wave-number poles with
+

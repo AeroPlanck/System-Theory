@@ -1,0 +1,485 @@
+  Microscopic Nonreciprocity-Tuned Topological Transitions and Boundary Flows in
+                                  Active Matter
+
+                                        Tong Zhu1, 2, 3, ∗ and Zhigang Zheng2, 3, †
+                   1
+                    Center for Interdisciplinary Studies, Westlake University, Hangzhou 310030, CHINA
+                        2
+                          Institute of System Science, Huaqiao University, Xiamen 361021, CHINA
+              3
+                College of Information Science and Technology, Huaqiao University, Xiamen 361021, CHINA
+                                                 (Dated: September 3, 2026)
+                We show that a minimal frustrated Vicsek–Kuramoto model realizes a non-Hermitian bulk–
+             boundary correspondence in which pattern formation controls the stability of the particle-level
+             boundary ﬂow. In contrast to ﬁeld-level constructions, its Chern structure emerges from micro-
+             scopic self-propelled dynamics, with the Sakaguchi phase lag serving as a tunable source of nonre-
+             ciprocity. A low-angular-harmonic closure of the one-particle distribution yields a non-Hermitian
+             hydrodynamic matrix whose direction-independent polar projector limits allow compactiﬁcation in
+             spectrally isolated regimes. In regimes where the closed spectral projector remains isolated, the phase
+             lag connects opposite circular-polarization spin characters at the compactiﬁed wave-number poles
+             k = 0 and k = ∞, producing Chern numbers C = ±2; singular endpoints and ﬁnite-wavenumber
+             band collisions are excluded. Collision boundaries reveal long-lived chiral boundary ﬂow before
+             pattern onset but only weak protection against geometric defects; once a ﬁnite-wavenumber vortex
+             lattice forms, the particulate convection between interior pattern and chiral boundary ﬂow forms the
+             topological protection. Thus microscopic topology selects boundary chirality, while the emergent
+             bulk pattern supplies its robust nonlinear realization.
+
+
+   Introduction.— Active matter converts local energy             Berry curvature provide a route from Chern numbers
+input into collective motion, producing ﬂocking, clus-            to Hall responses and edge transport, as illustrated by
+tering, vortices, and ordered nonequilibrium patterns;            ﬁrst-principles anomalous-Hall calculations and graphene
+the Vicsek model and its hydrodynamic descendants                 quantum-anomalous-Hall models [27, 28]. Our question
+provide a paradigmatic route to polar order [1–4]. A              is analogous in spirit but diﬀerent in mechanism: can
+complementary route to collective order is synchroniza-           a Chern bulk-boundary correspondence emerge from a
+tion: Kuramoto-type interactions lock phases through              minimal active-particle rule rather than from a quantum
+local coupling, and Sakaguchi-type phase lags introduce           Hamiltonian? Here the answer is controlled by the micro-
+a simple nonvariational frustration into this locking dy-         scopic phase lag, whose nonreciprocal frustration twists
+namics [5–8]. Kuramoto–Vicsek models combine these                the hydrodynamic eigenvectors whenever the continuum
+two routes in a minimal setting where synchronization,            closure is well deﬁned.
+swarming, and nonequilibrium transport coexist [9–11].
+                                                                    Boundaries can profoundly reorganize active matter.
+   Topology supplies another organizing principle for col-        Conﬁnement stabilizes bacterial spiral vortices and ﬂow-
+lective dynamics. Since the quantum Hall eﬀect, bulk              induced cellular order [29, 30], while swarming bacterial
+topological invariants have been known to determine ro-           colonies exhibit robust edge ﬂows [31]. These examples
+bust boundary modes [12, 13]; related ideas now appear            demonstrate that boundaries can select collective states
+in photonic [14, 15], acoustic [16, 17], mechanical [18, 19],     absent in the bulk. Here the boundary serves a more
+geophysical [20, 21], non-Hermitian [22, 23], and active          speciﬁc purpose: it provides the arena in which the bulk
+systems [24, 25]. In active matter, topology has been used        Chern structure becomes observable as chiral particle
+to describe defects, curved-surface ﬂocking, anomalous            transport.
+edge responses, and stochastic chiral currents [26]. These
+                                                                     We study a frustrated Vicsek–Kuramoto model in
+developments suggest that active systems may host bulk-
+                                                                  which self-propelled particles align their heading an-
+boundary mechanisms beyond conventional pattern se-
+                                                                  gles through a local Sakaguchi-type phase lag. Previ-
+lection.
+                                                                  ous periodic-boundary studies identiﬁed a transition near
+   For a nondegenerate complex spectrum, each eigen-              αc = π/2, where the maximum linear growth rate shifts
+vector spans a complex line, and these lines form a bun-          from zero to ﬁnite wave number [32]. Above this thresh-
+dle over the parameter manifold. Its global obstruction           old, the particles organize into dynamic hexagonal vortex
+is measured by a Chern number. A mismatch between                 lattices. Within a narrow parameter interval, a hyperuni-
+a line-gapped bulk and its exterior cannot be removed             form state appears when the vortex scale predicted by a
+without closing the gap; after translation symmetry is            phase-locking ansatz is incompatible with the linearly se-
+lost normal to an edge, the same obstruction reappears            lected wavelength [32, 33]. Replacing periodic boundaries
+as boundary spectral ﬂow.                                         by collision boundaries allows us to ask whether the bulk
+  In electronic systems, microscopic band structures and          linear spectrum predicts an actual boundary response in
+                                                                                                                                         2
+
+the particle system.                                                          chiral boundary stream. These no-pattern states retain
+   The resulting non-Hermitian operator is isotropic;                         chirality on a regular convex boundary but are weakly
+direction-independent polar projector limits allow com-                       protected against an isolated strong defect; their Chern
+pactiﬁcation of the wave-number plane in isolated                             label applies only where the continuum projector remains
+regimes. Unlike earlier ﬁeld-level topological ﬂuid set-                      isolated.
+tings [34], its Chern structure emerges from microscopic                         At the pattern threshold α = π/2, a unidirectional
+self-propelled dynamics: in each nonsingular line-gapped                      chiral boundary lattice appears with a microscopic spac-
+regime, the Sakaguchi phase lag selects opposite spin                         ing of order d0 , but its chirality remains sensitive to
+characters at the compactiﬁed wave-number poles k = 0                         strong defects. For π/2 < α < π, a rotating vortex lat-
+and k = ∞, yielding C = ±2. The associated strip spec-                        tice supplies a counterpropagating minority edge stream
+tral ﬂow predicts the chiral boundary transport observed                      and strong protection against local defects. We call
+in particle simulations.                                                      this relative bulk–edge motion “convection” as a kine-
+                                                                              matic label, not ﬂuid-mechanical convection. At α = π,
+                                                                              two boundary-lattice streams counterpropagate; unlike
+                                                                              the threshold lattice, their spacing follows the ﬁnite-
+                                                                              wavenumber pattern scale 2π/k∗ approached from the
+                                                                              nonsingular side, where k∗ maximizes the linear growth
+                                                                              rate. Because D0 = 0, this phase-lag endpoint re-
+                                                                              mains outside the Chern classiﬁcation. Initial-condition,
+                                                                              boundary-shape, defect, and long-time stability tests are
+                                                                              provided in the Supplemental Material [35]. Away from
+                                                                              the phase-lag endpoints, the observed chirality agrees
+                                                                              with the edge-mode group velocity. We next derive the
+                                                             Phase θi         bulk invariant and test its strip spectral ﬂow.
+            0                      π                    2π                       Continuum spectrum.— The directional spectrum and
+                                                                              Chern platforms are summarized in Figs. 3 and 4, re-
+FIG. 1. Periodic-boundary terminal states across the phase-                   spectively.     Let f (x, θ, t) be the one-particle density
+lag sweep for L = 7, N = 2000, K = 20, d0 = 1.55, and v =
+                                                                              in position x and heading θ. A mean-ﬁeld reduction of
+3, reproduced from Ref. [32]. Below the ﬁnite-wavenumber
+threshold the system forms synchronized clusters; above it                    the N -particle Liouville equation gives a kinetic PDE for
+the spectrum selects a ﬁnite pattern scale.                                   f . Because the microscopic interaction contains only the
+                                                                              ﬁrst angular harmonic, we adopt a low-angular-harmonic
+  Active-particle model.— The microscopic dynamics are
+                                                                              closure as a phenomenological ansatz. We expand f in
+         ẋi = ve(θi ),          e(θi ) = (cos θi , sin θi ),           (1)   angular Fourier modes indexed by m, neglect modes with
+and                                                                           large |m|, and adiabatically eliminate the second har-
+                    K X                                                       monic [35]. The topology refers to this retained operator
+      θ̇i = ωi +         [sin(θj − θi + α) − sin α],                    (2)   with its stated large-wave-number extension, not an ex-
+                   |Ni |
+                          j∈Ni                                                act invariant of the full kinetic hierarchy. Hereafter, k
+for i = 1, 2, . . . , N . Here K is the neighborhood-averaged                 denotes the spatial wave vector.
+coupling strength, ωi = 0 is the intrinsic angular fre-                          The retained spatial density and polarization ﬁeld are
+quency, Ni contains the particles within the interaction                      deﬁned before linearization by
+range of particle i, and α is the frustration angle. The                                    Z 2π                      Z 2π
+subtraction of sin α removes the uniform angular drift                            ρ(x, t) =      f dθ,      p(x, t) =      f e(θ) dθ. (3)
+                                                                                            0                         0
+of a perfectly aligned neighborhood. In the continuum
+equations below, the coeﬃcient λ denotes the eﬀective                         Let ρ0 be the homogeneous density, let hats denote spa-
+strength after replacing the discrete average by an unnor-                    tial Fourier transforms, and deﬁne
+malized kernel convolution; for a typical neighborhood                                    b δp
+                                                                               U(k, t) = (δρ,      dy )T ,
+                                                                                              dx , δp           k = (kx , ky ),  k = |k|.
+population N ′ , λ ≃ K/N ′ up to kernel normalization                                                                                   (4)
+[35].                                                                         For the isotropic interaction kernel G(r), its spatial trans-
+   Figures 1 and 2 compare periodic and circular colli-                       form and zero-wave-number value are
+sion boundaries, while Fig. 5 quantiﬁes their long-time                                      Z
+response to boundary defects. At α = 0, the long-time                                b
+                                                                                    G(k)   =      G(|r|)e−ik·r d2 r,           b
+                                                                                                                       G0 = G(0).       (5)
+analysis assigns no stable net chirality, while D0 = 0                                          R2
+makes the continuum closure and Chern invariant un-                           Retaining the common intrinsic frequency ω symboli-
+deﬁned; the resulting particle ﬂow is therefore unpro-                        cally, deﬁne the closure denominator and the two radial
+tected and depends on initialization and boundary ge-
+ometry. For 0 < α < π/2, all particles can join one
+                                                                                                                                                                       3
+
+
+                                 α=0                α = 0.2π                     α = 0.4π           α = 0.5π             α = 0.6π            α = 0.8π           α=π
+                          (a)                 (b)                          (c)                (d)                  (e)                 (f)                (g)
+    No defect
+   Single defect: H = 3
+
+
+
+
+                          (h)                 (i)                          (j)                (k)                  (l)                 (m)                (n)
+
+
+
+
+                                                                          θ
+                                                                                 0                    π                      2π
+
+
+FIG. 2. Circular-boundary terminal states without a defect (a–g) and with one inward triangular defect of height H = 3
+in simulation length units (h–n), for L = 7, N = 2000, K = 20.75, v = 3, and d0 = 1; color gives θ. Columns sweep
+α = 0, 0.2π, 0.4π, 0.5π, 0.6π, 0.8π, π. The associated trajectory analysis assigns no persistent single chirality or topological
+protection at α = 0. For 0 < α < π/2, an all-particle chiral stream forms without an interior pattern but is readily disrupted
+by the isolated defect. At α = π/2, the unidirectional boundary lattice has spacing of order d0 and remains defect-sensitive.
+For π/2 < α < π, the interior vortex lattice supports a highly coherent minority edge stream that survives the defect. At the
+singular phase-lag endpoint α = π, trajectory data show two counterpropagating boundary-lattice streams whose spacing is
+associated with the limiting ﬁnite-wavenumber scale 2π/k∗ rather than the threshold scale d0 ; this bidirectional state is distinct
+from the chiral α = π/2 lattice and carries no Chern label within the continuum closure.
+
+                               (a) α = 0.4π                               (b) α = 0.6π                    The linearized density–polarization dynamics are then
+                                n=1    n=2     n=3                         n=1       n=2    n=3                                                                
+                                                                                                                                              0    −ivkx −ivky
+                           3
+                                                                      0                                    ∂t U = M (k)U,        M (k) = − iv2 kx  a(k) b(k)  .
+                           2
+                                                                     −1
+                                                                                                                                           − iv k
+                                                                                                                                              2 y  −b(k)   a(k)
+          Re σ(k)
+
+
+
+
+                                                           Re σ(k)
+
+
+
+
+                           1
+                                                                                                                                                                 (7)
+                                                                     −2                                                          b
+                                                                                                          For the disk kernel, G(k) = 2πd0 J1 (kd0 )/k. The clo-
+                           0                                                                              sure requires D0 ̸= 0; since ω = 0 here, α = 0 and
+                                                                     −3
+                                                                                                          π are singular phase-lag endpoints rather than topolog-
+                          20                                         20                                   ically trivial points. The generally complex eigenvalues
+                                                                                                          σn have growth rates Re σn and frequencies Im σn . Fig-
+ Im σ(k)
+
+
+
+
+                                                         Im σ(k)
+
+
+
+
+                           0                                          0
+                                                                                                          ure 3 shows that the dominant growth rate moves from
+                                                                                                          k = 0 at 0.4π to a ﬁnite wave number at 0.6π.
+                  −20                                              −20
+                                                                                                             Chern number from isotropy and spin.— Fix an iso-
+                                                                                                          lated band or band cluster I. Its right and left eigenvec-
+                           −10         0            10                −10            0        10
+                                       k                                             k                    tors are deﬁned biorthogonally by
+                                                                                                                       n ⟩ = σn |un ⟩,
+                                                                                                                   M |uR          R
+                                                                                                                                                   n |M = σn ⟨un |,
+                                                                                                                                                 ⟨uL           L
+                                                                                                                                                                      (8)
+FIG. 3. Directional dispersions. Isotropy makes the α = 0.4π                                                        ℓ |un ⟩ = δℓn .
+                                                                                                                  ⟨uL   R
+and 0.6π cuts representative and exposes the zero- to ﬁnite-
+wavenumber instability transition.                                                                        The corresponding spectral projector is
+                                                                                                                                X
+                                                                                                                       PI (k) =    |uR        L
+                                                                                                                                      n (k)⟩⟨un (k)|.                 (9)
+matrix coeﬃcients by                                                                                                                  n∈I
+
+  D0 = 2ω − 2λρ0 G0 sin α,                                                                                Writing d for the exterior derivative on a compact wave-
+                                                                                                          number surface M, its ﬁrst Chern number is
+ a(k) =
+        λρ0 b
+           G(k) cos α,                                                                                                             Z
+                                                                                                                                1
+         2                                                                                                           C(PI ) =          Tr(PI dPI ∧ dPI ) .      (10)
+                                                         λρ0 b           v2 k2                                                 2πi M
+  b(k) = −ω + λρ0 G0 sin α −                                G(k) sin α +       . (6)                      Figure 4 evaluates this projector invariant using the pole
+                                                          2              4D0
+                                                                                                          formula below after numerical spectral-isolation screen-
+                                                                                                          ing; representative values are independently checked with
+                                                                                                          the biorthogonal Fukui–Hatsugai–Suzuki algorithm [36].
+                                                                                                                                                                                    4
+
+                            (a) mixed-band Chern                                                                         (b) single-band Chern
+                             {0, 1}     {0, 2}      {1, 2}     {0, 1, 2}                                                             {0}      {1}     {2}
+                                         ̂                                                                                             ̂
+                               K = λρ0 G(0),    shown in legend                                                              K = λρ0 G(0),  shown in legend
+
+              d0 = 1, K = 10               d0 = 1, K = 20              d0 = 1, K = 30                        d0 = 1, K = 10             d0 = 1, K = 20             d0 = 1, K = 30
+     2                                                                                               2
+
+     0                                                                                               0
+
+    −2                                                                                              −2
+
+              d0 = 2, K = 10               d0 = 2, K = 20              d0 = 2, K = 30                        d0 = 2, K = 10             d0 = 2, K = 20             d0 = 2, K = 30
+     2                                                                                               2
+C
+
+
+
+
+                                                                                                C
+     0                                                                                               0
+
+    −2                                                                                              −2
+
+              d0 = 3, K = 10               d0 = 3, K = 20              d0 = 3, K = 30                        d0 = 3, K = 10             d0 = 3, K = 20             d0 = 3, K = 30
+     2                                                                                               2
+
+     0                                                                                               0
+
+    −2                                                                                              −2
+         0           0.5          1    0         0.5         1     0        0.5             1            0        0.5           1   0         0.5         1    0        0.5         1
+                                                α/π                                                                                          α/π
+                           Gaps: invalid or unresolved target projector.                                                Gaps: invalid or unresolved target projector.
+
+
+FIG. 4. Chern platforms. (a,b) Mixed- and single-band results for v = 3, ω = 0, obtained from the pole formula after
+numerical radial spectral-isolation screening. Gaps in a curve mark an undeﬁned or numerically unresolved target projector,
+including ﬁnite-wavenumber exceptional-point collisions and the singular phase-lag endpoints; they are not zero Chern values.
+Representative values are independently checked by the Fukui discretization.
+
+   It remains to identify M and the integer analytically.                                       has a unique direction-independent asymptotic spectral
+Parameterize the wave vector and deﬁne its induced ac-                                          value at the compactiﬁcation pole. Together with the
+tion on density–polarization space by                                                           direction-independent polar projectors at k = 0, this
+                                                                                              identiﬁes every angular direction at the two poles and
+                                         cos ϕ − sin ϕ
+  k = k(cos ϕ, sin ϕ),    S(ϕ) = 1 ⊕                     .                                      compactiﬁes the wave-number plane as
+                                         sin ϕ cos ϕ
+                                                       (11)                                                                M = R2 ∪ {∞} ≃ S 2 .                                 (15)
+With B(k) = M (k, 0), rotational covariance gives both
+                                                                                                Order the eigenvalues by increasing imaginary part,
+the similarity relation and directional spectral isotropy,
+                                                                                                Im σ1 ≤ Im σ2 ≤ Im σ3 . For the ﬁrst branch in this
+                                M (k, ϕ) = S(ϕ)B(k)S −1 (ϕ),                                    ordering, let P (k) be the target projector of B(k) and
+                                                                                   (12)
+              det[M (k, ϕ) − σI] = det[B(k) − σI].                                              deﬁne the radial-pole coeﬃcients and spin labels
+Thus every continuously labelled branch may be chosen                                                                         λρ0 G0
+                                                                                                                  b0 = −ω +          sin α,
+radial, σn (k, ϕ) = σn (k), up to branch labels at degen-                                                                         2                                             (16)
+eracies. Deﬁne the angular generator J and its density                                                            s0 = − sgn b0 ,    s∞ = − sgn β.
+and circular-polarization eigenvectors by                                                       The eigenvectors at the compactiﬁed wave-number poles
+             −1
+J = iS            ∂ϕ S,         eρ = (1, 0, 0) ,   T
+                                                                 u± = (0, 1, ±i) ,      T       are therefore us0 and us∞ . For ω = 0 and 0 < α < π, the
+                           Jeρ = 0,           Ju± = ±u± .                                       microscopic phase lag enforces their pole-to-pole twist
+                                                                                                through
+                                                  (13)
+ At large k, label the spin sectors by s = 0, ±1. Let                                                         D0 b0 = −(λρ0 G0 )2 sin2 α < 0,
+                                                                                                                                                    (17)
+σs and Ps denote the associated eigenvalue and Riesz                                                           b0 β < 0,     s∞ = −s0 .
+projector, and set β = v 2 /(4D0 ).                                                             Thus microscopic nonreciprocity acts directly on the
+                B(k)                              σs (k, ϕ)                                     eigenvector bundle by forcing a spin reversal between the
+                       −→ iβJ,                              −→ iβs,                             two compactiﬁed wave-number poles. Finally, rotational
+                  k2                                 k2                            (14)
+             Ps (k, ϕ) −→ Ps (∞).                                                               covariance reduces the Chern integral to the diﬀerence of
+                                                                                                the polar spin weights,
+ The branch asymptotics and projector limits are uni-                                                                                               ∞
+form in ϕ. The unscaled oscillatory eigenvalues are un-                                             C ≡ C(PI ) = − [Tr(JP (k))]0 = −(s∞ − s0 ),
+                                                                                                                                                                                (18)
+bounded along the imaginary direction, but each branch                                                            |C| = 2,
+                                                                                                                                                                                                              5
+
+
+                                                                       Dashed line: pattern onset at α = π/2; isolated markers use the critical-point rule
+
+                                             (a) Boundary-flow recurrence                                                                       (b) Selected-signal chirality
+                                       1.0
+      Active-block fraction ΞPersist
+
+
+                                       0.8
+
+
+
+
+                                                                                                                     Mean chirality ΞSign
+                                       0.6
+
+                                       0.4
+
+                                       0.2
+
+                                       0.0
+                                             0.0        0.2      0.4          0.6         0.8         1.0                                       0.0      0.2           0.4          0.6      0.8        1.0
+                                                                 Phase lag α/π                                                                                       Phase lag α/π
+
+                                                                             Circle                                           Square, four defects (H = 1)
+                                                                             Circle, one defect (H = 3)                       Full requested window
+                                                                             Square                                           Shorter available window
+
+
+FIG. 5. Single-realization, terminal-window boundary-ﬂow diagnostics across the phase-lag sweep. (a) The recurrent active-
+block fraction remains high through most of the open interval. (b) Mean chirality is stable on a regular circle below pattern
+onset but is strongly reduced by corners or geometric defects; after the interior pattern forms, all tested geometries retain
+near-unit mean chirality of the selected boundary population. The isolated α = π/2 markers use the critical-point selection
+rule and remain defect-sensitive. Filled markers reach the requested ten-circuit window, whereas open markers use shorter
+records. The singular phase-lag endpoints α = 0, π are excluded from these single-chirality measures; deﬁnitions, coverage
+checks, and numerical limitations are given in the Supplemental Material [35].
+
+up to the orientation convention, provided the target pro-                                                                                                α = π/2, v = 3, ω = 0, K = 20.75, d0 = 1
+jector is isolated for every ﬁnite k. Opposite pole spins                                                                                                  Left edge         Right edge   Other modes
+alone do not establish this condition: ﬁnite-k exceptional                                                                            40
+points exclude portions of the open phase-lag interval.
+Figure 4 marks invalid or unresolved samples as unavail-
+able; at α = 0, π, the closure itself is singular because                                                                             20
+D0 = 0 [35].
+                                                                                                                                      10
+   Boundary spectral ﬂow.— Fixing the tangential
+                                                                                                                  Im σ
+
+
+
+
+wavenumber ky , we construct a strip operator from the                                                                                      0
+Fourier blocks of M (kx , ky ); its spectrum contains bulk-                                                                   −10
+like and boundary-localized modes. For an edge branch
+                                                                                                                              −20
+                                                   σ(ky ) = γ(ky ) + iΩ(ky ),                       (19)
+the oscillatory phase gives group velocity
+                                                                                                                              −40
+                                                                                                                                −50                            −25                 0              25          50
+                                                      vg = −∂ky Ω(ky ).                             (20)                                                                          ky
+In Fig. 6, the left-edge branch has vg < 0, whereas the                                                                                                         c = ±10 : (nL , nR ) = (2, − 2)
+right-edge branch has vg > 0. Under the strip orienta-
+tion used here, mapping the two edges onto a closed two-                                                        FIG. 6. Finite-strip spectrum at α = π2 , with v = 3, ω =
+dimensional collision boundary predicts counterclockwise                                                        0, K = 20.75, and d0 = 1 matched to the circular-particle
+circulation, consistent with the particle simulations. This                                                     runs. The empirical levels Im σ = ±10 lie in bulk line gaps at
+comparison is made at the level of linear selection and                                                         this parameter value. The multi-α comparison and ﬁnite-grid
+nonlinear saturation: the topology belongs to the spec-                                                         diagnostics are given in the Supplemental Material.
+tral projector, while the particle pattern is the ﬁnite-                                                        Discussion.— This work establishes a direct link between
+amplitude carrier of the selected edge branch.                                                                  microscopic nonreciprocity and topological transport in
+                                                                                                                active matter. Within the spectrally isolated regimes of
+                                                                                                                the continuum closure, the phase lag produces a spin
+                                                                                                                twist between the compactiﬁed wave-number poles with
+                                                               6
+
+C = ±2; the onset of pattern formation does not create
+this Chern phase. Instead, it controls the nonlinear sta-
+bility of its particle-level realization. Before pattern on-
+set, a regular convex boundary supports long-lived chiral-
+ity, but strong geometric scattering can reverse or cancel
+it. Once the ﬁnite-wavenumber vortex lattice forms, the
+interior pattern acts as a particle reservoir that replen-
+ishes defect-scattered edge carriers, producing near-unit
+mean chirality of the selected boundary population for
+all tested geometries. The singular phase-lag endpoints,
+where D0 = 0, remain outside this continuum classiﬁca-
+tion: α = 0 supports geometry-dependent unprotected
+motion, whereas α = π supports two counterpropagating
+boundary-lattice streams rather than a protected unidi-
+rectional mode. Thus topology selects the chiral bound-
+ary branch, while nonlinear pattern formation supplies
+its strong defect tolerance, suggesting a broader bulk–
+boundary principle for boundary-driven self-organization
+in active systems.
+   We thank Profs. Hong Qian and Leihan Tang for guid-
+ance and valuable suggestions, and Yichen Lu for help-
+ful discussions and assistance. This work was supported
+in part by the National Natural Science Foundation of
+China under Grants No. 12375031 and No. 11875135.
+                                                                                                                                7
+
+                                                                        and robust one-way sound transport, Nature Physics 12,
+                                                                        1124 (2016).
+  ∗
+                                                                   [18] C. L. Kane and T. C. Lubensky, Topological boundary
+     aeroplanck@gmail.com                                               modes in isostatic lattices, Nature Physics 10, 39 (2014).
+  †
+     zgzheng@hqu.edu.cn                                            [19] R. Süsstrunk and S. D. Huber, Observation of phononic
+ [1] S. Ramaswamy, The mechanics and statistics of active               helical edge states in a mechanical topological insulator,
+     matter, Annual Review of Condensed Matter Physics 1,               Science 349, 47 (2015).
+     323 (2010).                                                   [20] P. Delplace, J. B. Marston, and A. Venaille, Topological
+ [2] M. C. Marchetti, J. F. Joanny, S. Ramaswamy, et al.,               origin of equatorial waves, Science 358, 1075 (2017).
+     Hydrodynamics of soft active matter, Reviews of Modern        [21] C. Tauber, P. Delplace, and A. Venaille, A bulk-interface
+     Physics 85, 1143 (2013).                                           correspondence for equatorial waves, Journal of Fluid
+ [3] T. Vicsek, A. Czirók, E. Ben-Jacob, I. Cohen, and                  Mechanics 868, R2 (2019).
+     O. Shochet, Novel type of phase transition in a system        [22] S. Yao and Z. Wang, Edge states and topological invari-
+     of self-driven particles, Physical Review Letters 75, 1226         ants of non-hermitian systems, Physical Review Letters
+     (1995).                                                            121, 086803 (2018).
+ [4] J. Toner and Y. Tu, Long-range order in a two-                [23] F. K. Kunst, E. Edvardsson, J. C. Budich, and E. J.
+     dimensional dynamical XY model: How birds ﬂy to-                   Bergholtz, Biorthogonal bulk-boundary correspondence
+     gether, Physical Review Letters 75, 4326 (1995).                   in non-hermitian systems, Physical Review Letters 121,
+ [5] Y. Kuramoto, Chemical Oscillations, Waves, and Turbu-              026808 (2018).
+     lence (Springer, Berlin, 1984).                               [24] K. Sone and Y. Ashida, Anomalous topological active
+ [6] S. H. Strogatz, From Kuramoto to Crawford: Exploring               matter, Physical Review Letters 123, 205502 (2019).
+     the onset of synchronization in populations of coupled os-    [25] E. Tang, J. Agudo-Canalejo, and R. Golestanian, Topol-
+     cillators, Physica D: Nonlinear Phenomena 143, 1 (2000).           ogy protects chiral edge currents in stochastic systems,
+ [7] J. A. Acebrón, L. L. Bonilla, C. J. Pérez Vicente, F. Ri-          Physical Review X 11, 031015 (2021).
+     tort, and R. Spigler, The Kuramoto model: A simple            [26] S. Shankar, A. Souslov, M. J. Bowick, M. C. Marchetti,
+     paradigm for synchronization phenomena, Reviews of                 and V. Vitelli, Topological active matter, Nature Reviews
+     Modern Physics 77, 137 (2005).                                     Physics 4, 380 (2022).
+ [8] H. Sakaguchi, S. Shinomoto, and Y. Kuramoto, Mu-              [27] Y. Yao, L. Kleinman, A. H. MacDonald, J. Sinova,
+     tual entrainment in oscillator lattices with nonvariational        T. Jungwirth, D.-S. Wang, E. Wang, and Q. Niu, First
+     type interaction, Progress of Theoretical Physics 79, 1069         principles calculation of anomalous hall conductivity in
+     (1988).                                                            ferromagnetic bcc fe, Physical Review Letters 92, 037204
+ [9] P. Degond, G. Dimarco, and T. B. N. Mac, Hydro-                    (2004).
+     dynamics of the Kuramoto–Vicsek model of rotating             [28] Z. Qiao, S. A. Yang, W. Feng, W.-K. Tse, J. Ding, Y. Yao,
+     self-propelled particles, arXiv preprint arXiv:1306.3372           J. Wang, and Q. Niu, Quantum anomalous hall eﬀect
+     10.48550/arXiv.1306.3372        (2013),    arXiv:1306.3372         in graphene from rashba and exchange eﬀects, Physical
+     [math-ph].                                                         Review B 82, 161414(R) (2010).
+[10] H. Chaté, K. H. Nagai, Y. Sumino, R. Montagne, and            [29] H. Wioland, F. G. Woodhouse, J. Dunkel, J. O. Kessler,
+     I. S. Aranson, Collective motion of self-propelled parti-          and R. E. Goldstein, Conﬁnement stabilizes a bacterial
+     cles with memory, Physical Review Letters 114, 168001              suspension into a spiral vortex, Physical Review Letters
+     (2015).                                                            110, 268102 (2013).
+[11] B. Liebchen and D. Levis, Collective behavior of chiral       [30] E. Lushi, H. Wioland, and R. E. Goldstein, Fluid ﬂows
+     active matter: Pattern formation and enhanced ﬂocking,             created by swimming bacteria drive self-organization
+     Physical Review Letters 119, 058002 (2017).                        in conﬁned suspensions, Proceedings of the National
+[12] D. J. Thouless, M. Kohmoto, M. P. Nightingale, and                 Academy of Sciences 111, 9733 (2014).
+     M. den Nijs, Quantized hall conductance in a two-             [31] H. P. Zhang, H. Li, H. Chaté, M. Sano, and X.-q. Shi, Ro-
+     dimensional periodic potential, Physical Review Letters            bust edge ﬂows in swarming bacterial colonies, Physical
+     49, 405 (1982).                                                    Review X 14, 041006 (2024).
+[13] Y. Hatsugai, Chern number and edge states in the integer      [32] Y.-C. Lu, Y.-S. Guo, Y.-Y. Zhang, T. Zhu, and Z.-G.
+     quantum hall eﬀect, Physical Review Letters 71, 3697               Zheng, Swarming lattice in frustrated vicsek-kuramoto
+     (1993).                                                            systems, Chinese Physics Letters 43, 060002 (2026).
+[14] F. D. M. Haldane and S. Raghu, Possible realization of        [33] Y. Lu, T. Zhu, Y. Guo, Y. Li, and Z. Zheng,
+     directional optical waveguides in photonic crystals with           Orientation-modulated hyperuniformity in frustrated
+     broken time-reversal symmetry, Physical Review Letters             vicsek-kuramoto systems, Entropy 28, 126 (2026).
+     100, 013904 (2008).                                           [34] A. Souslov, K. Dasbiswas, M. Fruchart, S. Vaikun-
+[15] Z. Wang, Y. D. Chong, J. D. Joannopoulos, and                      tanathan, and V. Vitelli, Topological waves in ﬂuids
+     M. Soljačić, Reﬂection-free one-way edge modes in a                with odd viscosity, Physical Review Letters 122, 128001
+     gyromagnetic photonic crystal, Physical Review Letters             (2019).
+     100, 013905 (2008).                                           [35] T. Zhu, Supplemental material for “microscopic
+[16] Z. Yang, F. Gao, X. Shi, X. Lin, Z. Gao, Y. Chong, and             nonreciprocity-tuned topological transitions and bound-
+     B. Zhang, Topological acoustics, Physical Review Letters           ary ﬂows in active matter” (2026).
+     114, 114301 (2015).                                           [36] T. Fukui, Y. Hatsugai, and H. Suzuki, Chern numbers in
+[17] C. He, X. Ni, H. Ge, X.-C. Sun, Y.-B. Chen, M.-H. Lu,              discretized brillouin zone: Eﬃcient method of computing
+     X.-P. Liu, and Y.-F. Chen, Acoustic topological insulator          (spin) hall conductances, Journal of the Physical Society
+                                                                        of Japan 74, 1674 (2005).
+

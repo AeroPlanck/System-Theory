@@ -1,0 +1,25 @@
+{
+  "diameters": [
+    3.3
+  ],
+  "couplings": [
+    20.75
+  ],
+  "m_values": [
+    8,
+    9,
+    10,
+    11
+  ],
+  "resolutions": [
+    24,
+    32
+  ],
+  "quadrature_factor": 8,
+  "speed": 3.0,
+  "interaction_radius": 1.0,
+  "omega": 0.0,
+  "alpha_over_pi": 0.5,
+  "spectral_cutoff": 300.0,
+  "converged_match_tolerance": 0.025
+}

@@ -1,0 +1,360 @@
+{
+  "documents": [
+    {
+      "file": "Methods Appendix.pdf",
+      "page_count": 39,
+      "pages": [
+        {
+          "page": 1,
+          "image_objects": 0,
+          "text_characters": 2057
+        },
+        {
+          "page": 2,
+          "image_objects": 0,
+          "text_characters": 2173
+        },
+        {
+          "page": 3,
+          "image_objects": 0,
+          "text_characters": 1416
+        },
+        {
+          "page": 4,
+          "image_objects": 0,
+          "text_characters": 1287
+        },
+        {
+          "page": 5,
+          "image_objects": 0,
+          "text_characters": 1544
+        },
+        {
+          "page": 6,
+          "image_objects": 0,
+          "text_characters": 2325
+        },
+        {
+          "page": 7,
+          "image_objects": 0,
+          "text_characters": 3232
+        },
+        {
+          "page": 8,
+          "image_objects": 0,
+          "text_characters": 2381
+        },
+        {
+          "page": 9,
+          "image_objects": 0,
+          "text_characters": 1004
+        },
+        {
+          "page": 10,
+          "image_objects": 0,
+          "text_characters": 1849
+        },
+        {
+          "page": 11,
+          "image_objects": 0,
+          "text_characters": 2125
+        },
+        {
+          "page": 12,
+          "image_objects": 0,
+          "text_characters": 430
+        },
+        {
+          "page": 13,
+          "image_objects": 0,
+          "text_characters": 1699
+        },
+        {
+          "page": 14,
+          "image_objects": 0,
+          "text_characters": 2637
+        },
+        {
+          "page": 15,
+          "image_objects": 0,
+          "text_characters": 1673
+        },
+        {
+          "page": 16,
+          "image_objects": 0,
+          "text_characters": 1680
+        },
+        {
+          "page": 17,
+          "image_objects": 0,
+          "text_characters": 2941
+        },
+        {
+          "page": 18,
+          "image_objects": 0,
+          "text_characters": 2286
+        },
+        {
+          "page": 19,
+          "image_objects": 0,
+          "text_characters": 723
+        },
+        {
+          "page": 20,
+          "image_objects": 0,
+          "text_characters": 725
+        },
+        {
+          "page": 21,
+          "image_objects": 0,
+          "text_characters": 4139
+        },
+        {
+          "page": 22,
+          "image_objects": 0,
+          "text_characters": 3484
+        },
+        {
+          "page": 23,
+          "image_objects": 0,
+          "text_characters": 1972
+        },
+        {
+          "page": 24,
+          "image_objects": 0,
+          "text_characters": 2449
+        },
+        {
+          "page": 25,
+          "image_objects": 0,
+          "text_characters": 2240
+        },
+        {
+          "page": 26,
+          "image_objects": 0,
+          "text_characters": 1759
+        },
+        {
+          "page": 27,
+          "image_objects": 0,
+          "text_characters": 2160
+        },
+        {
+          "page": 28,
+          "image_objects": 0,
+          "text_characters": 2532
+        },
+        {
+          "page": 29,
+          "image_objects": 0,
+          "text_characters": 1665
+        },
+        {
+          "page": 30,
+          "image_objects": 0,
+          "text_characters": 2269
+        },
+        {
+          "page": 31,
+          "image_objects": 0,
+          "text_characters": 2072
+        },
+        {
+          "page": 32,
+          "image_objects": 0,
+          "text_characters": 1328
+        },
+        {
+          "page": 33,
+          "image_objects": 0,
+          "text_characters": 2474
+        },
+        {
+          "page": 34,
+          "image_objects": 0,
+          "text_characters": 1855
+        },
+        {
+          "page": 35,
+          "image_objects": 0,
+          "text_characters": 2518
+        },
+        {
+          "page": 36,
+          "image_objects": 0,
+          "text_characters": 2687
+        },
+        {
+          "page": 37,
+          "image_objects": 0,
+          "text_characters": 2950
+        },
+        {
+          "page": 38,
+          "image_objects": 0,
+          "text_characters": 1126
+        },
+        {
+          "page": 39,
+          "image_objects": 0,
+          "text_characters": 2792
+        }
+      ],
+      "pages_with_figure_text": [
+        9,
+        10,
+        12,
+        13,
+        15,
+        16,
+        18,
+        19,
+        20,
+        23,
+        24,
+        25,
+        38
+      ]
+    },
+    {
+      "file": "PRL.pdf",
+      "page_count": 7,
+      "pages": [
+        {
+          "page": 1,
+          "image_objects": 0,
+          "text_characters": 5214
+        },
+        {
+          "page": 2,
+          "image_objects": 1,
+          "text_characters": 4619
+        },
+        {
+          "page": 3,
+          "image_objects": 0,
+          "text_characters": 2869
+        },
+        {
+          "page": 4,
+          "image_objects": 0,
+          "text_characters": 3209
+        },
+        {
+          "page": 5,
+          "image_objects": 0,
+          "text_characters": 3127
+        },
+        {
+          "page": 6,
+          "image_objects": 0,
+          "text_characters": 1306
+        },
+        {
+          "page": 7,
+          "image_objects": 0,
+          "text_characters": 5875
+        }
+      ],
+      "pages_with_figure_text": [
+        2,
+        3,
+        4,
+        5
+      ]
+    }
+  ],
+  "vector_assets": [
+    {
+      "file": "Boundary_Flow_Diagnostics_Vector.pdf",
+      "width_inches": 6.5,
+      "height_inches": 4.800000000000001,
+      "raster_objects": 0,
+      "vector_path_operations": 615
+    },
+    {
+      "file": "Boundary_Flow_Stability_Vector.pdf",
+      "width_inches": 6.5,
+      "height_inches": 3.25,
+      "raster_objects": 0,
+      "vector_path_operations": 378
+    },
+    {
+      "file": "Boundary_Projection_And_W_Filter_Schematic.pdf",
+      "width_inches": 6.5,
+      "height_inches": 6.9,
+      "raster_objects": 0,
+      "vector_path_operations": 238
+    },
+    {
+      "file": "Circular_Boundary_Terminal_States_Vector.pdf",
+      "width_inches": 6.5,
+      "height_inches": 2.4000000000000004,
+      "raster_objects": 0,
+      "vector_path_operations": 225988
+    },
+    {
+      "file": "Long_Time_Stability_Measures_Schematic.pdf",
+      "width_inches": 6.5,
+      "height_inches": 7.449999999999999,
+      "raster_objects": 0,
+      "vector_path_operations": 297
+    },
+    {
+      "file": "mixed_v_3_omega_0_gap_screened.pdf",
+      "width_inches": 3.43,
+      "height_inches": 3.36,
+      "raster_objects": 0,
+      "vector_path_operations": 1434
+    },
+    {
+      "file": "plot_1d_dispersion_alpha_0.40pi.pdf",
+      "width_inches": 1.7000000000000002,
+      "height_inches": 2.72,
+      "raster_objects": 0,
+      "vector_path_operations": 6075
+    },
+    {
+      "file": "plot_1d_dispersion_alpha_0.60pi.pdf",
+      "width_inches": 1.7000000000000002,
+      "height_inches": 2.72,
+      "raster_objects": 0,
+      "vector_path_operations": 6075
+    },
+    {
+      "file": "Relay_Signal_Construction_Schematic.pdf",
+      "width_inches": 6.5,
+      "height_inches": 7.3500000000000005,
+      "raster_objects": 0,
+      "vector_path_operations": 246
+    },
+    {
+      "file": "single_v_3_omega_0_gap_screened.pdf",
+      "width_inches": 3.43,
+      "height_inches": 3.36,
+      "raster_objects": 0,
+      "vector_path_operations": 1125
+    },
+    {
+      "file": "Square_Boundary_Terminal_States_Vector.pdf",
+      "width_inches": 6.5,
+      "height_inches": 2.4000000000000004,
+      "raster_objects": 0,
+      "vector_path_operations": 225596
+    },
+    {
+      "file": "strip_circle_matched_alpha_050.pdf",
+      "width_inches": 3.43,
+      "height_inches": 2.94,
+      "raster_objects": 0,
+      "vector_path_operations": 112
+    },
+    {
+      "file": "strip_circle_matched_alpha_sweep_publication.pdf",
+      "width_inches": 6.5,
+      "height_inches": 7.0,
+      "raster_objects": 0,
+      "vector_path_operations": 389
+    }
+  ]
+}

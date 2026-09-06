@@ -1,0 +1,54 @@
+{
+  "available": true,
+  "inference_valid": false,
+  "reason": "Only three common seeds per K x D cell were run. Coefficients are descriptive; no p-values or bootstrap confidence intervals are reported.",
+  "descriptive_model": "a_eff = intercept + slope / K + diameter fixed effect",
+  "intercept": 1.0082078110109,
+  "slope": 0.4844454824905884,
+  "diameter_fixed_effect_offset": -0.006287182059099441,
+  "reference_diameter": 3.3,
+  "constant_K_model_SSE": 0.010498348291967666,
+  "inverse_K_model_SSE": 0.004498762688262362,
+  "SSE_reduction": 0.0059995856037053045,
+  "k_values": [
+    8.0,
+    12.0,
+    20.75,
+    40.0
+  ],
+  "formed_sample_size": 17,
+  "per_K_descriptive_ranges": {
+    "8": {
+      "n_formed": 4,
+      "arc_spacing_median": 1.0594766354249723,
+      "arc_spacing_min": 1.0465747484926606,
+      "arc_spacing_max": 1.0620653703698264,
+      "actual_chord_median": 1.038138573072476,
+      "effective_q_median": 5.930467347032803
+    },
+    "12": {
+      "n_formed": 4,
+      "arc_spacing_median": 1.0693647878010855,
+      "arc_spacing_min": 1.0561431303542665,
+      "arc_spacing_max": 1.0825165973126396,
+      "actual_chord_median": 1.0532907257363004,
+      "effective_q_median": 5.876463428723936
+    },
+    "20.75": {
+      "n_formed": 3,
+      "arc_spacing_median": 1.0087052212973275,
+      "arc_spacing_min": 1.0070477251453864,
+      "arc_spacing_max": 1.0095747999982916,
+      "actual_chord_median": 0.9930437991263888,
+      "effective_q_median": 6.228960824747772
+    },
+    "40": {
+      "n_formed": 6,
+      "arc_spacing_median": 1.0185511295231984,
+      "arc_spacing_min": 1.0158399139870942,
+      "arc_spacing_max": 1.0214337314437192,
+      "actual_chord_median": 1.0060839970459612,
+      "effective_q_median": 6.168780696611961
+    }
+  }
+}

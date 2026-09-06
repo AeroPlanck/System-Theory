@@ -1,0 +1,54 @@
+{
+  "seeds": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+  ],
+  "autocorrelation_peak_quality_gate": {
+    "minimum_mean_peak_height": 0.3,
+    "maximum_temporal_coefficient_of_variation": 0.1
+  },
+  "common_vertical_axis_span_d0": 0.5,
+  "halfpi_resolved_seeds": [
+    1,
+    2,
+    3,
+    4,
+    6,
+    8,
+    9,
+    10
+  ],
+  "halfpi_unresolved_seeds": [
+    5,
+    7
+  ],
+  "halfpi_mean": 1.028473794824372,
+  "halfpi_seed_min": 1.0267958346102155,
+  "halfpi_seed_max": 1.0301615409615137,
+  "alpha06_mean": 1.3567641409002742,
+  "alpha06_seed_min": 1.3048905315499737,
+  "alpha06_seed_max": 1.4101957158665497,
+  "alpha06_prediction": 1.4250955266116963,
+  "alpha06_relative_difference": -0.04794863532684479,
+  "pi_unresolved_seed_streams": [
+    "seed 4 CW"
+  ],
+  "pi_mean": 1.3491007892764033,
+  "pi_seed_stream_min": 1.2667419792536192,
+  "pi_seed_stream_max": 1.5098622271432316,
+  "pi_left_limit": 1.2234515465879678,
+  "pi_relative_difference": 0.10270062843015992,
+  "pi_geometry_conversion_factor": 1.1547005383792517,
+  "pi_geometry_corrected_left_limit": 1.4127201595260546,
+  "pi_geometry_corrected_relative_difference": -0.04503324301041656,
+  "boundary_spacing_method": "first nonzero circular density-autocorrelation peak",
+  "cluster_count_statistics_used": false
+}

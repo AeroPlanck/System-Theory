@@ -1,0 +1,39 @@
+{
+  "experiment": {
+    "K_values": [
+      8.0,
+      12.0,
+      20.75,
+      40.0
+    ],
+    "diameters": [
+      3.3,
+      4.58
+    ],
+    "seeds": [
+      9,
+      10,
+      11
+    ],
+    "alpha_over_pi": 0.5,
+    "N": 2000,
+    "d0": 1.0,
+    "v": 3.0,
+    "dt": 0.005,
+    "iterations": 50000,
+    "physical_time": 250.0,
+    "shotsnaps": 500
+  },
+  "strict_lattice_criterion": {
+    "terminal_fourier_amplitude_min": 0.9,
+    "last_20_median_amplitude_min": 0.9,
+    "last_20_mode_stability_min": 0.9,
+    "shell_fraction_min": 0.7,
+    "count_agreement": "Fourier = angular peaks = DBSCAN"
+  },
+  "references_sha256": {
+    "D:\\PrivatePythonProject\\Math\\Lattice\\Dispersion.py": "a1fc299f4ab13f9997bdf0eba993c6ba12054500134a8617180f572f3732b89d",
+    "D:\\LaTex\\Boundary Flow\\PRL.tex": "a7020ab8327bdb0045f8d4a5147fc2a49fec2732060b51aeea3de379c9873937",
+    "D:\\LaTex\\Boundary Flow\\Methods Appendix.tex": "63b20123eeda9a1de865a3f766d3a7973f0d7c3113e1e4e9eb3a960cdf14784f"
+  }
+}

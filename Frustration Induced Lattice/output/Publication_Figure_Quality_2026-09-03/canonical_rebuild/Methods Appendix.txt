@@ -1,0 +1,2146 @@
+    Supplemental Material for “Microscopic Nonreciprocity-Tuned
+    Topological Transitions and Boundary Flows in Active Matter”
+    Methods Appendix: Continuum Reduction, Linear Spectrum, and Boundary-Spectrum
+                                     Topology
+
+
+
+
+1     Purpose and Scope
+
+This appendix gives a self-contained derivation of the continuum and linear-spectral framework
+used for the frustrated Vicsek–Kuramoto particle model. The aim is to connect the microscopic
+particle dynamics to: (i) a kinetic equation for the one-particle distribution, (ii) a closed density–
+polarization hydrodynamic model, (iii) the non-Hermitian linear dispersion matrix that selects
+pattern-forming wavelengths, and (iv) the Chern-number and strip-spectral-ﬂow algorithms used
+to diagnose topological boundary transport.
+The derivation adopts a low-angular-harmonic closure ansatz for a linear and weakly nonlinear
+framework. The Chern number and strip spectral ﬂow are statements about the linearized oper-
+ator and its spectral projectors. The nonlinear particle simulations are then interpreted through
+a saturation ansatz: linear growth selects the relevant wavelength, branch, and topology, while
+nonlinear terms arrest the growth and organize the ﬁnite-amplitude particle state.
+The closed density–polarization theory derived below requires the adiabatically eliminated second
+harmonic to have a nonzero algebraic denominator. In the homogeneous state this condition is
+D0 6= 0. Since the main text sets ω = 0, the phase-lag endpoints α = 0 and α = π have D0 = 0 and
+are excluded from the closed dispersion matrix and all subsequent spectral-projector and Chern-
+number constructions. The microscopic particle dynamics remain meaningful at these phase-lag
+endpoints, but the present continuum closure does not assign them a spectrum or a Chern number.
+
+
+2     Kinetic Description
+
+2.1    One-Particle Distribution
+
+Let f (x, θ, t) be the one-particle distribution in position and heading angle. Deﬁne
+
+                            u(x, θ, t) = v(cos θ, sin θ),     g(x, θ, t) = θ̇.                   (2.1)
+
+The kinetic continuity equation is
+
+                                     ∂t f + ∇x · (f u) + ∂θ (f g) = 0.                           (2.2)
+
+
+
+                                                    1
+We expand the angular dependence as
+                                    ∞
+                                    X                                       Z 2π
+                                                                        1
+                    f (x, θ, t) =          fm (x, t)e   imθ
+                                                              ,   fm =             f e−imθ dθ.      (2.3)
+                                    m=−∞
+                                                                       2π    0
+
+Here m ∈ Z is the angular-harmonic index. In the spatial Fourier analysis below, bold k denotes
+the wave vector and k = |k| its magnitude.
+For a nonlocal interaction kernel G, deﬁne
+                                  Z
+                        (Gh)(x) = d2 x′ G(|x′ − x|) h(x′ ),             Fm := Gfm .                 (2.4)
+
+
+2.2   Relation Between Particle and Continuum Couplings
+
+The particle simulations use the neighborhood-averaged coupling
+                                     K X
+                         θ̇i = ωi +        Aij [sin(θj − θi + α) − sin α],                          (2.5)
+                                    |Ni |
+                                              j∈Ni
+
+where K is the numerical coupling strength. If the interaction disk has radius d0 , the typical
+number of particles sampled by the disk is
+
+                                                 N ′ ≃ ρ0 πd20                                      (2.6)
+
+for a homogeneous state with particle density ρ0 .
+For the binary metric neighborhood used here, Aij = 1 for j ∈ Ni . We use the unnormalized
+disk kernel G(r) = 1r≤d0 , so that G(0) b     = πd20 . In the homogeneous-reference mean-ﬁeld setting,
+replacing the discrete neighborhood average by a continuous average means
+              1 X
+                        [sin(θj − θi + α) − sin α]
+             |Ni |
+                   j∈Ni
+                             Z                    Z 2π
+                         1                                                       f (x′ , θ′ , t) ′
+                −→              d2 x′ G(|x′ − x|)      [sin(θ′ − θ + α) − sin α]                dθ . (2.7)
+                      b
+                      G(0)                         0                                 ρ0
+
+        b
+Thus 1/G(0)   supplies the spatial area average, while f /ρ0 accounts for the number-density con-
+vention used for f . Absorbing these normalization factors into the coeﬃcient of the unnormalized
+convolution gives
+                                 K         K      K             b
+                          λ=           =        ≃ ′ ,       λρ0 G(0) = K.                   (2.8)
+                                 b
+                              ρ0 G(0)
+                                              2
+                                         ρ0 πd0   N
+This makes explicit the K–λ convention of the main text: K remains the neighborhood-averaged
+particle coupling, whereas λ multiplies the unnormalized number-density convolution. In particular,
+at ω = 0 the homogeneous closure denominator below is D0 = −2K sin α.
+This convention freezes the neighborhood population at its homogeneous reference value N ′ ≃
+   b
+ρ0 G(0). Retaining the instantaneous local population instead would give the coeﬃcient K/(Gρ)(x, t)
+wherever that population is nonzero. The two prescriptions agree upon linearization about ρ = ρ0 ,
+p = 0 in a translation-invariant bulk, but need not agree for ﬁnite-amplitude density variations or
+a neighborhood truncated by a boundary. The closed equations below use the stated homogeneous-
+reference convention.
+
+                                                          2
+2.3    Mode Equations
+
+The kinetic equation contains self-propulsion, intrinsic rotation, and alignment contributions. The
+propulsion and rotation parts give
+                                   v
+                     ∂t fm |pro = − [∂x1 (fm+1 + fm−1 ) + i∂x2 (fm+1 − fm−1 )] ,                              (2.9)
+                                   2
+                     ∂t fm |rot = −imωfm .                                                                   (2.10)
+
+The alignment drift is written as
+
+                                              g(x, θ, t) = ω + gali (x, θ, t),                               (2.11)
+
+with                      Z                          Z 2π
+                               2 ′        ′
+               gali = λ       d x G(|x − x|)                [sin(θ′ − θ + α) − sin α]f (x′ , θ′ , t) dθ′ .   (2.12)
+                                                      0
+Projecting onto angular harmonics gives
+                                                            
+                ∂t fm |ali = −mλπ eiα F−1 fm+1 − e−iα F1 fm−1 + 2πimλ sin α F0 fm .                          (2.13)
+
+Thus
+                           v
+                 ∂t fm = − [∂x1 (fm+1 + fm−1 ) + i∂x2 (fm+1 − fm−1 )] − imωfm
+                           2                             
+                         − mλπ eiα F−1 fm+1 − e−iα F1 fm−1 + 2πimλ sin α F0 fm .                             (2.14)
+
+
+3      Hydrodynamic Closure
+
+3.1    Macroscopic Fields
+
+The density and polarization are
+                                                          Z 2π
+                                              ρ(x, t) =             f dθ = 2πf0 ,                             (3.1)
+                                                            0
+                                     Z 2π
+                  p = (px , py ) =             f (cos θ, sin θ) dθ = π(f1 + f−1 , i(f1 − f−1 )).              (3.2)
+                                      0
+The second angular harmonic is written as
+
+                                               Q = 2πf−2 = Qx + iQy .                                         (3.3)
+
+It represents the leading nematic correction beyond the density and polarization ﬁelds.
+
+
+3.2    Low-Order Closure
+
+We adopt the low-order closure ansatz of the main text: angular modes with |m| ≥ 3 are neglected
+and ∂t f±2 ≈ 0, so Qx , Qy are eliminated algebraically in terms of ρ, p. The condition D0 6= 0 ensures
+algebraic invertibility, not fast damping: the homogeneous k = 0 second-harmonic eigenvalues are
+∓iD0 . The ensuing topology belongs to this retained three-ﬁeld operator; its extension to arbitrarily
+
+                                                                3
+large k is an eﬀective-theory UV assumption, not a convergence claim for the full angular-harmonic
+hierarchy.
+The density equation is
+                                       ∂t ρ + v(∂x1 px + ∂x2 py ) = 0.                       (3.4)
+The polarization equations are
+                            v        v
+                   ∂t px = − ∂x1 ρ − (∂x1 Qx + ∂x2 Qy ) − ωpy
+                            2        2
+                            λ
+                           + ρ[(Gpx ) cos α − (Gpy ) sin α] + λ sin α(Gρ)py
+                            2
+                            λ
+                           − [(Qx Gpx + Qy Gpy ) cos α + (−Qx Gpy + Qy Gpx ) sin α] ,        (3.5)
+                            2
+
+                            v        v
+                   ∂t py = − ∂x2 ρ − (∂x1 Qy − ∂x2 Qx ) + ωpx
+                            2        2
+                            λ
+                           + ρ[(Gpx ) sin α + (Gpy ) cos α] − λ sin α(Gρ)px
+                            2
+                            λ
+                           − [(−Qx Gpy + Qy Gpx ) cos α − (Qx Gpx + Qy Gpy ) sin α] .        (3.6)
+                            2
+
+Deﬁne
+                                   D(x, t) = 2ω − 2λ sin α (Gρ)(x, t).                       (3.7)
+The quasistationary solution for the second harmonic is
+                           1 nv
+                    Qx =         (∂x py + ∂x2 px ) − λ[(Gpx )px − (Gpy )py ] sin α
+                           D 2 1
+                                      −λ[(Gpx )py + (Gpy )px ] cos α} ,                      (3.8)
+
+                               1 nv
+                      Qy = −        (∂x px − ∂x2 py ) − λ[(Gpx )px − (Gpy )py ] cos α
+                               D 2 1
+                                       +λ[(Gpx )py + (Gpy )px ] sin α} .                     (3.9)
+
+Substitution of (3.8)–(3.9) into (3.4)–(3.6) gives a closed density–polarization model. This con-
+struction requires D(x, t) 6= 0. If D = 0, the adiabatic equations for Qx , Qy cannot be inverted,
+and this three-ﬁeld closure is not deﬁned.
+
+
+4     Linear Stability Analysis
+
+4.1     Homogeneous State
+
+Linearize around
+                                            ρ = ρ0 ,       p = 0,                            (4.1)
+with perturbations
+                                ρ = ρ0 + δρ,      px = δpx ,        py = δpy .               (4.2)
+The convolution diagonalizes in Fourier space:
+                                           c
+                                           Gh(k)   b b
+                                                 = G(k) h(k),                                (4.3)
+
+                                                       4
+                                  Z ∞                                   Z
+                      b
+                      G(k) = 2π          rG(r)J0 (kr) dr,      b
+                                                               G(0) =            G(|r|) d2 r.          (4.4)
+                                     0                                      R2
+Deﬁne
+                                                               b
+                                         D0 = 2ω − 2λ sin α ρ0 G(0).                                   (4.5)
+All formulas obtained by eliminating the second harmonic require D0 6= 0. For the parameters of
+the main text, ω = 0, so
+                                                 b sin α
+                                     D0 = −2λρ0 G(0)                                      (4.6)
+vanishes at α = 0 and α = π. At these two singular phase-lag endpoints, the linear closure below
+contains divergent D0−1 coeﬃcients and does not deﬁne a ﬁnite dispersion matrix. To linear order,
+                           v                              v
+                   Qx ≈      (∂x1 py + ∂x2 px ), Qy ≈ −      (∂x1 px − ∂x2 py ).            (4.7)
+                         2D0                             2D0
+
+4.2     Dispersion Matrix
+
+Let
+                                                    b δp
+                                         U(k, t) = (δρ,      cy )T .
+                                                        dx , δp                                        (4.8)
+The linearized equation is
+                                                ∂t U = M (k)U,                                         (4.9)
+with
+                                                                                                         
+            0                        −ivkx                                             −ivky
+                                                                                                          
+         iv                     λρ0 b                                    b sin α − λρ0 G(k)
+                                                                                         b            v2 2 
+M (k) = − 2 kx                   2 G(k) cos α                  −ω + λρ 0 G(0)        2      sin α + 4D0 k .
+                                                                                                          
+          − iv k y ω − λρ 0
+                                          b
+                            b sin α + λρ0 G(k)
+                            G(0)               sin α −  v 2
+                                                            k 2                λρ0 b
+                                                                                  G(k) cos α
+             2                         2               4D0                      2
+                                                                                                      (4.10)
+The growth rates σ(k) are determined by
+                                             det(M (k) − σI) = 0.                                     (4.11)
+If maxn Re σn (k) > 0 over a ﬁnite interval of wavenumbers, the homogeneous state is linearly
+unstable and the selected unstable mode initiates pattern formation.
+Equations (4.10) and (4.12), and hence their eigenvalues, are understood only for D0 6= 0. In
+particular, for ω = 0 no spectral statement is made at α = 0 or α = π within this closure.
+It is convenient to write
+                                                 
+                                   0  −ivkx −ivky
+                                iv                                         q
+                                            b(k) 
+                       M (k) = − kx a(k)         ,                   k=     kx2 + ky2 ,             (4.12)
+                                2                
+                                  iv
+                                 − ky −b(k) a(k)
+                                   2
+where
+                                               λρ0 b
+                                           a(k) = G(k) cos α,                                         (4.13)
+                                                2
+                                          b sin α − λρ0 G(k)
+                                                        b              v2 2
+                          b(k) = −ω + λρ0 G(0)                sin α +     k .                         (4.14)
+                                                     2                4D0
+For a disk-like kernel,
+                                             b           J1 (kd0 )
+                                             G(k) = 2πd0           .                                  (4.15)
+                                                             k
+
+                                                       5
+5    Phase-Locking Ansatz and the Nonlinear Vortex Scale
+
+The hydrodynamic matrix determines the linearly selected wavelength, but the ﬁnal particle pat-
+tern is a ﬁnite-amplitude nonlinear state. The periodic-boundary phenomenology therefore uses a
+separate phase-locking ansatz to estimate the vortex scale selected by local particle motion after
+saturation.
+The ansatz is phenomenological. In a saturated local vortex, neighboring particles are assumed to be
+phase locked: their heading phases need not be equal, but their phase velocities are approximately
+equal. Thus, for a local cluster,
+
+                        θ̇i ≃ Ωpl    for particles in the same locked vortex.                    (5.1)
+
+If the locked cluster samples the headings around a full local orbit, the microscopic coupling gives
+                                       Z
+                                    K 2π
+                              Ωpl ≃        [sin(θ′ − θ + α) − sin α] dθ′
+                                    2π 0
+                                  = −K sin α.                                                  (5.2)
+
+The self-propulsion speed v and the locked angular speed determine a circulation radius
+                                                       v
+                                             rpl ≃          ,                                    (5.3)
+                                                     |Ωpl |
+and hence an eﬀective phase-locking vortex diameter
+                                                            2v
+                                       ℓpl = 2rpl ≃                .                             (5.4)
+                                                         K| sin α|
+For the main parameter range 0 < α < π, this reduces to ℓpl ≃ 2v/(K sin α).
+This length is not the same object as the linear instability wavelength
+                                                         2π
+                                             ℓlin =         ,                                    (5.5)
+                                                         k∗
+where k∗ maximizes the linear growth rate Re σ(k). The phase-locking ansatz estimates how a
+nonlinear vortex cluster wants to rotate once it has saturated, whereas linear stability theory de-
+termines which wavelength ﬁrst becomes unstable. Ordinary swarming lattices occur when these
+two scales can be accommodated simultaneously. Orientation-modulated hyperuniformity is inter-
+preted as the narrow post-onset regime in which ℓpl and ℓlin are incompatible, so phase-locked local
+rotation persists but cannot tile the domain into a regular hexagonal vortex lattice.
+The topological analysis in this appendix is independent of the detailed nonlinear locking mech-
+anism: it uses the homogeneous-state linear projector and its line gap. The phase-locking ansatz
+only explains how the saturated particle state accommodates, or fails to accommodate, the length
+scale selected by the linear spectrum.
+
+
+6    Measuring Long-Time Boundary-Flow Stability
+
+This section measures the long-time stability of the particle ﬂow near the boundary. Exactly two
+quantities are calculated. First, ΞPersist is the fraction of time blocks in which a valid directional
+
+                                                     6
+boundary signal is present. Second, ΞSign measures whether the mean chirality of that signal keeps
+the same sign over the full observation window. The calculation allows relay transport: the particle
+carrying the signal may change from one saved frame to the next. Every operation used to construct
+these two quantities is stated below.
+For the data analyzed here, the particle trajectories show the onset of the interior pattern at
+α = π/2. We therefore use one particle-selection rule for 0 < α < π/2, another for π/2 < α < π,
+and report the exact α = π/2 state separately.
+
+
+6.1   Basic Saved Quantities and Boundary Coordinates
+
+We use two indices throughout this section. The subscript i = 1, . . . , N labels a particle, where N
+is the number of particles. The superscript n = 0, . . . , F − 1 labels a saved frame, where F is the
+number of saved frames in the HDF5 ﬁle. Thus a superscript n is a time label, not a power. For
+example, Xni is the position of particle i in saved frame n. Additional roman subscripts, such as
+“b” for boundary and “free” for free ﬂight, are descriptive labels rather than running indices.
+At saved frame n, the HDF5 ﬁle provides the position and heading angle of particle i,
+
+                            Xni = (xni , yin ),   θin ,   ∆ts = ∆t nsnap ,                       (6.1)
+
+where ∆ts is the time between two saved frames. The simulation uses the same variable θin as the
+microscopic phase and as the particle heading. The symbol d0 below is the particle interaction
+distance; it is diﬀerent from the continuum denominator D0 . The free-ﬂight heading and velocity
+are
+                               uni = (cos θin , sin θin ),  n
+                                                           vi,free = vuni .                (6.2)
+If a ﬁle contains F saved frames and N particles, the two stored tables are reshaped as
+
+  positionX ∈ RF N ×2 −→ {Xni }0≤n<F, 1≤i≤N ,       phaseTheta ∈ RF N ×1 −→ {θin }0≤n<F, 1≤i≤N .
+                                                                                               (6.3)
+Rows are not reordered, so row i in every frame refers to the same particle. The code checks
+that the position table has two columns, the heading table has one column, both tables have the
+same number of rows, and that this number is divisible by N . The HDF5 schema does not store an
+iteration number. The analysis therefore uses the actual number of saved frames F , the saved-frame
+spacing ∆ts , and the last saved frame in each ﬁle.
+We orient the boundary counterclockwise. For every particle position, Π returns quantities evalu-
+ated at the closest valid point on the boundary:
+                                                                           
+                                    Π(Xni ) = dni , sni , tni , κnb,i , eni .               (6.4)
+
+Every quantity on the right-hand side belongs to particle i in saved frame n. Speciﬁcally, dni is
+the shortest distance from Xni to the boundary, sni ∈ [0, P ) is the counterclockwise arclength of
+the closest boundary point, and tni is the counterclockwise unit tangent at that point. In κnb,i , the
+roman subscript b means “boundary,” while i and n retain their particle and saved-frame meanings;
+this quantity is the signed curvature at the projected boundary point. Finally, eni is the label of
+the smooth boundary segment containing that point, and P is the full perimeter. A projection
+is rejected if two boundary points are equally close within 10−7 d0 . For a polygon or an arc–line
+boundary, we also remove a length 0.05d0 from each side of every corner or join. This prevents an
+
+
+                                                    7
+ambiguous tangent from being assigned at a nonsmooth point. For a circle, only the center has a
+nonunique closest point. The signed tangential heading component is
+
+                                              qin = uni · tni .                                  (6.5)
+
+Thus qin > 0 denotes counterclockwise heading, qin < 0 denotes clockwise heading, and vqin is
+the tangential component of the free-ﬂight velocity. Because a collision can change the actual
+displacement, the sign of qin is checked against the measured change in sni below.
+                                                                                     P
+After removing the corner and join intervals, the retained boundary length is Preg = e Le . Each
+retained smooth segment of length Le is divided into Ne = d2Le /d0 e boundary cells Ig . Cell g has
+length ℓg = Le /Ne ≤ d0 /2, and             X
+                                                ℓg = Preg .                                    (6.6)
+                                               g
+
+No cell crosses a corner or join. Cells are stored in their physical order around the closed boundary.
+When we test the total connected active length, we perform the calculation twice: once with the
+physical periodic ordering and once with adjacency broken at every removed corner or join interval.
+
+
+6.2     Selecting Particles Near the Boundary
+
+We ﬁrst remove headings whose tangential sign cannot be resolved reliably:
+
+                                      |qin | ≥ q0 ,        q0 = 0.05.                            (6.7)
+
+The value q0 = 0.05 is only a sign-resolution threshold. It does not require the heading to be mainly
+tangential, and |qin | is not used as a weight.
+For 0 < α < π/2, the observed boundary ﬂow is broad in the direction normal to the wall. We
+therefore apply no ﬁxed cutoﬀ to dni . All valid projections satisfying Eq. (6.7) are candidates; the
+nearest candidate in each boundary cell will be selected below. The exact α = π/2 state uses this
+same rule and is plotted as a separate point.
+For π/2 < α < π, interior vortices can pass close to the boundary. We use the heading dynamics to
+remove particles whose curved motion can be explained without the wall. At frame n, the neighbors
+of particle i are                      
+                                Nin = j 6= i : Xnj − Xni ≤ d0 .                              (6.8)
+Using these neighbors, the heading angular velocity is recalculated from the same discrete equation
+used in the simulation:
+                                                                     
+                      
+                                        X
+                      ω + K  1             sin(θjn − θin + α) − sin α , |Nin | > 0,
+                         i
+                  n
+                Ωi =             |Nin |                                                       (6.9)
+                      
+                      
+                                           n
+                                        j∈Ni
+                      
+                        ωi ,                                               |Nin | = 0.
+
+The code evaluates Eq. (6.9) directly from the saved state. It does not estimate Ωni by diﬀerencing
+θin , because a collision can produce a jump between saved frames.
+Deﬁne
+                                                           κnb,i
+                                           κnd,i =                                             (6.10)
+                                                      1 − κnb,i dni
+
+
+                                                       8
+as the curvature of the curve at distance dni from the wall. For motion that is approximately tangent
+to such a constant-distance curve, the inward acceleration required to follow the wall is κnd,i v 2 (qin )2 ,
+while free heading rotation supplies vΩni qin . We deﬁne their diﬀerence divided by v as
+
+                                         Win = κnd,i v(qin )2 − Ωni qin .                             (6.11)
+
+For π/2 < α < π, a particle is retained only when
+                                                                                        v
+                    dni ≤ d0 ,     1 − κnb,i dni > 0,       Win > εW ,      εW = 0.02      .          (6.12)
+                                                                                        d0
+Here εW = 0.02v/d0 . On a straight segment κb = 0; on a circular arc of radius R, κb = 1/R. The
+acceleration comparison is valid only for nearly tangential motion at nearly ﬁxed wall distance.
+Thus Win is used only to select particles; it is not interpreted as a measured force. The exact
+α = π/2 calculation does not apply this W ﬁlter.
+Figure 1 shows the quantitative origin of Eqs. (6.10)–(6.11). It also makes explicit why the required
+curvature term contains (qin )2 but the free-turning term contains the signed factor qin .
+
+
+
+
+                                                        9
+  Boundary projection and the W membership gate
+
+   (a) Why distance is not enough                                   (b) Local boundary coordinates
+                    Physical boundary                                                          κb,n i
+                                                                                   κd,n i =
+                                                                                            1 − κb,n i din
+                                                                                           n
+                                                                                          ti
+                                                                                  uni                      din
+                                                 Boundary                                                     Π(Xni )
+                                                 candidate                              inward
+                                                                                        normal
+                                                                                                     Xni
+
+
+              Nearby interior vortex
+                                                                                             qin = uni ⋅tni
+                 Both can satisfy din ≤ d0 .
+          Distance alone does not separate them.                                     q > 0: CCW; q < 0: CW
+
+
+
+
+   (c) Near-tangential turning balance                              (d) Membership, not a weight
+           Approximation: nearly tangent motion
+               at nearly fixed wall distance.                                         |qin | ≥ 0.05, din ≤ d0
+                                                                                 valid projection; 1 − κb,n i din > 0
+              Curve-following requirement
+                  areq, ⟂ = κd,n i v 2 (qin )2
+
+
+                                                                             Win > εW                          Win ≤ εW
+          Normal acceleration from free rotation                         Retain candidate                  Exclude candidate
+                    afree, ⟂ = vΩni qin
+
+
+          Ωni : recomputed microscopic angular rate
+                                                                                           εW = 0.02v/d0
+
+
+                          areq, ⟂ − afree, ⟂                                         ng ⟶ rng ⟶ Qng
+                 Win =              v                                            Discard the magnitude of Win .
+                   = κd,n i v(qin )2 − Ωni qin                                Only membership is carried forward.
+
+
+
+                      W is used only for π/2 < α < π: a conditional selection proxy, not a measured force.
+
+
+
+Figure 1: Code-drawn construction of the boundary-selection quantity Win . (a) A distance cutoﬀ
+alone cannot distinguish wall-supported motion from an interior vortex that passes near the wall.
+(b) Closest-point projection gives the local tangent, normal, signed tangential component qin , and
+oﬀset curvature κnd,i . (c) The curvature-following requirement is compared with the normal acceler-
+ation already supplied by the free heading dynamics; their diﬀerence per unit speed is Win . (d) Win
+is used only as a membership gate. Its magnitude is discarded before the cell, relay, and long-time
+statistics are calculated. The drawing states the geometric assumptions used by the ﬁlter; it is not
+a simulation snapshot.
+
+
+Let Sng be the retained particles assigned to boundary cell g at frame n. If this set is empty, set
+
+                                                              10
+Qng = 0. Otherwise choose the particle closest to the wall,
+
+                         rng = arg min dni ,    Qng = sgn qrnng ∈ {−1, 0, +1}.                    (6.13)
+                                 i∈Sng
+
+If two nearest particles are tied within 10−7 d0 and have opposite signs, set Qng = 0. Therefore
+every cell at every frame contributes exactly one value Qng ∈ {−1, 0, +1}, regardless of how many
+particles occupy that cell.
+
+
+6.3   Checking Heading Sign Against Measured Motion
+
+The sign of the heading projection must agree with the particle’s measured motion along the
+boundary. We track the selected particle rng from frame n to frame n + 1 and calculate
+                                                               
+                              ∆sni = wrap[−P/2,P/2) sn+1
+                                                      i   − sni .                      (6.14)
+
+A pair of frames is a valid trial, Tng = 1, only if the same particle has a valid projection onto the
+same smooth boundary segment at both frames, passes the particle-selection rule at both frames,
+has the same nonzero sign of q at both frames, and has a unique wrapped displacement. On a
+straight boundary segment, the largest accepted projected step is J = 1.05v∆ts . On a curved
+segment, it is
+                                             (
+                     1.05v∆ts                  d0 ,                      α > π/2,
+               J=               ,     dmax =                                                   (6.15)
+                    1 − κb dmax                max(di , di ) + v∆ts , 0 < α ≤ π/2.
+                                                      n   n+1
+
+
+The trial is rejected if the denominator is not positive, if J ≥ P/2, or if |∆sni | > J. A valid trial is
+counted as a successful match when
+                                      "                 #
+                                        |∆snrng |         h                  i
+                          Eng = Tng 1             ≥ 0.02 1 sgn ∆snrng = Qng .                     (6.16)
+                                         v∆ts
+
+Clockwise and counterclockwise trials are pooled. Hence this check does not choose a preferred
+chirality. Boundary cell g passes the check when
+                               X                     P
+                                                         Eng  2
+                                   Tng ≥ 3,     Cg = Pn      ≥ .                        (6.17)
+                                 n                     n Tng  3
+
+Thus a cell needs at least three valid trials, and at least two thirds of those trials must have
+displacement in the direction predicted by Qng . Trial counts do not weight either ﬁnal quantity.
+They only decide whether cell g may contribute. The calibration and the two ﬁnal quantities use
+the same terminal window. We therefore also report the fraction of boundary length that passes
+this calibration.
+
+
+6.4   From Frame Signs to Time-Block Signs
+
+A directional signal must appear in the same boundary cell in two consecutive frames. Deﬁne
+                                      (
+                                        Qng , Qng = Qn+1,g 6= 0,
+                               Yng =                                                      (6.18)
+                                        0,    otherwise.
+
+                                                   11
+The selected particle at frame n may diﬀer from the selected particle at frame n+1. Equation (6.18)
+therefore keeps a boundary signal when one particle replaces another with the same chirality. No
+particle is required to travel around the full boundary.
+Figure 2 follows one cell from particle selection to the two-frame relay signal and the independent
+displacement check. The particle labels in the drawing are illustrative.
+
+
+
+
+                                                12
+  Constructing a relay-compatible boundary signal
+
+    (a) One representative per cell                                    (b) Check actual displacement
+
+                          ng = {A, B, C}                                          sin                                sin + 1
+                                     C
+                                                                                    Δsin = wrap[−P/2, P/2) (sin + 1 − sin )
+                                         B
+                                                                                    Same particle and smooth segment;
+                                                                               selection and nonzero heading sign retained;
+                                A                                                   unique step |Δsin | ≤ J < P/2: Tng = 1.
+                                                                                         J = 1.05vΔts /(1 − κb dmax )
+
+
+         I1          I2         I3           I4         I5                           Eng = Tng 1[|Δsin |/(vΔts ) ≥ 0.02]
+                                                                                           ×1[sgn Δsin = Qng ]
+
+                 rng = A, Qng = sgn qAn = +1
+                                                                                                       ∑Eng
+               Opposite-sign nearest tie: Qng = 0.                                       ∑Tng ≥ 3, Cg = n   ≥2
+                                                                                         n             ∑Tng 3
+                                                                                                              n
+
+
+
+    (c) Relay across two frames                                        (d) Window and time blocks
+
+
+                                                                                    Δts = Δt nsnap ,        Treq = 10P/v
+     Frame n                         A               Q = +1
+
+
+                                                                                            nblk = ⌈(d0 /v)/Δts ⌉
+     Frame n + 1
+                                                                                              ΔTb = nblk Δts
+                                     B               Q = +1
+
+
+              Different carriers; same cell and sign.                                Navail = min(F − 1, ⌈Treq /Δts ⌉)
+                                                                                             B = ⌊Navail /nblk ⌋
+                                                                                            n0 = F − 1 − Bnblk
+                 Qng = Qn + 1, g = +1, A ≠ B
+                       ⟹ Yng = +1
+                                                                                          Use frames n0 , …, F − 1.
+                Otherwise Yng = 0. No full circuit                                           fT = Bnblk Δts /Treq
+                 is required of any one particle.
+
+
+                 Calibration follows a particle; the relay signal follows a boundary cell. Illustrative geometry only.
+
+
+
+Figure 2: Code-drawn construction of the discrete boundary signal. (a) The nearest retained
+particle supplies the single-frame sign Qng for one boundary cell. (b) The heading sign is checked
+against the measured arclength displacement through Tng , Eng , and Cg . This calibration is the only
+stage that requires the same particle in consecutive frames. (c) Equal nonzero cell signs give Yng
+even when the selected particle changes, thereby retaining relay transport. (d) The saved-frame
+count, saved-frame spacing, perimeter, interaction distance, and speed determine the terminal
+observation window and its time-block indices. The example contains no simulation data.
+
+
+
+                                                                 13
+The target duration of one time block is d0 /v. Because the analysis uses saved frames, the number
+of saved intervals per block is
+                                              
+                                         d0 /v
+                                nblk =           ,  ∆Tb = nblk ∆ts .                         (6.19)
+                                         ∆ts
+For the present data, nblk = 7 and ∆Tb = 0.35; the continuous target is d0 /v = 1/3. The requested
+observation time is ten free-ﬂight circuits of the boundary, Treq = 10P/v. For a ﬁle with F saved
+frames, the number of complete blocks and the ﬁrst used frame are
+                                                         
+                                     Treq              Navail
+              Navail = min F − 1,            , B=               , n0 = F − 1 − Bnblk .      (6.20)
+                                     ∆ts               nblk
+Only the ﬁnal Bnblk saved intervals, from frame n0 through frame F − 1, are used. We record
+                                              Bnblk ∆ts
+                                         fT =                                            (6.21)
+                                                 Treq
+to quantify the retained observation time. Discarding an incomplete ﬁnal block can give fT < 1
+even for a suﬃciently long ﬁle; the plots use fT ≥ 0.995 to label a near-complete requested window.
+In block b and cell g, count the positive and negative two-frame signals:
+                   X                                                    X
+                                                                   −
+              +
+             Nbg =      1(Yng = +1),                             Nbg =     1(Yng = −1),       (6.22)
+                   n∈b                                                 n∈b
+                    +       −
+                    |Nbg − Nbg | , N + + N − > 0,
+                   
+                        +    −       bg    bg
+             pbg =    Nbg + Nbg                                                               (6.23)
+                   
+                                     +     −
+                     0,             Nbg + Nbg = 0.
+The directional agreement within this cell and block is pbg . It equals zero when no two-frame signal
+is present. The ﬁnal sign assigned to this cell and block is
+            (
+                          −             −
+                   +
+              sgn(Nbg − Nbg      +
+                            ), Nbg + Nbg  ≥ nmin , pbg ≥ 2/3, and cell g is calibrated,
+     Zbg =                                                                                     (6.24)
+              0,               otherwise.
+The main calculation uses nmin = 1. Thus Zbg is nonzero only when the cell is calibrated, at least
+one two-frame signal occurs, and the normalized sign diﬀerence satisﬁes pbg ≥ 2/3. If both signs
+occur, this last condition means that the dominant sign accounts for at least 5/6 of the signals.
+Each boundary cell contributes one value in {−1, 0, +1}, independent of the number of particles
+or events in that cell. We repeat the full calculation with nmin = 2 and 3 to check the eﬀect of
+requiring more two-frame signals.
+Before calculating the two ﬁnal quantities, the signal must cover a connected part of the boundary
+over the observation window. Let
+                                      A = {g : ∃b, |Zbg | = 1}.                               (6.25)
+be the set of cells that are active in at least one block. We require the largest connected group of
+these cells to have total length at least 2d0 :
+                                                  X
+                                           max        ℓg ≥ 2d0 .                              (6.26)
+                                       G∈Conn(A)
+                                                   g∈G
+
+Disconnected cell groups are not added together. This condition prevents an isolated active cell
+from being counted as boundary transport. The cells in the connected interval do not need to
+be active at the same time: diﬀerent particles may carry the signal through diﬀerent parts of the
+interval during diﬀerent blocks. The same test is also repeated with connectivity broken at all
+removed corners and joins.
+
+                                                   14
+6.5   The Two Stability Measures
+
+If Eq. (6.26) is satisﬁed, block b is active when at least one boundary cell has a nonzero block sign:
+
+                                       Mb = 1{∃g : |Zbg | = 1}.                                (6.27)
+
+The ﬁrst measure is the fraction of active blocks,
+
+                                                    1 X
+                                                       B
+                                         ΞPersist =     Mb .                                   (6.28)
+                                                    B
+                                                       b=1
+
+
+Thus ΞPersist = 1 means that a directional boundary signal is found in every time block, while
+ΞPersist = 0.5 means that it is found in half of the blocks. This measure does not count how many
+particles carry the signal, and it is not multiplied by a carrier fraction.
+For each active block, the length-weighted mean chirality is
+                                          P
+                                             g ℓg Zbg
+                                    χb = P              ∈ [−1, 1].                             (6.29)
+                                            g ℓg |Zbg |
+
+Here χb = +1 means that all active boundary length in block b is counterclockwise, χb = −1 means
+that it is clockwise, and values near zero mean that clockwise and counterclockwise active lengths
+cancel. The second measure is                    P
+                                                   b Mb χ b
+                                         ΞSign = P          .                                (6.30)
+                                                     b Mb
+
+All active blocks, including blocks with χb = 0, remain in the average. ΞSign = 1 means that
+χb = +1 in every active block or χb = −1 in every active block. A value near zero means that
+opposite chiralities cancel within blocks, reverse between blocks, or both. Every active block has
+equal weight. ΞSign is reported as unavailable when fewer than three blocks are active. Both
+measures are also unavailable if the connected length test fails. Neither measure is weighted by
+particle number, event number, crossing rate, or current magnitude.
+Figure 3 gives a complete numerical example of the reduction from Zbg to the two reported measures.
+It shows that signal recurrence and ﬁxed mean chirality are calculated from the same cell–block
+array but answer diﬀerent questions.
+
+
+
+
+                                                  15
+  From relay signs to two long-time stability measures
+
+
+    (a) Within-cell reduction: relay signs to a block sign
+
+                                                                                               +       −
+                  Yng ∈ {−1, 0, + 1}, n ∈ b                                                  |Nbg − Nbg  |
+                                                                                         pbg = +       −
+                      ±
+                    Nbg = ∑ 1(Yng = ±1)                                                       Nbg + Nbg
+                           n∈b                                                         No support: pbg = 0.
+
+
+                                                                    +     −
+                                                       Zbg = sgn(Nbg  − Nbg )
+                                      +     −
+                                  if Nbg + Nbg ≥ nmin , pbg ≥ 2/3, and cell g passes calibration;
+                                             otherwise Zbg = 0. Main rule: nmin = 1.
+
+
+
+
+    (b) Connected active union                                                         (c) Block summaries
+             g1      g2      g3      g4       g5      g6      g7           g8              b               Mb                 χb
+
+     b1      +1      +1      +1       0       0       0           0        0               1                   1            +1.0
+     b2      0       +1      +1       0       0       0           0        0               2                   1            +1.0
+     b3      0        0      -1       -1      0       0           0        0               3                   1            -1.0
+     b4      0        0       0       0       0       0           0        0               4                   0              --
+     b5      0        0       0       0      +1       -1          0        0               5                   1            +0.0
+
+                      = {g1 , …, g6 }; illustrative ℓg = d0 /2                                     Mb = 1{∃g : |Zbg | = 1}
+                                                                                                               ∑ℓg Zbg
+                           Lconn = 6ℓg = 3d0 ≥ 2d0                                                              g
+                                                                                                       χb =
+                     Cells need not be active simultaneously.                                                  ∑ℓg |Zbg |
+                                                                                                               g
+
+
+
+    (d) Two distinct questions
+                           Recurrence                                                    Mean chirality
+                       ΞPersist = B −1 ∑Mb
+                                       b                                                    |
+                                                                                    ΞSign = ∑Mb χb /∑Mb
+                                                                                                b          b        |
+                           = 4/5 = 0.80                                           = |(1 + 1 − 1 + 0)/4| = 0.25
+
+
+              Equal active-block weights; the zero-chirality block remains. Illustrative array, not simulation data.
+
+
+
+Figure 3: Code-drawn numerical example for ΞPersist and ΞSign . (a) For each cell g and block b, the
+two-frame signs Yng give the positive and negative counts, conditional purity pbg , and calibrated
+block sign Zbg . (b) The illustrative Zbg array is required to contain a connected active union A of
+macroscopic length. (c) Each block is reduced to the activity indicator Mb and the length-weighted
+mean chirality χb . (d) ΞPersist asks how often a directional signal recurs, whereas ΞSign asks whether
+the mean chirality keeps one sign. Neither quantity uses Win as a numerical weight. The displayed
+values are constructed solely to verify the calculation and are not simulation results.
+
+
+                                                                      16
+Two geometric quantities are recorded to show how much of the boundary enters the calculation.
+The active boundary-length fraction in block b is
+                                                  1 X
+                                          ab =          ℓg |Zbg |                              (6.31)
+                                                 Preg g
+
+and the fraction of retained boundary length that passes the displacement check is
+                                         1 X
+                               fcal =          ℓg 1[cell g is calibrated]                      (6.32)
+                                        Preg g
+
+                   pre      sel indicate whether cell g contains at least one candidate before and
+For α > π/2, let Ong   and Ong
+after the W requirement, respectively. The fraction retained by the W requirement is
+                                     P
+                                      P n,g Ong , P Opre > 0,
+                                               sel
+                                     
+                                               pre     n,g ng
+                               ηW =       n,g Ong                                            (6.33)
+                                     
+                                     
+                                       NA,           otherwise,
+
+and is reported as unavailable when the W ﬁlter is not used. Wall-distance quantiles are calculated
+from the selected nearest particle rng in each nonempty cell–frame pair. The calculation also
+records the omitted boundary fraction and the result of the no-cross-join length check. These
+quantities check how the particle selection and geometry aﬀect the two stability measures; they are
+not additional measures of transport.
+
+
+6.6   Terminal-Window Results and Interpretation
+
+The analysis uses four geometries and the grid α/π = 0, 0.1, . . . , 1, giving 44 exact parameter-
+matched HDF5 ﬁles. For every ﬁle, the code checks the required datasets, column numbers, particle
+count, and frame alignment. Finite values are checked in the loaded analysis window, not over each
+ﬁle’s entire history; the two phase-lag endpoints return without loading that window. It then
+calculates the two measures for the 36 rows with 0 < α < π, including the four exact α = π/2
+rows. No trajectory is restarted or continued. Every ﬁle uses random seed 9; therefore the reported
+values are for one realization of each parameter set. Consecutive time blocks are correlated, so no
+binomial error bars are assigned.
+For α > π/2, the neighbor sum in Eq. (6.9) is evaluated with a vectorized particle-pair algorithm.
+We compared it with the original simulation loop on one saved frame from each geometry. The
+largest absolute diﬀerence was 1.07 × 10−14 ; the accepted tolerance was 5 × 10−10 .
+Thirty-two of the 36 analyzed rows reach at least 99.5% of the requested ten-circuit observation
+time. Four older circular ﬁles are shorter: circular 0.2π has (F − 1, B, fT ) = (1000, 142, 0.678),
+circular 0.4π has (250, 35, 0.167), circular 0.8π has (1000, 142, 0.678), and the single-defect circle
+at 0.2π has (1000, 142, 0.542). Open markers identify these four rows; ﬁlled markers identify full-
+window rows. A shorter window has fewer chances to contain a rare chirality reversal, even after
+division by the number of blocks B.
+Two details aﬀect how the numbers should be read. First, the projection mask removes a length
+0.05d0 on each side of a corner or defect join. Second, the low-α rule has no radial cutoﬀ and
+can assign a boundary coordinate to a particle far from the wall. The reported active-length and
+wall-distance values show the size of these eﬀects for every row.
+
+                                                    17
+ α/π                                    Circular    Circular, H = 3    Square     Square, four H = 1 defects
+                                     ΞPersist ΞSign ΞPersist ΞSign ΞPersist ΞSign ΞPersist       ΞSign
+ 0.1                                 1.0000 1.0000 1.0000 0.0360 0.9474 0.0726 0.7055           0.0655
+ 0.2                                 1.0000 0.9862 1.0000 0.2631 0.9774 0.0771 0.8988           0.0611
+ 0.3                                 1.0000 1.0000 0.9962 0.0649 0.9925 0.9879 1.0000           0.3494
+ 0.4                                 1.0000 0.9105 1.0000 0.5694 1.0000 0.9783 1.0000           0.4731
+ 0.5                                 1.0000 1.0000 1.0000 0.6643 1.0000 0.9932 1.0000           0.1531
+ 0.6                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           1.0000
+ 0.7                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           0.9997
+ 0.8                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           0.9998
+ 0.9                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           0.9999
+
+                                                    P
+The machine-readable table also contains a = B −1 b ab , fcal , ηW , the selected-particle wall-
+distance quantiles, B, fT , and the HDF5 ﬁlename used for every row. Only ΞPersist and ΞSign are
+used as boundary-ﬂow stability measures.
+The removed fractions of perimeter are 0, 0.0109, 0.0143, and 0.0467 for the circle, single-defect
+circle, square, and four-defect square. All 36 rows still pass the connected-length requirement when
+adjacency is broken at every removed join. Thus no row passes only because cells on opposite sides
+of a removed join were treated as adjacent. For every patterned row, fcal = 1. The smallest value
+outside the patterned regime is 0.875000 for the square at 0.3π; the single-defect circle at 0.1π gives
+0.875520.
+
+                                                                 Dashed line: pattern onset at α = π/2; isolated markers use the critical-point rule
+
+                                         (a) Boundary-flow recurrence                                                                 (b) Selected-signal chirality
+                                   1.0
+  Active-block fraction ΞPersist
+
+
+
+
+                                   0.8
+                                                                                                               Mean chirality ΞSign
+
+
+
+
+                                   0.6
+
+                                   0.4
+
+                                   0.2
+
+                                   0.0
+                                         0.0     0.2       0.4          0.6         0.8         1.0                                   0.0      0.2        0.4         0.6   0.8   1.0
+                                                          Phase lag α/π                                                                                  Phase lag α/π
+
+                                                                       Circle                                           Square, four defects (H = 1)
+                                                                       Circle, one defect (H = 3)                       Full requested window
+                                                                       Square                                           Shorter available window
+
+
+
+Figure 4: The two boundary-ﬂow stability measures on the exact 0.1π-spaced sweep. The dashed
+line marks the pattern-formation threshold seen in the particle trajectories. The disconnected
+α = π/2 markers use the critical-point particle-selection rule deﬁned above. Filled markers reach
+the requested ten-circuit window; open markers use the shorter available record. The phase-lag
+endpoints α = 0 and α = π are not assigned these single-chirality measures.
+
+
+
+                                                                                                      18
+                                    (a) Active boundary length                                                                      (b) Displacement calibration
+                              1.0                                                                                             1.0
+  Mean active fraction a
+
+
+
+
+                                                                                                   Calibrated fraction fcal
+                              0.8                                                                                             0.8
+
+                              0.6                                                                                             0.6
+
+                              0.4                                                                                             0.4
+
+                              0.2                                                                                             0.2
+
+                              0.0                                                                                             0.0
+
+
+
+                                    (c) High-α membership gate                                                                      (d) Selected-particle wall distance
+                              1.0
+                                                                                                                                                                   Line: d50 ; band: d50 -d90
+  Retained-cell fraction ηW
+
+
+
+
+                                                                                                                              2.0
+                              0.8
+                                                                                                   Distance d/d0
+
+
+
+
+                                                                                                                              1.5
+                              0.6
+
+                              0.4                                                                                             1.0
+
+                              0.2                                                                                             0.5
+
+                              0.0                                                                                             0.0
+                                    0.0      0.2      0.4        0.6        0.8        1.0                                          0.0      0.2         0.4       0.6         0.8          1.0
+                                                      Phase lag α/π                                                                                    Phase lag α/π
+
+                                                                 Circle                                                       Square, four defects (H = 1)
+                                                                 Circle, one defect (H = 3)                                   Full requested window
+                                                                 Square                                                       Shorter available window
+
+
+
+Figure 5: Checks on boundary coverage and particle selection. In the wall-distance panel, lines
+show d50 /d0 and shaded bands extend to d90 /d0 . Marker ﬁll has the same observation-window
+meaning as in Fig. 4.
+
+
+
+
+                                                                                              19
+                              α=0         α = 0.2π         α = 0.4π         α = 0.5π         α = 0.6π         α = 0.8π         α=π
+                        (a)         (b)              (c)              (d)              (e)              (f)              (g)
+  No defect
+ Single defect: H = 3
+
+
+
+
+                        (h)         (i)              (j)              (k)              (l)              (m)              (n)
+
+
+
+
+                                                     θ
+                                                           0                  π                  2π
+
+
+
+                              α=0         α = 0.2π         α = 0.4π         α = 0.5π         α = 0.6π         α = 0.8π         α=π
+                        (a)         (b)              (c)              (d)              (e)              (f)              (g)
+  No defect
+
+
+
+
+                        (h)         (i)              (j)              (k)              (l)              (m)              (n)
+ Four defects: H = 1
+
+
+
+
+                                                     θ
+                                                           0                  π                  2π
+
+
+Figure 6: Terminal saved states used for direct morphology checks, with heading phase shown by
+the common cyclic color map. The α = π/2 column displays the independently classiﬁed pattern-
+formation threshold, while the α = π column is a phase-lag-endpoint morphology comparison and
+is not included in the single-chirality measures. Boundary outlines are deliberately light so that
+near-wall particles remain visible.
+
+
+
+
+                                                                            20
+At 0.1π–0.3π, the square has mean active boundary-length fraction a = 0.053–0.097, and the four-
+defect square has a = 0.030–0.241. Their selected-particle d90 ranges are 1.208d0 –2.294d0 and
+0.960d0 –1.173d0 , respectively. Therefore a low-α signal can appear in many time blocks while
+occupying only a small part of the boundary in each block, and some selected particles can be
+more than one interaction distance from the wall. For 0.6π ≤ α ≤ 0.9π, a = 0.795–0.997 and
+ηW = 0.862–1.000. In the patterned regime, the stable chirality is supported over most of the
+retained boundary rather than by a few isolated cell–frame pairs.
+For 0.1π ≤ α ≤ 0.4π, the convex circular boundary has ΞPersist = 1 and ΞSign = 0.911–1.000. It
+therefore contains a directional boundary signal in every time block, and its mean chirality remains
+almost ﬁxed. With one strong circular defect, ΞPersist = 0.996–1.000 but ΞSign ranges from 0.036 to
+0.569. Thus a boundary signal is still found in nearly every block, but its mean chirality reverses
+or cancels over the full window. The square changes from ΞSign ≃ 0.073 at 0.1π–0.2π to 0.988
+and 0.978 at 0.3π and 0.4π; four symmetric defects retain only 0.065, 0.061, 0.349, and 0.473. The
+lowest recurrence, 0.706, occurs for the four-defect square at 0.1π. Below the pattern threshold, the
+regular circle supports long-time chiral boundary ﬂow, but strong defects and corners can strongly
+reduce the stability of its chirality.
+For every tested patterned state at α/π = 0.6, 0.7, 0.8, 0.9, ΞPersist = 1. All ΞSign values are unity
+to the reported precision except the four-defect square, which gives 0.9997, 0.9998, and 0.9999 at
+0.7π, 0.8π, and 0.9π. Thus every tested geometry has a boundary signal in every block and keeps
+one mean chirality after the interior pattern has formed. Direct trajectory inspection shows the
+corresponding particle exchange: interior particles join the boundary ﬂow, while particles scattered
+by a defect leave it or rejoin at another boundary segment. The high-α numbers use the particle-
+selection conditions in Eq. (6.12); ηW reports retained cell occupancy, not sign-resolved particle
+counts. For α > π/2, these are conditional statistics of the population selected by Eqs. (6.7) and
+(6.12), not the net chirality of all near-wall particles: on a straight segment W = −Ωi qi , which
+can select one direction. Near-unit ΞSign is therefore interpreted together with direct trajectory
+observations, rather than as an independent test of chirality selection.
+The isolated threshold α = π/2 gives ΞPersist = 1 for all four geometries, while ΞSign is 1.000, 0.664,
+0.993, and 0.153 for the circular, single-defect circular, square, and four-defect square, respectively.
+These four values are calculated directly from the α = π/2 ﬁles with the no-radial-cutoﬀ rule and
+without the W ﬁlter. They are not interpolated from neighboring α values. At the threshold,
+recurrence is high in every geometry, but chirality is still sensitive to the boundary shape and
+defects.
+The robustness check q0 = 0.02, 0.05, 0.10 was performed only for the most sensitive α = 0.2π
+square comparison. The no-defect values span ΞPersist = 0.974–0.981 and ΞSign = 0.077–0.084; the
+four-defect values span 0.896–0.902 and 0.061–0.074, respectively. The small ΞSign values therefore
+remain when the sign-resolution threshold is changed by a factor of ﬁve.
+The minimum supported-pair threshold was also changed from one to two and three without re-
+reading or reweighting particles. The sensitive square 0.2π recurrence spans 0.951–0.977 and its
+net chirality spans 0.075–0.085; the four-defect values span 0.844–0.899 and 0.029–0.061. Requiring
+more two-frame signals changes the exact recurrence values but leaves the conclusion unchanged:
+the long-time mean chirality is weak for these two cases.
+The bulk Chern classiﬁcation applies where its projector remains isolated; the ﬁnite-strip branches
+provide a complementary linear comparison. The particle data add the following result. Below
+π/2, the regular circle maintains one chirality, but strong boundary scattering can reverse or cancel
+
+
+                                                  21
+that chirality. Above π/2, the interior pattern continuously supplies particles to the boundary,
+and both stability measures remain near one for all tested defects and geometries. Thus the linear
+topology gives the chiral boundary mode, while the interior particle pattern provides the strong
+protection of the realized particle ﬂow. Neither measure contains current magnitude or particle
+number. Consequently, their values near one at 0.9π do not measure the visible thinning of the
+boundary layer as α approaches π. Every reﬁned grid point uses an exact HDF5 parameter match;
+no value is interpolated or continued from another trajectory.
+At the separate singular phase-lag endpoint α = π, the circular system supports bidirectional
+boundary-lattice ﬂow: particles can join, leave, and rejoin diﬀerent boundary segments, while
+interior particles replenish ﬂow scattered by a circular defect. The ﬂow does not propagate along
+the defect boundary; instead, the interior population supplies the downstream circular-boundary
+segments. The square α = π state has no visually resolved boundary ﬂow, with or without the tested
+defect, as shown in Fig. 6. Because these phase-lag-endpoint states do not contain a single-chirality
+boundary ﬂow, neither phase-lag endpoint is assigned ΞPersist or ΞSign .
+
+
+6.7   Representative Lattice-Scale Comparison
+
+We compare ten independent realizations (seeds 1–10) at the common parameters N = 2000,
+2R = 7d0 , K = 20.75, and v = 3. No cluster-number observable is used. For a boundary density
+ρf (φ, t), where f denotes the full boundary layer or one phase-resolved stream, deﬁne
+                                                       Z 2π
+                                                    1
+                          δρf (φ, t) = ρf (φ, t) −           ρf (φ′ , t) dφ′ ,                    (6.34)
+                                                   2π 0
+                                       R 2π
+                                            δρf (φ, t)δρf (φ + ∆s/Rf (t), t) dφ
+                         Cf (∆s, t) = 0            R 2π 2                       ,                 (6.35)
+                                                     0  δρ f (φ, t) dφ
+
+with Rf (t) the mean radial position of the selected particles in that frame. The implementation
+bins the density into 2048 angular bins, smooths it with a periodic Gaussian of width 2.5 bins,
+computes and zero-lag-normalizes the circular autocorrelation, and smooths the correlation with
+width 2.0 bins. The ﬁrst-neighbor peak in each frame is selected by largest prominence in 0.60d0 ≤
+∆s ≤ 1.80d0 , with minimum peak separation 0.35d0 and prominence at least the larger of 0.01
+and 0.05 times the correlation range within that search window, followed by three-point parabolic
+interpolation. The reported spacing is the equal-frame mean of these peak positions, and its error
+bar is their temporal sample standard deviation (denominator equal to the number of sampled
+frames minus one); it is not the peak of a time-averaged correlation. A numerical value is reported
+only when the mean normalized peak height is at least 0.30 and the temporal coeﬃcient of variation
+of the peak positions is at most 0.10; otherwise that realization is retained in the ﬁgure as unresolved.
+The resolved/unresolved assignments are unchanged when the two cutoﬀs are varied over 0.25–0.35
+and 0.08–0.12, respectively. To prevent panel-dependent magniﬁcation, all three comparison ﬁgures
+use the same vertical-axis span, 0.50d0 , rather than data-dependent limits. For a regular continuum
+spectrum we use
+                                      k∗ = arg max max Re σn (k).                                  (6.36)
+                                              k>0        n
+
+
+At α = π/2, a(k) = 0 in Eq. (4.12) and all three growth rates have zero real part for every k.
+Hence Eq. (6.36) does not deﬁne a spectral prediction at the critical point. Applying Eq. (6.35) to
+particles within 0.25d0 of the wall over iterations 40000–50000, sampled every 100 iterations (101
+
+
+                                                    22
+frames), gives a∂ = 1.0268–1.0302d0 (mean 1.0285d0 ) whenever a stable peak is resolved. Seeds 5
+and 7 do not have such a peak and are shown without assigning a lattice constant. The d0 line in
+Fig. 7 is therefore only the microscopic interaction-distance reference, not a theoretical prediction.
+
+                                         1.4
+                                                   d0 reference
+                                                   No stable correlation peak
+         Boundary lattice spacing (d0)
+
+                                         1.3       Density-correlation spacing
+
+
+                                         1.2
+
+                                         1.1
+
+                                         1.0
+
+                                         0.9
+                                               1      2       3        4     5     6   7      8   9   10
+                                                                           Random seed
+Figure 7: Seed-resolved boundary-lattice spacing at α = π/2. Error bars are temporal standard
+deviations over iterations 40000–50000. Crosses indicate realizations without a stable correlation
+peak; their vertical placement is categorical and has no numerical ordinate. The dashed d0 line is
+a length reference, not a linear-spectral prediction.
+
+
+At α = 0.6π, Eq. (6.36) gives
+                           √ k∗ = 5.0910/d0 . For a triangular Bravais lattice the ﬁrst reciprocal
+shell satisﬁes |G1 | = 4π/( 3ahex ); identifying |G1 | with k∗ therefore predicts
+                                                                          4π
+                                                                   hex = √
+                                                                  alin         = 1.4251d0 .                (6.37)
+                                                                           3k∗
+Direct ﬁrst-shell distances between neighboring vortex centers over iterations 40000–50000 give
+seed means 1.3049–1.4102d0 , with ten-seed mean 1.3568d0 , or 4.8% below Eq. (6.37). The centers
+are estimated from the free angular rates Ωi as (xi − v sin θi /Ωi , yi + v cos θi /Ωi ), retaining |Ωi | ≥
+0.2K| sin α| and center radii at most R + 0.2d0 . DBSCAN uses neighborhood radius v/(K| sin α|)
+and minimum sample count 10; retained clusters contain at least 15 particles and are represented
+by coordinate-wise median centers. Centers within 0.5d0 of the wall are excluded. Each analyzed
+frame is required to contain at least seven retained centers. First-shell pairs are all unordered pairs
+separated by at most 1.45 times that frame’s median nearest-neighbor distance. Pair distances are
+averaged within each frame, then equally across the 101 frames sampled every 100 iterations; error
+bars are temporal sample standard deviations, not standard errors.
+
+
+
+
+                                                                             23
+                                           1.6
+                                                                                                      ahex
+                                                                                                       lin
+                                                                                                      Particle simulation
+         Hexagonal lattice constant (d0)   1.5
+
+                                           1.4
+
+                                           1.3
+
+                                           1.2
+
+                                           1.1
+                                                    1       2       3        4     5     6   7        8      9       10
+                                                                                 Random seed
+Figure 8: Seed-resolved bulk hexagonal lattice constant at α = 0.6π. Points are ﬁrst-shell vortex-
+center distances, error bars are their temporal standard deviations, and the dashed line is Eq. (6.37).
+
+
+At α = π, D0 = 0 and M (k) is undeﬁned, so no endpoint spectrum is assigned. A candidate
+scale can only be obtained from the left. Writing x = kd0 , the limiting real-growth envelope is
+proportional to −J1 (x)/x; its ﬁrst positive maximum satisﬁes J2 (x) = 0. Thus, with j2,1 the ﬁrst
+positive zero of J2 ,
+
+                                                 k∗− d0 = lim k∗ d0 = j2,1 = 5.1356,
+                                                          α→π −
+                                                          2π                             2       4π                         (6.38)
+                                                   ℓ−
+                                                    π ≡       = 1.2235d0 ,       a−,△ ≡ √ ℓ−π = √ − = 1.4127d0 .
+                                                          k∗−
+                                                                                  π
+                                                                                          3      3k∗
+Preliminary conjecture (not a demonstrated mechanism).— Periodic-boundary trajectories at α = π
+suggest a dynamic state formed by two hexagonal cluster lattices translating in opposite spatial
+directions. We conjecture that a predominantly circular collision boundary ﬁlters the length scales
+carried by this moving bulk structure and exposes a nearby hexagonal scale as a tangential boundary
+period. Under this conjecture, ℓ−                                                        √ the measured
+                                   π is interpreted as a local triangular-plane spacing and
+period as the associated nearest-neighbor distance, which motivates the factor 2/ 3 in Eq. (6.38).
+The morphology comparison in Fig. 6 is consistent with, but does not prove, this picture: the
+bidirectional lattice is resolved when most of the wall remains circular, survives one isolated localized
+defect, and is not resolved for the tested square boundary. Thus a−,△  π   is only a conditional geometric
+candidate, not a separate endpoint spectrum or an established consequence of the boundary. For
+the particle data, the two counterpropagating populations are ﬁrst separated by the two axial
+families of the relative phase θi − φi and are then labelled CCW for the family with the larger mean
+tangential heading and CW for the other. In each frame the axial direction is 12 arghe2i(θi −φi ) i,
+evaluated in the 0.50d0 wall shell; particles are retained when the absolute cosine of their relative
+phase measured from this axis is at least 0.5, and the sign of that projection assigns the two families.
+Applying Eq. (6.35) separately to the two families in the 0.50d0 wall shell over the last ten free-ﬂight
+circuit times (iterations 35300–50000, every 50 iterations, 295 frames) gives resolved seed–stream
+
+                                                                                   24
+values 1.2667–1.5099d0 , with mean 1.3491d0 . The mean is 10.3% above ℓ−
+                                                                       π but only 4.5% below
+                          −,△
+the geometry-corrected aπ . The CW family of seed 4 has no stable peak and is retained as
+unresolved.
+
+                                           1.6
+                                                         = 2 /k           No stable correlation peak   CCW
+                                                     a,    =2 / 3         CW
+         Per-stream lattice spacing (d0)
+
+                                           1.5
+
+                                           1.4
+
+                                           1.3
+
+                                           1.2
+
+                                           1.1
+                                                 1   2      3       4     5    6    7              8   9     10
+                                                                        Random seed
+Figure 9: Seed- and stream-resolved boundary-lattice spacing at α = π. Error bars are temporal
+standard deviations. The cross marks an unresolved correlation peak and has no numerical ordinate.
+The dashed line is the geometry-corrected left-limit candidate aπ−,△ , while the dotted line is the
+unconverted ℓ−
+             π . Neither is a spectrum evaluated at α = π.
+
+
+The ten-seed comparison separates wavelength selection from state formation. At α = π/2, a
+resolved boundary lattice has a local spacing robustly close to d0 , although some random initial
+conditions do not reach a state with a stationary correlation peak. At 0.6π, the geometry-corrected
+linear scale captures the bulk hexagonal spacing to within 4.8%. At α = π, applying the triangular-
+plane conversion to the left-limit scale reduces the mean discrepancy from 10.3% to 4.5%, although
+the seed-to-seed spread remains appreciably larger. This numerical agreement supports the prelim-
+inary boundary-ﬁltering conjecture but cannot distinguish it from curvature-induced mode locking
+or ﬁnite-circumference commensuration. Thus the spectral peak selects a preferred scale where
+it is deﬁned, while nonlinear relaxation, conﬁnement, and initial-condition dependence determine
+whether and how sharply that scale is realized.
+
+
+7    Spectral Projectors and Chern Numbers
+
+In this section bold k = (kx , ky ) is the spatial wave vector and k = |k|. We assume D0 6= 0, so that
+the closed matrix M (k) is ﬁnite. We also ﬁx a target spectral cluster I whose eigenvalues remain
+separated from the complementary spectrum. Separation may be supplied by a closed contour or
+by a line gap that keeps the same set of eigenvalues on one side of the line. The Chern number
+belongs to the resulting spectral projector, not to the unordered set of eigenvalues alone. If D0 = 0
+or the separating gap closes, the projector used below and its Chern number are not deﬁned.
+
+                                                                         25
+7.1   Riesz Projector and the Projector Bundle
+
+For each k, choose a positively oriented contour Γk ⊂ C that encloses precisely the eigenvalues in
+I and does not intersect Spec M (k). The associated Riesz projector is
+                                            I
+                                          1
+                               PI (k) =         (zI3 − M (k))−1 dz.                          (7.1)
+                                         2πi Γk
+
+The result is independent of any deformation of the contour that does not cross the spectrum. On
+each suﬃciently small parameter patch one may choose a single ﬁxed contour Γ; projectors obtained
+from diﬀerent local contours agree on overlaps because they enclose the same spectral cluster.
+The resolvent identity
+
+                                                          (zI3 − M )−1 − (wI3 − M )−1
+                    (zI3 − M )−1 (wI3 − M )−1 =                                               (7.2)
+                                                                     w−z
+inserted into the double contour integral gives
+
+                                                  PI2 = PI .                                  (7.3)
+
+Moreover, diﬀerentiating the resolvent on a local parameter patch gives
+                                    I
+                                 1
+                         dPI =         (zI3 − M )−1 (dM )(zI3 − M )−1 dz.                     (7.4)
+                                2πi Γ
+Thus PI is smooth whenever M is smooth and the spectral separation persists. Its rank r =
+rank PI = Tr PI is then constant, and
+
+                                 EI = {(k, u) : PI (k)u = u} −→ M                             (7.5)
+
+is a rank-r complex vector bundle over the parameter manifold M. Internal degeneracies inside I
+do not invalidate this construction; only contact between I and its complement does. A globally
+isolated single band is the special case r = 1.
+
+
+7.2   Biorthogonal Frames and Gauge Freedom
+
+For a simple eigenvalue σn , deﬁne right and left eigenvectors by
+
+                             M |uR
+                                 n i = σn |un i,
+                                            R
+                                                              M † |uL      ∗ L
+                                                                    n i = σn |un i,           (7.6)
+
+                    n |M = σn hun |. For a rank-r cluster, choose a smooth local frame of Im PI and
+or, equivalently, huL           L
+
+its dual frame in Im PI† :
+
+                          RI = (|r1 i, . . . , |rr i),        LI = (|ℓ1 i, . . . , |ℓr i),    (7.7)
+
+where RI , LI ∈ C3×r . They are chosen biorthonormally,
+
+                                                 L†I RI = Ir ,                                (7.8)
+
+so that the Riesz projector has the frame representation
+
+                                       PI = RI L†I ,            PI2 = PI .                    (7.9)
+
+                                                         26
+Unlike a Hermitian orthogonal projector, PI† need not equal PI . The left frame is therefore essential.
+When the cluster is diagonalizable, |ra i and |ℓa i may be chosen as its right and left eigenvectors.
+At an internal exceptional degeneracy the individual eigenvectors need not form a basis, but the
+smooth Riesz subspace and the frames used in (7.9) remain well deﬁned as long as the cluster stays
+separated from its complement.
+The local frame is not unique. For any smooth G(k) ∈ GL(r, C),
+                                 RI 7→ RI G,         LI 7→ LI (G−1 )† .                         (7.10)
+This transformation preserves both L†I RI = Ir and PI = RI L†I . Consequently, a topological
+invariant must be independent of this nonunitary frame freedom.
+
+
+7.3   Connection, Curvature, and the First Chern Number
+
+On a local patch deﬁne the non-Abelian biorthogonal connection and its curvature by
+                                 A = L†I dRI ,      F = dA + A ∧ A.                             (7.11)
+Here d is the exterior derivative on M; no extra factor of i is included in this mathematical
+convention. Under (7.10),
+                             A 7→ G−1 AG + G−1 dG,          F 7→ G−1 FG.                        (7.12)
+Therefore Tr F is frame independent.
+The frame and projector forms of the curvature are equivalent. From d(L†I RI ) = 0 and dPI =
+dRI LI† + RI dL†I , one obtains
+                                                  h                      i
+                            Tr(PI dPI ∧ dPI ) = Tr dL†I (I3 − PI ) ∧ dRI
+                                                 = Tr(dA + A ∧ A) = Tr F.                       (7.13)
+The identity PI2 = PI also implies
+                           PI dPI + (dPI )PI = dPI ,        PI (dPI )PI = 0.                    (7.14)
+Thus ﬁrst-order changes of the projector connect the target subspace to its complement.
+The ﬁrst Chern number is the Chern–Weil integral
+                                      Z               Z
+                                  1               1
+                       C(PI ) =           Tr F =           Tr(PI dPI ∧ dPI ).                   (7.15)
+                                 2πi M           2πi M
+In Cartesian coordinates this becomes
+                                        Z
+                                    1         
+                         C(PI ) =          Tr PI [∂kx PI , ∂ky PI ] dkx dky .                   (7.16)
+                                   2πi M
+
+For completeness, its integrality follows directly from the frame gauge law. Cover a compact M
+by two patches whose frames are related on their overlap by G. Taking the trace of (7.12) gives
+                                     Tr A2 − Tr A1 = d log det G.                               (7.17)
+Stokes’ theorem then reduces (7.15) to the transition function winding,
+                                                I
+                                             1
+                                 C(PI ) =           d log det G ∈ Z,                       (7.18)
+                                            2πi
+up to the orientation assigned to the overlap curve. For r > 1, this is the ﬁrst Chern number of
+the determinant line bundle det EI ; for r = 1, it is the usual biorthogonal Berry bundle.
+
+                                                    27
+7.4   Biorthogonal Fukui Discretization
+
+Let kij be an oriented grid on M and let Rij , Lij ∈ C3×r be local frames satisfying L†ij Rij = Ir .
+Deﬁne the nearest-neighbor overlap matrices
+
+                            Wx (i, j) = L†ij Ri+1,j ,          Wy (i, j) = L†ij Ri,j+1 .          (7.19)
+
+Provided their determinants do not vanish, the determinant-line link variables are
+                                       det Wx (i, j)                           det Wy (i, j)
+                       Ux (i, j) =                    ,        Uy (i, j) =                    .   (7.20)
+                                     | det Wx (i, j)|                        | det Wy (i, j)|
+
+The oriented plaquette phase and the discrete Chern number are
+                                                                                   
+                  Fxy (i, j) = Arg Ux (i, j)Uy (i + 1, j)Ux (i, j + 1)−1 Uy (i, j)−1 ,            (7.21)
+                                1 X
+                    CFukui =         Fxy (i, j).                                                  (7.22)
+                               2π
+                                       i,j
+
+Indeed, for a grid spacing ∆kµ ,
+                                                                                          
+              Wµ = Ir + Aµ ∆kµ + O(∆kµ2 ),                det Wµ = exp Tr Aµ ∆kµ + O(∆kµ2 ) .     (7.23)
+
+Before normalization, the product of the four determinant overlaps around a plaquette satisﬁes
+                                           Z                
+                                 e
+                                U□ = exp       Tr F + O(∆k ) .
+                                                           3
+                                                                                           (7.24)
+                                                     □
+
+For a non-Hermitian frame this quantity need not have unit modulus. Equation (7.20) retains its
+phase: the discarded positive factor is topologically contractible because C× ≃ R+ × U (1), whereas
+the U (1) factor carries the winding. Under the frame change (7.10),
+
+                                             Wab 7→ G(a)−1 Wab G(b),                              (7.25)
+
+so all determinant gauge factors cancel around a closed plaquette. The algorithm is consequently
+frame independent. On a suﬃciently ﬁne admissible grid, for which no plaquette ﬂux crosses the
+principal-branch cut and no det Wµ vanishes,
+
+                                               CFukui −→ C(PI ).                                  (7.26)
+
+The determinant is essential for a band cluster because it discretizes the connection on det EI
+rather than selecting an arbitrary eigenvector inside the cluster.
+The implementation ﬁrst screens target–complement separation on a radial grid independent of the
+compactiﬁcation mesh, augmented by zeros of b(k) and reﬁned roots of the cubic discriminant. It
+uses 1201 logarithmic and 1201 linear radial samples before reﬁnement, with gap tolerances 10−6
+relative and 10−9 absolute; an operator-norm bound controls the remaining large-k tail. Passing this
+ﬁnite-radius screening is numerical evidence, not a proof over every ﬁnite k. Frames are constructed
+by an ordered complex Schur decomposition and a Sylvester equation for the Riesz projector, so an
+internal cluster degeneracy need not be resolved into individual eigenvectors. Rotational covariance
+supplies the angular frames. The cap basis is chosen from the tracked asymptotic spin sectors, and
+an explicitly supplied incompatible cap is rejected. Unresolved determinant links, principal-phase
+ambiguity, or failure of the independent pole-formula check yield an unavailable result, rather
+
+                                                          28
+than dropping plaquettes and rounding the remaining ﬂux. The main-text platform plots use the
+screened pole formula, with representative independent determinant-link evaluations.
+Parameter scans return an unavailable value, rather than zero, when the closure is singular or the
+target projector is not isolated from its complement. Such samples interrupt the plotted curve and
+are retained with an invalidity reason in the numerical output. In particular, neither α = 0 nor
+α = π is labelled a trivial Chern phase at ω = 0.
+
+
+8      Rotational Covariance and the Origin of C = ±2
+
+8.1     Covariant Form and Radial Spectrum
+
+Write
+                                  kx = k cos ϕ,        ky = k sin ϕ.                           (8.1)
+Deﬁne                                                   
+                                          1   0      0
+                                  S(ϕ) = 0 cos ϕ − sin ϕ .                                   (8.2)
+                                          0 sin ϕ cos ϕ
+The corresponding generator on density–polarization space is
+                                                            
+                                                      0 0 0
+                             J = iS(ϕ)−1 ∂ϕ S(ϕ) = 0 0 −i .                                  (8.3)
+                                                      0 i 0
+
+This J is distinct from the microscopic coupling strength K in (2.5). Then
+
+                                   M (k, ϕ) = S(ϕ)B(k)S(ϕ)−1 ,                                 (8.4)
+
+with                                                   
+                                          0  −ivk   0
+                                         iv            
+                                 B(k) =                
+                                        − k a(k) b(k)  .                                     (8.5)
+                                           2
+                                          0  −b(k) a(k)
+The covariance relation implies directional spectral isotropy. For the characteristic polynomial,
+
+                           χM (σ; k, ϕ) = det[M (k, ϕ) − σI3 ]
+                                        = det[S(ϕ)(B(k) − σI3 )S(ϕ)−1 ]
+                                        = det[B(k) − σI3 ].                                    (8.6)
+
+Thus, away from degeneracies, every continuously labelled branch satisﬁes σn (k, ϕ) = σn (k); at a
+degeneracy the same statement applies to the isolated spectral cluster. The angular coordinate
+does not move the spectrum in the complex plane; it only rotates the eigenvectors and spectral
+subspaces. More precisely, let
+                                       (0)
+                                      PI (k) := PI (k, 0)                                    (8.7)
+be the Riesz projector of the radial matrix B(k). Since
+
+                         (zI3 − M (k, ϕ))−1 = S(ϕ)(zI3 − B(k))−1 S(ϕ)−1 ,                      (8.8)
+
+                                                  29
+the full two-dimensional projector is
+
+                                   PI (k, ϕ) = S(ϕ)PI (k)S(ϕ)−1 .
+                                                        (0)
+                                                                                                 (8.9)
+
+The superscript (0) denotes the reference direction ϕ = 0; it is not a band label.
+
+
+8.2   Finite-Wavenumber Isolation and Exceptional Points
+
+The condition D0 6= 0 makes the closed matrix ﬁnite but does not guarantee an isolated spectral
+projector. This must be checked along the entire radial spectrum, whose characteristic equation is
+
+                det[σI3 − B(k)] = σ 3 − 2aσ 2 + (a2 + b2 + v 2 k 2 /2)σ − av 2 k 2 /2 = 0.     (8.10)
+
+For example, with v = 3, ω = 0, d0 = 1, K = λρ0 G(0)    b   = 20.75, and α = 0.99π, the oscillatory
+pair meets at ﬁnite-wavenumber exceptional points near k = 0.413267 and 0.472217. Its separate
+rank-one Chern numbers are therefore undeﬁned, despite D0 6= 0 and distinct pole sectors. An
+exceptional point internal to a band cluster does not by itself invalidate that cluster: the relevant
+condition is separation of the target cluster from its complement. Consequently the open phase-lag
+interval alone is not a Chern phase diagram.
+
+
+8.3   Compactiﬁcation of the Projector Base Space
+
+The punctured wave-number plane is (0, ∞)×S 1 . In polar coordinates, the circle at k = 0 represents
+the single origin, while the one-point compactiﬁcation also collapses the circle at k = ∞. Collapsing
+both boundary circles produces
+                                          R2 ∪ {∞} ≃ S 2 .                                     (8.11)
+For a spectral bundle, this topological compactiﬁcation is legitimate only if the chosen projector
+has direction-independent limits at both ends:
+
+                         lim PI (k, ϕ) = PI (0),        lim PI (k, ϕ) = PI (∞),                (8.12)
+                         k→0                            k→∞
+
+uniformly in ϕ. Directional spectral isotropy is necessary for using one radial spectral separation at
+every angle, but it is not by itself suﬃcient; the polar projector limits in (8.12) are the additional
+requirement.
+At k = 0, M (0, ϕ) = B(0) is independent of ϕ and commutes with S(ϕ). Its isolated Riesz projectors
+                                                                       b
+therefore commute with S(ϕ) as well. At large k, the disk kernel obeys G(k)   → 0, and
+
+                                 B(k)                               v2
+                                      −→ A∞ = iβJ,            β=       ,                       (8.13)
+                                  k2                               4D0
+
+Since S −1 ∂ϕ S = −iJ and S(ϕ) = e−iϕJ , A∞ commutes with S(ϕ). Let σs and Ps denote the
+continuously labelled eigenvalue and Riesz projector approaching the spin sector s ∈ {0, ±1}.
+Standard spectral perturbation gives, uniformly in ϕ,
+
+                    σs (k, ϕ)
+                              −→ iβs,       Ps (k, ϕ) −→ Ps (∞),        s ∈ {0, ±1},           (8.14)
+                        k2
+
+
+
+                                                   30
+                                                                                     b
+whenever the relevant eigenvalue or cluster of A∞ is separated. For the disk kernel, G(k) =
+O(k −3/2 ), and the three branches have the more explicit asymptotics
+
+      σ0 (k) = O(k −7/2 ),       Re σs (k) = O(k −3/2 ),                    Im σs (k) = βsk 2 + O(1),             s = ±1.   (8.15)
+
+Thus the real parts remain bounded and vanish asymptotically, whereas the oscillatory pair is un-
+bounded only through its imaginary parts. For every continuously labelled branch, this asymptotic
+behaviour is independent of the approach angle ϕ. In the extended complex plane, each unbounded
+branch reaches the spectral point at inﬁnity independently of the direction in wave-number space.
+This does not imply coalescence of the two oscillatory branches in the aﬃne complex plane: their
+separation grows as O(k 2 ) and their limiting projectors remain distinct. Therefore the target pro-
+jector extends to S 2 precisely in the nonsingular, gapped regimes for which these polar separations
+hold.
+
+
+8.4     Spin Generator and Pole Formula
+
+Using
+                             ∂k PI = S(∂k PI )S −1 ,                  ∂ϕ PI = S[−iJ, PI ]S −1 ,
+                                                  (0)                                       (0)
+                                                                                                                            (8.16)
+the pullback of (7.15) to (k, ϕ) is
+                                            Z ∞         Z 2π        n                       o
+                                       1                              (0)    (0)        (0)
+                       C(PI ) =                    dk          dϕ Tr PI [∂k PI , [−iJ, PI ]] .                              (8.17)
+                                      2πi    0           0
+
+No additional factor of k appears because (8.17) is the pullback of a diﬀerential two-form, not a
+scalar area density.
+                                                        (0)        (0)
+To reduce the integrand, diﬀerentiate (PI )2 = PI :
+                       (0)      (0)              (0)    (0)           (0)            (0)       (0)   (0)
+                     PI ∂k PI + (∂k PI )PI                    = ∂ k PI ,            PI (∂k PI )PI          = 0.             (8.18)
+
+Expanding the nested commutator and using cyclicity of the trace yields
+                 n                         o
+                     (0)   (0)        (0)
+               Tr PI [∂k PI , [−iJ, PI ]]
+                         h                                 i
+                                  (0)     (0)     (0)   (0)                 (0)
+                    = Tr (−iJ) PI ∂k PI + (∂k PI )PI           = −i Tr(J∂k PI ).                                            (8.19)
+
+The integrand is independent of ϕ, so (8.17) becomes the compactiﬁcation-pole formula
+                                                      h            ik=∞
+                                                            (0)
+                                            C(PI ) = − Tr(JPI (k))      ,                                                   (8.20)
+                                                                                    k=0
+
+up to the overall sign ﬁxed by the orientation convention.
+The generator J has eigenvectors
+
+                         eρ = (1, 0, 0)T ,              u+ = (0, 1, i)T ,            u− = (0, 1, −i)T ,                     (8.21)
+
+with spin weights 0, +1, −1, respectively. Deﬁne the corresponding rank-one projectors by
+
+                                                                       us u†s
+                                      Q0 = eρ e†ρ ,            Qs =             ,    s = ±1.                                (8.22)
+                                                                       u†s us
+
+                                                                 31
+Then
+                                 Tr(JQs ) = s,        s ∈ {0, +1, −1}.                        (8.23)
+If a rank-r projector at either compactiﬁed pole is a sum of such mutually disjoint spin projectors,
+Tr(JP ) is the sum of the included spin weights. Equation (8.20) therefore applies without change
+to both a single band and a band cluster.
+
+
+8.5    Pole Eigenvectors and Twist Condition
+
+The pole formula becomes concrete by identifying which circular polarization sector is selected at
+                             b
+k = 0 and at k = ∞. Let G0 = G(0)  and
+                                                     λρ0
+                                      b0 = −ω +          G0 sin α.                            (8.24)
+                                                      2
+At k = 0,                                 
+                                  0 0   0
+                                                                    λρ0
+                          B(0) = 0 a0 b0  ,                a0 =       G0 cos α.             (8.25)
+                                                                     2
+                                  0 −b0 a0
+Therefore
+                       B(0)u+ = (a0 + ib0 )u+ ,           B(0)u− = (a0 − ib0 )u− .            (8.26)
+For the branch selected by the lower-imaginary ordering, the k = 0 pole spin label is therefore
+
+                                 s0 = − sgn(b0 ),         k=0:       u s0 ,                   (8.27)
+
+provided b0 6= 0.
+                                     b
+At large k, the disk kernel satisﬁes G(k) → 0 and
+
+                                 v2 2
+                       b(k) =       k + O(1),            D0 = 2ω − 2λρ0 G0 sin α.             (8.28)
+                                4D0
+Writing
+                                                      v2
+                                             β=          ,                                    (8.29)
+                                                     4D0
+one obtains                                           
+                                                0 0 0
+                                  B(k)
+                                       −→ A∞ = 0 0 β  ,                                     (8.30)
+                                   k2
+                                                0 −β 0
+and hence
+                                A∞ u+ = iβu+ ,           A∞ u− = −iβu− .                      (8.31)
+The same lower-imaginary ordering at inﬁnity gives
+
+                                s∞ = − sgn(β),           k→∞:         u s∞ ,                  (8.32)
+
+provided D0 6= 0.
+The target eigenvector therefore twists between opposite circular polarizations exactly when the
+pole sectors in (8.27) and (8.32) are diﬀerent:
+
+                                sgn(b0 ) 6= sgn(β)       ⇐⇒     b0 β < 0.                     (8.33)
+
+                                                    32
+Equivalently,                                                       
+                                                      λρ0
+                                      D0         −ω +     G0 sin α       < 0.                            (8.34)
+                                                       2
+For the simulations in the main text, ω = 0. Then
+
+                                        D0 b0 = −(λρ0 G0 )2 sin2 α,                                      (8.35)
+
+so the pole sectors are opposite throughout 0 < α < π. They give a twist u− → u+ for a globally
+isolated lower-imaginary branch, but do not establish its ﬁnite-k isolation. The phase-lag endpoints
+sin α = 0 are singular before this classiﬁcation can be applied: D0 = 0, so β = v 2 /(4D0 ) and the
+D0−1 entries of the closed dispersion matrix are undeﬁned. Consequently, at α = 0 and α = π
+there is no ﬁnite closed matrix, no well-deﬁned spectrum or spectral projector, and hence no Chern
+number. These phase-lag endpoints must not be interpreted as topologically trivial phases; the
+revised numerical scans record them as unavailable rather than plotting them at zero.
+Combining this pole-sector change with (8.20), the rank-one lower-imaginary-band projector obeys
+
+                            C = − (s∞ − s0 ) ,           |C| = |(+1) − (−1)| = 2,                        (8.36)
+
+where the displayed sign changes if the orientation of S 2 is reversed. The upper-imaginary com-
+panion branch has the opposite pole-to-pole connection and hence the opposite Chern number. For
+a two-band cluster complementary to a rank-one projector,
+
+                            Ppair = I3 − Psingle ,        C(Ppair ) = −C(Psingle ),                      (8.37)
+
+because Tr J = 0. This explains why the single-band and mixed-band numerical platforms carry the
+same magnitudes with complementary signs. Thus C = ±2 originates from the rotational covariance
+of the dispersion matrix and the change of polar spin weight, while the phase lag α controls whether
+that twist is present through D0 b0 . All statements require D0 6= 0, the relevant polar sectors to be
+nondegenerate, and the target projector to remain isolated from its complement for every ﬁnite k.
+A straight bulk line gap is an additional condition for the bulk–boundary identiﬁcation below.
+
+
+9     UV-Regularized Toeplitz Strip and Boundary Spectral Flow
+
+9.1   Normal-Momentum Regularization and Fourier Blocks
+
+Fix the tangential wave number ky . The continuum symbol M (kx , ky ) is not periodic in kx , so
+a ﬁnite Toeplitz matrix ﬁrst requires an explicit ultraviolet regularization. Choose a normal-
+momentum cutoﬀ kc > 0, deﬁne the auxiliary lattice spacing
+                     π               2kc
+                a=      ,   ∆kx =        ,          kx,j = −kc + j∆kx ,         j = 0, . . . , Nk − 1,    (9.1)
+                     kc              Nk
+and periodically continue the sampled symbol from [−kc , kc ). The resulting Fourier blocks are
+                                      Z kc
+                                    1
+                        TR (ky ) =         M (kx , ky )eikx aR dkx ,
+                                   2kc −kc
+                                             N −1
+                                     1 Xk
+
+                                   ≈      M (kx,j , ky )eikx,j aR ,             R ∈ Z.                    (9.2)
+                                     Nk
+                                             j=0
+
+
+
+                                                         33
+Thus                                                   X
+                                  Mkper
+                                     c
+                                        (kx , ky ) =           TR (ky )e−ikx aR                   (9.3)
+                                                       R∈Z
+
+is the Fourier series of the periodized regularization Mkper
+                                                          c
+                                                             , not an exact periodic identity for the
+original continuum symbol. This distinction is essential: a is a numerical UV scale and is unrelated
+to the particle interaction distance d0 .
+The half-space block Toeplitz operator acts on ℓ2 (N0 ) ⊗ C3 as
+                                                       ∞
+                                                       X
+                                  (Tkc (ky )Ψ)n =              Tn−n′ (ky )Ψn′ .                   (9.4)
+                                                       n′ =0
+
+For the numerical strip, let n, n′ = 0, . . . , Nx − 1 label normal cells and µ, ν = 1, 2, 3 label the
+density–polarization components. With a Fourier-block cutoﬀ Rmax ≤ Nx − 1, the hard-wall strip
+matrix is                                          (
+                                                     [Tn−n′ (ky )]µν , |n − n′ | ≤ Rmax ,
+                     [Lstrip (ky )](n,µ),(n′ ,ν) =                                               (9.5)
+                                                     0,                |n − n′ | > Rmax .
+The open normal direction is therefore represented by truncating the Toeplitz convolution, while
+translation invariance along y leaves ky as a parameter. Quantitative claims require convergence
+under increasing kc , Nk , Nx , Rmax ; otherwise Fourier aliasing, the artiﬁcial UV periodization, and
+hybridization between the two strip edges can move the computed crossings.
+
+
+9.2    Left and Right Eigenvectors and Boundary Localization
+
+For each ky , solve the non-Hermitian right and left eigenproblems
+
+                                  Lstrip (ky )ΨR                  R
+                                               j (ky ) = σj (ky )Ψj (ky ),
+                                 Lstrip (ky )† ΨL                 ∗ L
+                                                j (ky ) = σj (ky ) Ψj (ky ),                      (9.6)
+
+and, for a simple spectrum, choose the biorthogonal normalization
+
+                                        hΨL         R
+                                          j (ky ), Ψl (ky )i = δjl .                              (9.7)
+
+Write the right eigenvector as
+
+                              ΨR                                         j,n ∈ C .
+                                     R              R
+                               j = (Ψj,0 , . . . , Ψj,Nx −1 ),          ΨR      3
+                                                                                                  (9.8)
+
+Because ΨR  j is the spatial proﬁle multiplying the linear time factor, the localization classiﬁer uses
+its scale-invariant Euclidean cell weight
+
+                                                                 X
+                                                                 3
+
+                             j (n; ky ) = kΨj,n (ky )k2 =
+                            dR                                         |ΨR
+                                            R         2                              2
+                                                                         j,n,µ (ky )| .           (9.9)
+                                                                 µ=1
+
+For an integer edge-window width 1 ≤ w < Nx /2, deﬁne
+                         Pw−1 R                                        PNx −1      R
+                     (j)  n=0 dj (n; ky )                  (j)           n=Nx −w dj (n; ky )
+                    WL = PNx −1             ,             WR =           PNx −1 R            .   (9.10)
+                                d R (n; k )                                    d   (n; k   )
+                          n=0     j      y                                n=0    j       y
+
+
+
+                                                       34
+                                                                          (j)       (j)     (j)
+For a threshold 0 < η < 1, a mode is labelled left-localized when WL ≥ η and WL > WR , and
+right-localized with L ↔ R. The threshold is a numerical classiﬁer rather than a topological invari-
+ant and must be varied in a robustness test. Near an exceptional point or unresolved degeneracy,
+individual biorthogonal eigenvectors cease to be stable labels. A subspace treatment would then
+be required for invariant continuation [9]; the present individual-branch implementation ﬂags such
+samples and excludes aﬀected crossings rather than claiming to perform that continuation.
+
+
+9.3    Discrete Branch Tracking
+      (s)
+Let ky , s = 0, . . . , Ny − 1, be an increasing tangential-momentum grid. Eigenvalue ordering at a
+single grid point does not deﬁne a branch. For adjacent samples, the implementation forms
+                           D                          E
+                   (s)                                     (s)
+                Ojl = ΨL      j (k (s)
+                                   y   ), Ψ R (s+1)
+                                            l (k y  )   , Djl = σj (ky(s) ) − σl (ky(s+1) ) . (9.11)
+
+After normalizing O(s) and D(s) by their respective maxima, the assignment cost is
+                          (s)                         e (s) ,
+                                           e (s) ) + χD
+                         Cjl = (1 − χ)(1 − O                        0 ≤ χ ≤ 1.                (9.12)
+                                             jl         jl
+
+                              P (s)
+The permutation minimizing      j Cj,π(j) is found by the Hungarian assignment algorithm. The
+reproduced strip plot uses χ = 0.25. This construction makes the branch labels depend mainly
+on biorthogonal continuation while using eigenvalue proximity to resolve ﬁnite-grid ambiguity.
+The code ﬂags relative eigenvalue separations at most 10−7 , normalized left–right self-overlaps at
+most 10−8 , and assignment margins at most 10−6 . The latter is the diﬀerence between the best
+alternative row cost and the assigned cost; it is a conservative individual-branch ambiguity ﬂag,
+not a subspace-gap test. Flagged crossings are recorded separately as unresolved.
+
+
+9.4    Line Gap and Oriented Crossings
+
+An oriented straight line in the complex spectral plane is speciﬁed by
+
+                       ℓ = {z ∈ C : g(z) = 0},         g(z) = Re[e−iθ (z − z0 )].             (9.13)
+
+It is a bulk line gap only when
+
+                           Spec M (k) ∩ ℓ = ∅      for every ﬁnite k ∈ R2 .                   (9.14)
+
+The same separation must also persist in the high-|k| limiting sector. The eigenvalue branches
+possess direction-independent asymptotic values in the extended spectral plane, while the vector
+bundle over the compactiﬁed wave-number space is extended through the uniform polar limits of
+the Riesz projectors. The sign of g ﬁxes the orientation convention. For a tracked, edge-localized
+branch, a transverse crossing at ky = k∗ obeys
+
+                              g(σj (k∗ )) = 0,     ∂ky g(σj (ky ))|k∗ 6= 0,                   (9.15)
+
+and contributes                                               
+                                    sj,k∗ = sgn ∂ky g(σj (ky )) k∗ .                          (9.16)
+
+
+
+                                                  35
+                                                                                                    (s)
+On the discrete grid, a crossing is recorded when gs gs+1 < 0, where gs = g(σj (ky )). Linear
+interpolation gives
+
+                                                         |gs |
+                 k∗ ≈ ky(s) + (ky(s+1) − ky(s) )                   ,    sj,k∗ = sgn(gs+1 − gs ).          (9.17)
+                                                   |gs | + |gs+1 |
+
+The same edge label must hold at both bracketing samples; their average weights are recorded
+only as diagnostics. A crossing exactly on a grid vertex is bracketed once by its nearest nonzero
+neighbors, with the label also required at intervening samples; tangencies and interval-end contacts
+are not counted as transverse crossings. Crossings aﬀected by a ﬂagged sample or ambiguous
+assignment are excluded and reported separately. The resolved left and right counts are then
+                                          X
+                               SFE,ℓ =           sj,k∗ ,  E ∈ {L, R},                         (9.18)
+                                            (j,k∗ )∈XE
+
+where XE is the set of transverse crossings classiﬁed at edge E. Horizontal lines Im σ = c, as used
+in the strip ﬁgure, correspond to θ = π/2 and z0 = ic.
+For the continuum problem, the tangential parameter is ky ∈ R ∪ {∞} ≃ S 1 . A ﬁnite interval
+[−ky,c , ky,c ] approximates this compactiﬁcation only if the two ends have reached the same high-|ky |
+limiting sector and no crossing is lost near either cutoﬀ. Otherwise (9.18) is only a cutoﬀ-dependent
+crossing count, not an integer spectral-ﬂow invariant.
+
+
+9.5   Scope of the Bulk–Boundary Identiﬁcation
+
+For a Hermitian Chern family, the Toeplitz/Fredholm index identiﬁes the oriented edge spectral ﬂow
+with the Chern-number diﬀerence across an interface [5, 6, 7]. A line-gapped non-Hermitian family
+admits a gap-preserving ﬂattening to a Hermitian representative [8]. Nevertheless, conventional
+Bloch bulk–boundary correspondence can fail in non-Hermitian systems with skin accumulation,
+and left, right, and biorthogonal localization need not coincide [9, 10]. Accordingly, the strip
+calculation here uses
+                                SFinterface,ℓ = C(Pright ) − C(Pleft )                      (9.19)
+as a consistency relation only when: (i) the same bulk line gap remains open; (ii) the compactiﬁed
+bulk projector is continuous; (iii) the half-space family is Fredholm; (iv) the UV-regularized strip
+converges without extensive bulk skin accumulation; and (v) the ky cutoﬀ closes onto the same
+limiting sector. For a hard wall modelled by a trivial exterior, C(Pvac ) = 0. Opposite boundary
+orientations then give
+                                 SFL,ℓ = C(P ),      SFR,ℓ = −C(P )                           (9.20)
+up to one global orientation sign. A ﬁnite-strip agreement with (9.20) is numerical evidence for
+bulk–boundary correspondence; it is not, by itself, a proof that all of the above operator-theoretic
+hypotheses hold.
+
+
+9.6   From Edge Spectrum to Boundary Motion
+
+An edge wave packet built narrowly around a real ky = k̄y contains modes
+
+                 U (x, y, t; ky ) = ΨR (x; ky )eσ(ky )t+iky y ,        σ(ky ) = γ(ky ) + iΩ(ky ).         (9.21)
+
+
+                                                          36
+With the convention eσt+iky y , its oscillatory phase is ky y + Ω(ky )t. If γ(ky ) and the eigenvector
+proﬁle vary slowly across the packet bandwidth, stationary phase gives
+                                              dy
+                                          vg =   = −Ω′ (k̄y ).                                (9.22)
+                                              dt
+This sign changes if the Fourier convention or boundary orientation is reversed. Nonzero spectral
+ﬂow enforces a net oriented crossing count; it does not require every edge branch to have the same
+local group velocity and does not prove nonlinear particle-ﬂow stability. The observed particle ﬂow
+is therefore compared with the linear edge branches only after nonlinear saturation and persistent
+boundary localization have been checked independently.
+
+
+10     Numerical Workﬂow
+
+The reproducible workﬂow is:
+
+   1. Fix M (kx , ky ) and the regularization parameters (kc , Nk , Rmax , Nx ) using (9.1)– (9.5).
+                 (s)
+   2. At every ky , construct Lstrip and compute paired left and right eigenvectors satisfying (9.7).
+   3. Track simple branches by minimizing (9.12); ﬂag unresolved eigenvectors and ambiguous
+      assignments, without substituting an unimplemented subspace rule.
+   4. Compute (9.10) and classify crossings only when the edge label persists on both sides of the
+      crossing.
+   5. Count resolved oriented crossings of the stated empirical reference lines using (9.17), and
+      separately test whether each reference intersects the bulk spectrum. The line-gap condition
+      (9.14) is required only for an invariant bulk–boundary interpretation, not for reporting these
+      empirical counts.
+   6. Repeat after varying kc , Nk , Rmax , Nx , w, η, ∆ky , and ky,c . Report an integer spectral ﬂow
+      only when its value and the crossing locations are stable under these changes.
+   7. Compare the converged edge counts with the bulk Chern number from the biorthogonal Fukui
+      projector algorithm.
+
+The circular-particle-matched strip calculation uses N = 2000, L = 7, R = L/2 = 3.5, v = 3,
+ω = 0, K = 20.75, and d0 = 1, with ρ0 = N/(πR2 ) and λ = K/(ρ0 πd20 ). The sampled phase lags
+are α/π = 0.2, 0.4, 0.5, 0.6, 0.8; neither singular endpoint is evaluated. The displayed numerical grid
+is
+            (kc , Nk , Rmax , Nx , w, η, ky,c , Ny , χ) = (40, 384, 35, 36, 6, 0.45, 50, 201, 0.25). (10.1)
+The levels Im σ = ±10pare empirically chosen observation references. For α = π/2, the matched
+bulk spectrum is 0, ±i b(k)2 + v 2 k 2 /2 with minimum nonzero frequency K/2 = 10.375, so both
+levels are bulk line gaps; for the other four phase lags they intersect the bulk spectrum and remain
+only observation references. Finite-strip counts, including the threshold case, do not by themselves
+certify every convergence assumption of the index relation. The Ny = 101 run is a momentum-step
+comparison, not a joint UV or inﬁnite-width convergence claim. On both grids, all ﬁve phase lags
+give (SFL,ℓ , SFR,ℓ ) = (2, −2) at both references under the stated orientation and persistent-edge
+rule. The machine-readable output records parameters, resolved and excluded crossings, and bulk
+intersections for every phase lag.
+
+                                                    37
+               Matched-parameter finite-strip spectra
+               v = 3, ω = 0, K = 20.75, d0 = 1; Δky = 0.5
+
+               (a) α = 0.2π                                                        (b) α = 0.4π
+         40                                                                  40
+
+
+         20                                                                  20
+  Im σ
+
+
+
+
+                                                                      Im σ
+          0                                                                   0
+
+
+         -20                                                                 -20
+
+
+         -40                                                                 -40
+            -50           -25            0           25     50                  -50            -25             0           25   50
+                                        ky                                                                     ky
+               (c) α = 0.5π                                                        (d) α = 0.6π
+         40                                                                  40
+
+
+         20                                                                  20
+  Im σ
+
+
+
+
+                                                                      Im σ
+
+
+
+          0                                                                   0
+
+
+         -20                                                                 -20
+
+
+         -40                                                                 -40
+            -50           -25            0           25     50                  -50            -25             0           25   50
+                                        ky                                                                     ky
+               (e) α = 0.8π
+         40
+                                                                                         Left-localized mode
+                                                                                         Right-localized mode
+         20                                                                              Other / unresolved mode
+                                                                                         Empirical levels c = ±10
+
+                                                                                   All five panels, at both levels:
+  Im σ
+
+
+
+
+          0
+                                                                                   (nL , nR ) = (2, − 2)
+
+                                                                                   Bulk line gaps only at α = π/2.
+         -20                                                                       Other panels: bulk intersections.
+
+                                                                                   Counts require persistent edge labels
+         -40                                                                       and resolved tracking; they are
+            -50           -25            0           25     50                     finite-cutoff diagnostics.
+                                        ky
+
+
+Figure 10: Finite-strip spectra at the circular-particle-matched parameters. Blue and orange sam-
+ples are left- and right-localized modes; gray samples are other or unresolved modes. The two
+unchanged empirical reference levels are Im σ = ±10. Displayed signed counts require persistent
+localization on both sides of a crossing and resolved tracking; they are ﬁnite-cutoﬀ diagnostics, not
+certiﬁed line-gap invariants. All panels share the same axes and numerical grid.
+
+
+
+
+                                                                 38
+11    Summary
+
+Starting from the microscopic frustrated alignment rule, the kinetic equation is reduced to a closed
+density–polarization model by Fourier mode truncation and adiabatic elimination of the second
+angular harmonic. Linearization around the homogeneous state gives a non-Hermitian dispersion
+matrix whose real parts determine growth rates and whose imaginary parts determine linear fre-
+quencies. Isolated spectral projectors of this matrix deﬁne complex vector bundles over wavenumber
+space; their ﬁrst Chern numbers are computed either through the projector formula or through the
+Fukui determinant-link discretization. This closed matrix and its topological invariants require
+D0 6= 0; for ω = 0, the phase-lag endpoints α = 0 and α = π are singular and carry no spectrum
+or Chern number within the closure. Rotational covariance reduces the relevant Chern number to
+a diﬀerence of polar spin weights, explaining the robust values C = ±2. Finally, Toeplitz strip
+matrices convert the bulk symbol into an open-boundary linear problem. Their empirical edge
+branches are compared with particle transport; identifying a crossing count with a bulk Chern
+number additionally requires the common line-gap and convergence conditions stated above.
+
+
+References
+
+[1] T. Kato, Perturbation Theory for Linear Operators, Springer, Berlin, 1995.
+
+[2] D. J. Thouless, M. Kohmoto, M. P. Nightingale, and M. den Nijs, Quantized Hall conductance
+    in a two-dimensional periodic potential, Physical Review Letters 49, 405–408 (1982).
+
+[3] Y. Hatsugai, Chern number and edge states in the integer quantum Hall eﬀect, Physical Review
+    Letters 71, 3697–3700 (1993).
+
+[4] T. Fukui, Y. Hatsugai, and H. Suzuki, Chern numbers in discretized Brillouin zone: Eﬃcient
+    method of computing spin Hall conductances, Journal of the Physical Society of Japan 74,
+    1674–1677 (2005).
+
+[5] J. Kellendonk, T. Richter, and H. Schulz-Baldes, Edge current channels and Chern numbers in
+    the integer quantum Hall eﬀect, Reviews in Mathematical Physics 14, 87–119 (2002).
+
+[6] G. M. Graf and M. Porta, Bulk-edge correspondence for two-dimensional topological insulators,
+    Communications in Mathematical Physics 324, 851–895 (2013).
+
+[7] E. Prodan and H. Schulz-Baldes, Bulk and Boundary Invariants for Complex Topological Insu-
+    lators: From K-Theory to Physics, Springer, Cham, 2016.
+
+[8] K. Kawabata, K. Shiozaki, M. Ueda, and M. Sato, Symmetry and topology in non-Hermitian
+    physics, Physical Review X 9, 041015 (2019).
+
+[9] F. K. Kunst, E. Edvardsson, J. C. Budich, and E. J. Bergholtz, Biorthogonal bulk–boundary
+    correspondence in non-Hermitian systems, Physical Review Letters 121, 026808 (2018).
+
+[10] S. Yao and Z. Wang, Edge states and topological invariants of non-Hermitian systems, Physical
+    Review Letters 121, 086803 (2018).
+
+
+
+
+                                                39
+

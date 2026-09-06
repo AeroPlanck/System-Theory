@@ -1,0 +1,47 @@
+{
+  "model": "CircularBoundaryPatternFormation",
+  "simulation": {
+    "strengthK": 20.75,
+    "distanceD0": 1.0,
+    "speedV": 3.0,
+    "freqDist": "uniform",
+    "omegaMin": 0.0,
+    "deltaOmega": 0.0,
+    "agentsNum": 2000,
+    "dt": 0.005,
+    "shotsnaps": 500,
+    "randomSeed": 9,
+    "iterations": 50000
+  },
+  "critical_diameters": [
+    3.0,
+    3.5,
+    4.0,
+    4.5,
+    5.0
+  ],
+  "critical_seeds": [
+    9,
+    10,
+    11
+  ],
+  "near_critical_alphas": [
+    0.501,
+    0.51
+  ],
+  "near_critical_diameters": [
+    3.0,
+    5.0
+  ],
+  "near_critical_seeds": [
+    9,
+    10
+  ],
+  "boundary_shell_width": 0.25,
+  "terminal_window_frames": 20,
+  "reference_files": {
+    "D:\\PrivatePythonProject\\Math\\Lattice\\Dispersion.py": "A1FC299F4AB13F9997BDF0EBA993C6BA12054500134A8617180F572F3732B89D",
+    "D:\\LaTex\\Boundary Flow\\PRL.tex": "A7020AB8327BDB0045F8D4A5147FC2A49FEC2732060B51AEEA3DE379C9873937",
+    "D:\\LaTex\\Boundary Flow\\Methods Appendix.tex": "63B20123EEDA9A1DE865A3F766D3A7973F0D7C3113E1E4E9EB3A960CDF14784F"
+  }
+}

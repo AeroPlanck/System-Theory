@@ -1,0 +1,594 @@
+  Boundary projection and the W membership gate
+
+   (a) Why distance is not enough                                   (b) Local boundary coordinates
+                    Physical boundary                                                          κb,n i
+                                                                                   κd,n i =
+                                                                                            1 − κb,n i din
+                                                                                           n
+                                                                                          ti
+                                                                                  uni                      din
+                                                 Boundary                                                     Π(Xni )
+                                                 candidate                              inward
+                                                                                        normal
+                                                                                                     Xni
+
+
+              Nearby interior vortex
+                                                                                             qin = uni ⋅tni
+                 Both can satisfy din ≤ d0 .
+          Distance alone does not separate them.                                     q > 0: CCW; q < 0: CW
+
+
+
+
+   (c) Near-tangential turning balance                              (d) Membership, not a weight
+           Approximation: nearly tangent motion
+               at nearly fixed wall distance.                                         |qin | ≥ 0.05, din ≤ d0
+                                                                                 valid projection; 1 − κb,n i din > 0
+              Curve-following requirement
+                  areq, ⟂ = κd,n i v 2 (qin )2
+
+
+                                                                             Win > εW                          Win ≤ εW
+          Normal acceleration from free rotation                         Retain candidate                  Exclude candidate
+                    afree, ⟂ = vΩni qin
+
+
+          Ωni : recomputed microscopic angular rate
+                                                                                           εW = 0.02v/d0
+
+
+                          areq, ⟂ − afree, ⟂                                         ng ⟶ rng ⟶ Qng
+                 Win =              v                                            Discard the magnitude of Win .
+                   = κd,n i v(qin )2 − Ωni qin                                Only membership is carried forward.
+
+
+
+                      W is used only for π/2 < α < π: a conditional selection proxy, not a measured force.
+
+
+
+Figure 1: Code-drawn construction of the boundary-selection quantity Win . (a) A distance cutoﬀ
+alone cannot distinguish wall-supported motion from an interior vortex that passes near the wall.
+(b) Closest-point projection gives the local tangent, normal, signed tangential component qin , and
+oﬀset curvature κnd,i . (c) The curvature-following requirement is compared with the normal acceler-
+ation already supplied by the free heading dynamics; their diﬀerence per unit speed is Win . (d) Win
+is used only as a membership gate. Its magnitude is discarded before the cell, relay, and long-time
+statistics are calculated. The drawing states the geometric assumptions used by the ﬁlter; it is not
+a simulation snapshot.
+
+
+Let Sng be the retained particles assigned to boundary cell g at frame n. If this set is empty, set
+
+                                                              10
+Qng = 0. Otherwise choose the particle closest to the wall,
+
+                         rng = arg min dni ,    Qng = sgn qrnng ∈ {−1, 0, +1}.                    (6.13)
+                                 i∈Sng
+
+If two nearest particles are tied within 10−7 d0 and have opposite signs, set Qng = 0. Therefore
+every cell at every frame contributes exactly one value Qng ∈ {−1, 0, +1}, regardless of how many
+particles occupy that cell.
+
+
+6.3   Checking Heading Sign Against Measured Motion
+
+The sign of the heading projection must agree with the particle’s measured motion along the
+boundary. We track the selected particle rng from frame n to frame n + 1 and calculate
+                                                               
+                              ∆sni = wrap[−P/2,P/2) sn+1
+                                                      i   − sni .                      (6.14)
+
+A pair of frames is a valid trial, Tng = 1, only if the same particle has a valid projection onto the
+same smooth boundary segment at both frames, passes the particle-selection rule at both frames,
+has the same nonzero sign of q at both frames, and has a unique wrapped displacement. On a
+straight boundary segment, the largest accepted projected step is J = 1.05v∆ts . On a curved
+segment, it is
+                                             (
+                     1.05v∆ts                  d0 ,                      α > π/2,
+               J=               ,     dmax =                                                   (6.15)
+                    1 − κb dmax                max(di , di ) + v∆ts , 0 < α ≤ π/2.
+                                                      n   n+1
+
+
+The trial is rejected if the denominator is not positive, if J ≥ P/2, or if |∆sni | > J. A valid trial is
+counted as a successful match when
+                                      "                 #
+                                        |∆snrng |         h                  i
+                          Eng = Tng 1             ≥ 0.02 1 sgn ∆snrng = Qng .                     (6.16)
+                                         v∆ts
+
+Clockwise and counterclockwise trials are pooled. Hence this check does not choose a preferred
+chirality. Boundary cell g passes the check when
+                               X                     P
+                                                         Eng  2
+                                   Tng ≥ 3,     Cg = Pn      ≥ .                        (6.17)
+                                 n                     n Tng  3
+
+Thus a cell needs at least three valid trials, and at least two thirds of those trials must have
+displacement in the direction predicted by Qng . Trial counts do not weight either ﬁnal quantity.
+They only decide whether cell g may contribute. The calibration and the two ﬁnal quantities use
+the same terminal window. We therefore also report the fraction of boundary length that passes
+this calibration.
+
+
+6.4   From Frame Signs to Time-Block Signs
+
+A directional signal must appear in the same boundary cell in two consecutive frames. Deﬁne
+                                      (
+                                        Qng , Qng = Qn+1,g 6= 0,
+                               Yng =                                                      (6.18)
+                                        0,    otherwise.
+
+                                                   11
+The selected particle at frame n may diﬀer from the selected particle at frame n+1. Equation (6.18)
+therefore keeps a boundary signal when one particle replaces another with the same chirality. No
+particle is required to travel around the full boundary.
+Figure 2 follows one cell from particle selection to the two-frame relay signal and the independent
+displacement check. The particle labels in the drawing are illustrative.
+
+
+
+
+                                                12
+  Constructing a relay-compatible boundary signal
+
+    (a) One representative per cell                                    (b) Check actual displacement
+
+                          ng = {A, B, C}                                          sin                                sin + 1
+                                     C
+                                                                                    Δsin = wrap[−P/2, P/2) (sin + 1 − sin )
+                                         B
+                                                                                    Same particle and smooth segment;
+                                                                               selection and nonzero heading sign retained;
+                                A                                                   unique step |Δsin | ≤ J < P/2: Tng = 1.
+                                                                                         J = 1.05vΔts /(1 − κb dmax )
+
+
+         I1          I2         I3           I4         I5                           Eng = Tng 1[|Δsin |/(vΔts ) ≥ 0.02]
+                                                                                           ×1[sgn Δsin = Qng ]
+
+                 rng = A, Qng = sgn qAn = +1
+                                                                                                       ∑Eng
+               Opposite-sign nearest tie: Qng = 0.                                       ∑Tng ≥ 3, Cg = n   ≥2
+                                                                                         n             ∑Tng 3
+                                                                                                              n
+
+
+
+    (c) Relay across two frames                                        (d) Window and time blocks
+
+
+                                                                                    Δts = Δt nsnap ,        Treq = 10P/v
+     Frame n                         A               Q = +1
+
+
+                                                                                            nblk = ⌈(d0 /v)/Δts ⌉
+     Frame n + 1
+                                                                                              ΔTb = nblk Δts
+                                     B               Q = +1
+
+
+              Different carriers; same cell and sign.                                Navail = min(F − 1, ⌈Treq /Δts ⌉)
+                                                                                             B = ⌊Navail /nblk ⌋
+                                                                                            n0 = F − 1 − Bnblk
+                 Qng = Qn + 1, g = +1, A ≠ B
+                       ⟹ Yng = +1
+                                                                                          Use frames n0 , …, F − 1.
+                Otherwise Yng = 0. No full circuit                                           fT = Bnblk Δts /Treq
+                 is required of any one particle.
+
+
+                 Calibration follows a particle; the relay signal follows a boundary cell. Illustrative geometry only.
+
+
+
+Figure 2: Code-drawn construction of the discrete boundary signal. (a) The nearest retained
+particle supplies the single-frame sign Qng for one boundary cell. (b) The heading sign is checked
+against the measured arclength displacement through Tng , Eng , and Cg . This calibration is the only
+stage that requires the same particle in consecutive frames. (c) Equal nonzero cell signs give Yng
+even when the selected particle changes, thereby retaining relay transport. (d) The saved-frame
+count, saved-frame spacing, perimeter, interaction distance, and speed determine the terminal
+observation window and its time-block indices. The example contains no simulation data.
+
+
+
+                                                                 13
+The target duration of one time block is d0 /v. Because the analysis uses saved frames, the number
+of saved intervals per block is
+                                              
+                                         d0 /v
+                                nblk =           ,  ∆Tb = nblk ∆ts .                         (6.19)
+                                         ∆ts
+For the present data, nblk = 7 and ∆Tb = 0.35; the continuous target is d0 /v = 1/3. The requested
+observation time is ten free-ﬂight circuits of the boundary, Treq = 10P/v. For a ﬁle with F saved
+frames, the number of complete blocks and the ﬁrst used frame are
+                                                         
+                                     Treq              Navail
+              Navail = min F − 1,            , B=               , n0 = F − 1 − Bnblk .      (6.20)
+                                     ∆ts               nblk
+Only the ﬁnal Bnblk saved intervals, from frame n0 through frame F − 1, are used. We record
+                                              Bnblk ∆ts
+                                         fT =                                            (6.21)
+                                                 Treq
+to quantify the retained observation time. Discarding an incomplete ﬁnal block can give fT < 1
+even for a suﬃciently long ﬁle; the plots use fT ≥ 0.995 to label a near-complete requested window.
+In block b and cell g, count the positive and negative two-frame signals:
+                   X                                                    X
+                                                                   −
+              +
+             Nbg =      1(Yng = +1),                             Nbg =     1(Yng = −1),       (6.22)
+                   n∈b                                                 n∈b
+                    +       −
+                    |Nbg − Nbg | , N + + N − > 0,
+                   
+                        +    −       bg    bg
+             pbg =    Nbg + Nbg                                                               (6.23)
+                   
+                                     +     −
+                     0,             Nbg + Nbg = 0.
+The directional agreement within this cell and block is pbg . It equals zero when no two-frame signal
+is present. The ﬁnal sign assigned to this cell and block is
+            (
+                          −             −
+                   +
+              sgn(Nbg − Nbg      +
+                            ), Nbg + Nbg  ≥ nmin , pbg ≥ 2/3, and cell g is calibrated,
+     Zbg =                                                                                     (6.24)
+              0,               otherwise.
+The main calculation uses nmin = 1. Thus Zbg is nonzero only when the cell is calibrated, at least
+one two-frame signal occurs, and the normalized sign diﬀerence satisﬁes pbg ≥ 2/3. If both signs
+occur, this last condition means that the dominant sign accounts for at least 5/6 of the signals.
+Each boundary cell contributes one value in {−1, 0, +1}, independent of the number of particles
+or events in that cell. We repeat the full calculation with nmin = 2 and 3 to check the eﬀect of
+requiring more two-frame signals.
+Before calculating the two ﬁnal quantities, the signal must cover a connected part of the boundary
+over the observation window. Let
+                                      A = {g : ∃b, |Zbg | = 1}.                               (6.25)
+be the set of cells that are active in at least one block. We require the largest connected group of
+these cells to have total length at least 2d0 :
+                                                  X
+                                           max        ℓg ≥ 2d0 .                              (6.26)
+                                       G∈Conn(A)
+                                                   g∈G
+
+Disconnected cell groups are not added together. This condition prevents an isolated active cell
+from being counted as boundary transport. The cells in the connected interval do not need to
+be active at the same time: diﬀerent particles may carry the signal through diﬀerent parts of the
+interval during diﬀerent blocks. The same test is also repeated with connectivity broken at all
+removed corners and joins.
+
+                                                   14
+6.5   The Two Stability Measures
+
+If Eq. (6.26) is satisﬁed, block b is active when at least one boundary cell has a nonzero block sign:
+
+                                       Mb = 1{∃g : |Zbg | = 1}.                                (6.27)
+
+The ﬁrst measure is the fraction of active blocks,
+
+                                                    1 X
+                                                       B
+                                         ΞPersist =     Mb .                                   (6.28)
+                                                    B
+                                                       b=1
+
+
+Thus ΞPersist = 1 means that a directional boundary signal is found in every time block, while
+ΞPersist = 0.5 means that it is found in half of the blocks. This measure does not count how many
+particles carry the signal, and it is not multiplied by a carrier fraction.
+For each active block, the length-weighted mean chirality is
+                                          P
+                                             g ℓg Zbg
+                                    χb = P              ∈ [−1, 1].                             (6.29)
+                                            g ℓg |Zbg |
+
+Here χb = +1 means that all active boundary length in block b is counterclockwise, χb = −1 means
+that it is clockwise, and values near zero mean that clockwise and counterclockwise active lengths
+cancel. The second measure is                    P
+                                                   b Mb χ b
+                                         ΞSign = P          .                                (6.30)
+                                                     b Mb
+
+All active blocks, including blocks with χb = 0, remain in the average. ΞSign = 1 means that
+χb = +1 in every active block or χb = −1 in every active block. A value near zero means that
+opposite chiralities cancel within blocks, reverse between blocks, or both. Every active block has
+equal weight. ΞSign is reported as unavailable when fewer than three blocks are active. Both
+measures are also unavailable if the connected length test fails. Neither measure is weighted by
+particle number, event number, crossing rate, or current magnitude.
+Figure 3 gives a complete numerical example of the reduction from Zbg to the two reported measures.
+It shows that signal recurrence and ﬁxed mean chirality are calculated from the same cell–block
+array but answer diﬀerent questions.
+
+
+
+
+                                                  15
+  From relay signs to two long-time stability measures
+
+
+    (a) Within-cell reduction: relay signs to a block sign
+
+                                                                                               +       −
+                  Yng ∈ {−1, 0, + 1}, n ∈ b                                                  |Nbg − Nbg  |
+                                                                                         pbg = +       −
+                      ±
+                    Nbg = ∑ 1(Yng = ±1)                                                       Nbg + Nbg
+                           n∈b                                                         No support: pbg = 0.
+
+
+                                                                    +     −
+                                                       Zbg = sgn(Nbg  − Nbg )
+                                      +     −
+                                  if Nbg + Nbg ≥ nmin , pbg ≥ 2/3, and cell g passes calibration;
+                                             otherwise Zbg = 0. Main rule: nmin = 1.
+
+
+
+
+    (b) Connected active union                                                         (c) Block summaries
+             g1      g2      g3      g4       g5      g6      g7           g8              b               Mb                 χb
+
+     b1      +1      +1      +1       0       0       0           0        0               1                   1            +1.0
+     b2      0       +1      +1       0       0       0           0        0               2                   1            +1.0
+     b3      0        0      -1       -1      0       0           0        0               3                   1            -1.0
+     b4      0        0       0       0       0       0           0        0               4                   0              --
+     b5      0        0       0       0      +1       -1          0        0               5                   1            +0.0
+
+                      = {g1 , …, g6 }; illustrative ℓg = d0 /2                                     Mb = 1{∃g : |Zbg | = 1}
+                                                                                                               ∑ℓg Zbg
+                           Lconn = 6ℓg = 3d0 ≥ 2d0                                                              g
+                                                                                                       χb =
+                     Cells need not be active simultaneously.                                                  ∑ℓg |Zbg |
+                                                                                                               g
+
+
+
+    (d) Two distinct questions
+                           Recurrence                                                    Mean chirality
+                       ΞPersist = B −1 ∑Mb
+                                       b                                                    |
+                                                                                    ΞSign = ∑Mb χb /∑Mb
+                                                                                                b          b        |
+                           = 4/5 = 0.80                                           = |(1 + 1 − 1 + 0)/4| = 0.25
+
+
+              Equal active-block weights; the zero-chirality block remains. Illustrative array, not simulation data.
+
+
+
+Figure 3: Code-drawn numerical example for ΞPersist and ΞSign . (a) For each cell g and block b, the
+two-frame signs Yng give the positive and negative counts, conditional purity pbg , and calibrated
+block sign Zbg . (b) The illustrative Zbg array is required to contain a connected active union A of
+macroscopic length. (c) Each block is reduced to the activity indicator Mb and the length-weighted
+mean chirality χb . (d) ΞPersist asks how often a directional signal recurs, whereas ΞSign asks whether
+the mean chirality keeps one sign. Neither quantity uses Win as a numerical weight. The displayed
+values are constructed solely to verify the calculation and are not simulation results.
+
+
+                                                                      16
+Two geometric quantities are recorded to show how much of the boundary enters the calculation.
+The active boundary-length fraction in block b is
+                                                  1 X
+                                          ab =          ℓg |Zbg |                              (6.31)
+                                                 Preg g
+
+and the fraction of retained boundary length that passes the displacement check is
+                                         1 X
+                               fcal =          ℓg 1[cell g is calibrated]                      (6.32)
+                                        Preg g
+
+                   pre      sel indicate whether cell g contains at least one candidate before and
+For α > π/2, let Ong   and Ong
+after the W requirement, respectively. The fraction retained by the W requirement is
+                                     P
+                                      P n,g Ong , P Opre > 0,
+                                               sel
+                                     
+                                               pre     n,g ng
+                               ηW =       n,g Ong                                            (6.33)
+                                     
+                                     
+                                       NA,           otherwise,
+
+and is reported as unavailable when the W ﬁlter is not used. Wall-distance quantiles are calculated
+from the selected nearest particle rng in each nonempty cell–frame pair. The calculation also
+records the omitted boundary fraction and the result of the no-cross-join length check. These
+quantities check how the particle selection and geometry aﬀect the two stability measures; they are
+not additional measures of transport.
+
+
+6.6   Terminal-Window Results and Interpretation
+
+The analysis uses four geometries and the grid α/π = 0, 0.1, . . . , 1, giving 44 exact parameter-
+matched HDF5 ﬁles. For every ﬁle, the code checks the required datasets, column numbers, particle
+count, and frame alignment. Finite values are checked in the loaded analysis window, not over each
+ﬁle’s entire history; the two phase-lag endpoints return without loading that window. It then
+calculates the two measures for the 36 rows with 0 < α < π, including the four exact α = π/2
+rows. No trajectory is restarted or continued. Every ﬁle uses random seed 9; therefore the reported
+values are for one realization of each parameter set. Consecutive time blocks are correlated, so no
+binomial error bars are assigned.
+For α > π/2, the neighbor sum in Eq. (6.9) is evaluated with a vectorized particle-pair algorithm.
+We compared it with the original simulation loop on one saved frame from each geometry. The
+largest absolute diﬀerence was 1.07 × 10−14 ; the accepted tolerance was 5 × 10−10 .
+Thirty-two of the 36 analyzed rows reach at least 99.5% of the requested ten-circuit observation
+time. Four older circular ﬁles are shorter: circular 0.2π has (F − 1, B, fT ) = (1000, 142, 0.678),
+circular 0.4π has (250, 35, 0.167), circular 0.8π has (1000, 142, 0.678), and the single-defect circle
+at 0.2π has (1000, 142, 0.542). Open markers identify these four rows; ﬁlled markers identify full-
+window rows. A shorter window has fewer chances to contain a rare chirality reversal, even after
+division by the number of blocks B.
+Two details aﬀect how the numbers should be read. First, the projection mask removes a length
+0.05d0 on each side of a corner or defect join. Second, the low-α rule has no radial cutoﬀ and
+can assign a boundary coordinate to a particle far from the wall. The reported active-length and
+wall-distance values show the size of these eﬀects for every row.
+
+                                                    17
+ α/π                                    Circular    Circular, H = 3    Square     Square, four H = 1 defects
+                                     ΞPersist ΞSign ΞPersist ΞSign ΞPersist ΞSign ΞPersist       ΞSign
+ 0.1                                 1.0000 1.0000 1.0000 0.0360 0.9474 0.0726 0.7055           0.0655
+ 0.2                                 1.0000 0.9862 1.0000 0.2631 0.9774 0.0771 0.8988           0.0611
+ 0.3                                 1.0000 1.0000 0.9962 0.0649 0.9925 0.9879 1.0000           0.3494
+ 0.4                                 1.0000 0.9105 1.0000 0.5694 1.0000 0.9783 1.0000           0.4731
+ 0.5                                 1.0000 1.0000 1.0000 0.6643 1.0000 0.9932 1.0000           0.1531
+ 0.6                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           1.0000
+ 0.7                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           0.9997
+ 0.8                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           0.9998
+ 0.9                                 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000 1.0000           0.9999
+
+                                                    P
+The machine-readable table also contains a = B −1 b ab , fcal , ηW , the selected-particle wall-
+distance quantiles, B, fT , and the HDF5 ﬁlename used for every row. Only ΞPersist and ΞSign are
+used as boundary-ﬂow stability measures.
+The removed fractions of perimeter are 0, 0.0109, 0.0143, and 0.0467 for the circle, single-defect
+circle, square, and four-defect square. All 36 rows still pass the connected-length requirement when
+adjacency is broken at every removed join. Thus no row passes only because cells on opposite sides
+of a removed join were treated as adjacent. For every patterned row, fcal = 1. The smallest value
+outside the patterned regime is 0.875000 for the square at 0.3π; the single-defect circle at 0.1π gives
+0.875520.
+
+                                                                 Dashed line: pattern onset at α = π/2; isolated markers use the critical-point rule
+
+                                         (a) Boundary-flow recurrence                                                                 (b) Selected-signal chirality
+                                   1.0
+  Active-block fraction ΞPersist
+
+
+
+
+                                   0.8
+                                                                                                               Mean chirality ΞSign
+
+
+
+
+                                   0.6
+
+                                   0.4
+
+                                   0.2
+
+                                   0.0
+                                         0.0     0.2       0.4          0.6         0.8         1.0                                   0.0      0.2        0.4         0.6   0.8   1.0
+                                                          Phase lag α/π                                                                                  Phase lag α/π
+
+                                                                       Circle                                           Square, four defects (H = 1)
+                                                                       Circle, one defect (H = 3)                       Full requested window
+                                                                       Square                                           Shorter available window
+
+
+
+Figure 4: The two boundary-ﬂow stability measures on the exact 0.1π-spaced sweep. The dashed
+line marks the pattern-formation threshold seen in the particle trajectories. The disconnected
+α = π/2 markers use the critical-point particle-selection rule deﬁned above. Filled markers reach
+the requested ten-circuit window; open markers use the shorter available record. The phase-lag
+endpoints α = 0 and α = π are not assigned these single-chirality measures.
+
+
+
+                                                                                                      18
+                                    (a) Active boundary length                                                                      (b) Displacement calibration
+                              1.0                                                                                             1.0
+  Mean active fraction a
+
+
+
+
+                                                                                                   Calibrated fraction fcal
+                              0.8                                                                                             0.8
+
+                              0.6                                                                                             0.6
+
+                              0.4                                                                                             0.4
+
+                              0.2                                                                                             0.2
+
+                              0.0                                                                                             0.0
+
+
+
+                                    (c) High-α membership gate                                                                      (d) Selected-particle wall distance
+                              1.0
+                                                                                                                                                                   Line: d50 ; band: d50 -d90
+  Retained-cell fraction ηW
+
+
+
+
+                                                                                                                              2.0
+                              0.8
+                                                                                                   Distance d/d0
+
+
+
+
+                                                                                                                              1.5
+                              0.6
+
+                              0.4                                                                                             1.0
+
+                              0.2                                                                                             0.5
+
+                              0.0                                                                                             0.0
+                                    0.0      0.2      0.4        0.6        0.8        1.0                                          0.0      0.2         0.4       0.6         0.8          1.0
+                                                      Phase lag α/π                                                                                    Phase lag α/π
+
+                                                                 Circle                                                       Square, four defects (H = 1)
+                                                                 Circle, one defect (H = 3)                                   Full requested window
+                                                                 Square                                                       Shorter available window
+
+
+
+Figure 5: Checks on boundary coverage and particle selection. In the wall-distance panel, lines
+show d50 /d0 and shaded bands extend to d90 /d0 . Marker ﬁll has the same observation-window
+meaning as in Fig. 4.
+
+
+
+
+                                                                                              19
+                              α=0         α = 0.2π         α = 0.4π         α = 0.5π         α = 0.6π         α = 0.8π         α=π
+                        (a)         (b)              (c)              (d)              (e)              (f)              (g)
+  No defect
+ Single defect: H = 3
+
+
+
+
+                        (h)         (i)              (j)              (k)              (l)              (m)              (n)
+
+
+
+
+                                                     θ
+                                                           0                  π                  2π
+
+
+
+                              α=0         α = 0.2π         α = 0.4π         α = 0.5π         α = 0.6π         α = 0.8π         α=π
+                        (a)         (b)              (c)              (d)              (e)              (f)              (g)
+  No defect
+
+
+
+
+                        (h)         (i)              (j)              (k)              (l)              (m)              (n)
+ Four defects: H = 1
+
+
+
+
+                                                     θ
+                                                           0                  π                  2π
+
+
+Figure 6: Terminal saved states used for direct morphology checks, with heading phase shown by
+the common cyclic color map. The α = π/2 column displays the independently classiﬁed pattern-
+formation threshold, while the α = π column is a phase-lag-endpoint morphology comparison and
+is not included in the single-chirality measures. Boundary outlines are deliberately light so that
+near-wall particles remain visible.
+
+
+
+
+                                                                            20
+

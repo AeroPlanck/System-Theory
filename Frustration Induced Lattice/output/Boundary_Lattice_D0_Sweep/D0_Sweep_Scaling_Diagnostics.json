@@ -1,0 +1,43 @@
+{
+  "inference_valid": false,
+  "reason": "Three common seeds per cell; results are descriptive.",
+  "similarity_scaled": {
+    "formed_samples": 18,
+    "actual_chord_over_d0_median": 1.0057672295520361,
+    "actual_chord_over_d0_range": [
+      0.99985029975895,
+      1.0097493266464943
+    ],
+    "arc_over_d0_median": 1.0174528176755668,
+    "arc_over_d0_range": [
+      1.0126183694793032,
+      1.0237487130600793
+    ],
+    "through_origin_fit_actual_chord_equals_c_d0": 1.0064559023638067,
+    "through_origin_fit_arc_equals_c_d0": 1.0190597980655305,
+    "actual_chord_relative_RMSE": 0.0028388436601849737,
+    "arc_relative_RMSE": 0.0034411546589951775
+  },
+  "fixed_diameter": {
+    "formed_samples": 8,
+    "actual_chord_over_d0_median": 1.007425936849041,
+    "actual_chord_over_d0_range": [
+      0.9946649778670523,
+      1.0199705885042336
+    ],
+    "arc_over_d0_median": 1.0159319792162886,
+    "arc_over_d0_range": [
+      0.9992060260657932,
+      1.0339694309616005
+    ],
+    "through_origin_fit_actual_chord_equals_c_d0": 1.0097780663267137,
+    "through_origin_fit_arc_equals_c_d0": 1.019622221397713,
+    "actual_chord_relative_RMSE": 0.009380452065405376,
+    "arc_relative_RMSE": 0.012984941889698093
+  },
+  "fixed_diameter_mode_fit": {
+    "model": "m = intercept + slope/d0",
+    "intercept": -1.0000000000000042,
+    "slope": 15.0
+  }
+}

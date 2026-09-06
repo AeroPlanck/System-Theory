@@ -1,0 +1,273 @@
+{
+  "scope": "Five theory figures only; no particle simulations or long spectral scans",
+  "scientific_data_changed": false,
+  "source_sha256_before_and_after_equal": true,
+  "source_hashes": {
+    "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\before\\Dispersion.py": "a1fc299f4ab13f9997bdf0eba993c6ba12054500134a8617180f572f3732b89d",
+    "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\code\\Dispersion.py": "ead29d34d504392019407c868a908c4a2853346d5df30277b0f311a2b37f6fb6",
+    "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\chern_platforms_gap_screened.csv": "dc50d0065503a2ac867bbad8226bc40eab3570c230b2d2316411560f14cb911b",
+    "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.5_fine.npz": "ef2b7717b567cb2d5727e57ba3c7f38f4e332f55a27625d9b9cb10b7cf898889",
+    "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_circle_matched_diagnostics.json": "7b91b5774da129efe4b3bf45a2c79409d822790473a50cb490f43a009f1dc500"
+  },
+  "figures": [
+    {
+      "pdf": "plot_1d_dispersion_alpha_0.40pi.pdf",
+      "png": "plot_1d_dispersion_alpha_0.40pi.png",
+      "width_inches": 1.7,
+      "height_inches": 2.72,
+      "png_pixels": [
+        1020,
+        1632
+      ],
+      "png_dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pdf_sha256": "1f6e19e392fe7477267701b89d9e8060cf4dccb06b094ee38236977bb0316107",
+      "png_sha256": "6a24924afb11ebcb0d1f0848d0220042b23be6a4e193393babc52dc7a8fe59df",
+      "original_image": "D:\\LaTex\\Boundary Flow\\Figures\\plot_1d_dispersion_alpha_0.40pi.png",
+      "original_image_sha256": "eebd6853cb44744f4429b7c05069a3112131666b7020d2734ac92d999d1d68dd",
+      "params_order": "v,omega,lambda,alpha,rho0,d0",
+      "params": [
+        3.0,
+        0.0,
+        78.01712896661536,
+        1.2566370614359172,
+        0.0204,
+        2.0
+      ],
+      "K_effective": 20.0,
+      "k_count": 1000,
+      "k_range": [
+        -10.0,
+        10.0
+      ],
+      "branch_colors": [
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c"
+      ],
+      "maximum_matrix_difference_from_current": 3.552713678800501e-15,
+      "origin_eigenvalues": [
+        [
+          3.0901699437494727,
+          9.510565162951533
+        ],
+        [
+          3.090169943749474,
+          -9.510565162951533
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "numerical_source": "Original Dispersion.py; same 1000-point cut and continuous branch ordering",
+      "provenance_note": "No original numeric sidecar was located. Parameters and original branch ordering were verified against source defaults and visible PNG landmarks.",
+      "tex_recommended_width": "0.48\\linewidth inside the existing single-column pair",
+      "minimum_label_points": 7.5
+    },
+    {
+      "pdf": "plot_1d_dispersion_alpha_0.60pi.pdf",
+      "png": "plot_1d_dispersion_alpha_0.60pi.png",
+      "width_inches": 1.7,
+      "height_inches": 2.72,
+      "png_pixels": [
+        1020,
+        1632
+      ],
+      "png_dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pdf_sha256": "64a541bbf2c187bcb0a457fe7f39745c879b72cf6748e5868a8c959afdd83a82",
+      "png_sha256": "47d410441fb04ecda2cf26a84a8454d41dba72fea7e41e10b59b76854c099617",
+      "original_image": "D:\\LaTex\\Boundary Flow\\Figures\\plot_1d_dispersion_alpha_0.60pi.png",
+      "original_image_sha256": "a291bda535e68c0a3403d05269ac4c4976707d24036d1980c469c0c1992c63b8",
+      "params_order": "v,omega,lambda,alpha,rho0,d0",
+      "params": [
+        3.0,
+        0.0,
+        78.01712896661536,
+        1.8849555921538759,
+        0.0204,
+        2.0
+      ],
+      "K_effective": 20.0,
+      "k_count": 1000,
+      "k_range": [
+        -10.0,
+        10.0
+      ],
+      "branch_colors": [
+        "#1f77b4",
+        "#ff7f0e",
+        "#2ca02c"
+      ],
+      "maximum_matrix_difference_from_current": 3.552713678800501e-15,
+      "origin_eigenvalues": [
+        [
+          -3.0901699437494745,
+          9.510565162951536
+        ],
+        [
+          -3.090169943749473,
+          -9.510565162951536
+        ],
+        [
+          0.0,
+          0.0
+        ]
+      ],
+      "numerical_source": "Original Dispersion.py; same 1000-point cut and continuous branch ordering",
+      "provenance_note": "No original numeric sidecar was located. Parameters and original branch ordering were verified against source defaults and visible PNG landmarks.",
+      "tex_recommended_width": "0.48\\linewidth inside the existing single-column pair",
+      "minimum_label_points": 7.5
+    },
+    {
+      "pdf": "mixed_v_3_omega_0_gap_screened.pdf",
+      "png": "mixed_v_3_omega_0_gap_screened.png",
+      "width_inches": 3.43,
+      "height_inches": 3.36,
+      "png_pixels": [
+        2058,
+        2016
+      ],
+      "png_dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pdf_sha256": "522509d179db15739442430a6054f455645a6024247e2119461f304c000ef1a1",
+      "png_sha256": "d32f845c217ba5bb5c0dde5b64d1a7f1b43ba26f2e1af3e7c40f20519a4c5539",
+      "original_image": "D:\\LaTex\\Boundary Flow\\Figures\\mixed_v_3_omega_0_gap_screened.png",
+      "original_image_sha256": "b51310b99e1482d4aeec2e763f3bb0e717be546e5dd5cce9e07e912413d82719",
+      "source_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\chern_platforms_gap_screened.csv",
+      "source_csv_sha256": "dc50d0065503a2ac867bbad8226bc40eab3570c230b2d2316411560f14cb911b",
+      "exact_csv_rows_used": 1224,
+      "alpha_count": 34,
+      "valid_samples": 968,
+      "unavailable_samples": 256,
+      "no_interpolation_across_NA": true,
+      "numerical_difference_from_CSV": 0.0,
+      "parameter_grid": {
+        "v": 3.0,
+        "omega": 0.0,
+        "rho0": 0.0204,
+        "d0": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "K_effective": [
+          10.0,
+          20.0,
+          30.0
+        ]
+      },
+      "tex_recommended_width": "0.49\\linewidth inside the existing figure* pair",
+      "minimum_label_points": 7.2
+    },
+    {
+      "pdf": "single_v_3_omega_0_gap_screened.pdf",
+      "png": "single_v_3_omega_0_gap_screened.png",
+      "width_inches": 3.43,
+      "height_inches": 3.36,
+      "png_pixels": [
+        2058,
+        2016
+      ],
+      "png_dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pdf_sha256": "c2b1974d03943ac228365f25f6fd6a4b9b4dfa23cf605a27cb0c36ff4803c390",
+      "png_sha256": "dbcd0cfad03e4bb5ac4849984405baecb77713d7a955092953b6560a0568c3df",
+      "original_image": "D:\\LaTex\\Boundary Flow\\Figures\\single_v_3_omega_0_gap_screened.png",
+      "original_image_sha256": "d55168316f984505cc8743e4f18985db330d3934320ae00783594d625d5af4e2",
+      "source_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\chern_platforms_gap_screened.csv",
+      "source_csv_sha256": "dc50d0065503a2ac867bbad8226bc40eab3570c230b2d2316411560f14cb911b",
+      "exact_csv_rows_used": 918,
+      "alpha_count": 34,
+      "valid_samples": 680,
+      "unavailable_samples": 238,
+      "no_interpolation_across_NA": true,
+      "numerical_difference_from_CSV": 0.0,
+      "parameter_grid": {
+        "v": 3.0,
+        "omega": 0.0,
+        "rho0": 0.0204,
+        "d0": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "K_effective": [
+          10.0,
+          20.0,
+          30.0
+        ]
+      },
+      "tex_recommended_width": "0.49\\linewidth inside the existing figure* pair",
+      "minimum_label_points": 7.2
+    },
+    {
+      "pdf": "strip_circle_matched_alpha_050.pdf",
+      "png": "strip_circle_matched_alpha_050.png",
+      "width_inches": 3.43,
+      "height_inches": 2.94,
+      "png_pixels": [
+        2058,
+        1764
+      ],
+      "png_dpi": [
+        599.9988,
+        599.9988
+      ],
+      "pdf_sha256": "9e55f6565d2f4a0177cb88627077bec6369deb5fd442b5665620d474aee9607d",
+      "png_sha256": "f45f0482b14e2db9e7a5a3f92bdf8e33d3681a205e5810670975171b9075f8aa",
+      "original_image": "D:\\LaTex\\Boundary Flow\\Figures\\strip_circle_matched_alpha_050.png",
+      "original_image_sha256": "b685909d2d15c59c54326354f528109462cf58319699a45454edf629b27528ee",
+      "source_npz": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.5_fine.npz",
+      "source_npz_sha256": "ef2b7717b567cb2d5727e57ba3c7f38f4e332f55a27625d9b9cb10b7cf898889",
+      "source_diagnostics": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_circle_matched_diagnostics.json",
+      "source_diagnostics_sha256": "7b91b5774da129efe4b3bf45a2c79409d822790473a50cb490f43a009f1dc500",
+      "params_order": "v,omega,lambda,alpha,rho0,d0",
+      "params": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.5707963267948966,
+        51.96896100959848,
+        1.0
+      ],
+      "stored_shape": [
+        201,
+        108
+      ],
+      "stored_eigenvalues": 21708,
+      "ky_range": [
+        -50.0,
+        50.0
+      ],
+      "exact_original_mask_counts": {
+        "weak": 19212,
+        "left": 1246,
+        "right": 1250
+      },
+      "coordinate_change": 0.0,
+      "reference_levels": [
+        10.0,
+        -10.0
+      ],
+      "left_right_counts_at_both_levels": [
+        2,
+        -2
+      ],
+      "source_arrays_reused_without_recomputation": true,
+      "tex_recommended_width": "\\linewidth in the existing single-column strip panel",
+      "minimum_label_points": 7.5
+    }
+  ],
+  "rasterization_requested": false,
+  "source_PNGs_not_used_as_redraw_backgrounds": true
+}

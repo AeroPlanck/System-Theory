@@ -1,0 +1,198 @@
+{
+  "operation": "saved-data redraw; no eigenvalue computation or reference-level reselection",
+  "source_diagnostics": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_circle_matched_diagnostics.json",
+  "source_diagnostics_sha256": "7b91b5774da129efe4b3bf45a2c79409d822790473a50cb490f43a009f1dc500",
+  "source_counting_routine_sha256": "94200a4cb00a31afd6dcb8e104ae719a7914003e1163156166e1bede04b3ea11",
+  "figure_size_inches": [
+    6.5,
+    7.0
+  ],
+  "png_dpi": 600,
+  "pdf_scatter_rasterized": false,
+  "minimum_standard_tick_font_pt": 7.5,
+  "legend_font_pt": 8.0,
+  "plot_limits_unchanged": {
+    "ky": [
+      -50,
+      50
+    ],
+    "imag_sigma": [
+      -40,
+      40
+    ]
+  },
+  "source_checks": [
+    {
+      "alpha_over_pi": 0.2,
+      "source_npz": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.2_fine.npz",
+      "sha256": "ccd3cae731beab6c9d88c3955e3d1d1f744673b2a0fd62d8d8aa79c51203530f",
+      "mode_samples": 21708,
+      "params": [
+        3.0,
+        0.0,
+        0.12709375,
+        0.6283185307179586,
+        51.96896100959848,
+        1.0
+      ],
+      "crossing_count_reverification": {
+        "10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 4,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 4,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.4,
+      "source_npz": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.4_fine.npz",
+      "sha256": "b4036573cd08029387c7a6018282b66565bf9f498e3083776917a54ba274483f",
+      "mode_samples": 21708,
+      "params": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.2566370614359172,
+        51.96896100959848,
+        1.0
+      ],
+      "crossing_count_reverification": {
+        "10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 0,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 0,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.5,
+      "source_npz": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.5_fine.npz",
+      "sha256": "ef2b7717b567cb2d5727e57ba3c7f38f4e332f55a27625d9b9cb10b7cf898889",
+      "mode_samples": 21708,
+      "params": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.5707963267948966,
+        51.96896100959848,
+        1.0
+      ],
+      "crossing_count_reverification": {
+        "10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 0,
+          "bulk_intersections_detected": false,
+          "bulk_line_gap_certified": true
+        },
+        "-10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 0,
+          "bulk_intersections_detected": false,
+          "bulk_line_gap_certified": true
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.6,
+      "source_npz": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.6_fine.npz",
+      "sha256": "0826ad94c4fff5016ea92e7f4e6c7c44ee3b18c1f8cac2ddca0b4c6005a4961d",
+      "mode_samples": 21708,
+      "params": [
+        3.0,
+        0.0,
+        0.12709375,
+        1.8849555921538759,
+        51.96896100959848,
+        1.0
+      ],
+      "crossing_count_reverification": {
+        "10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 0,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 0,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        }
+      }
+    },
+    {
+      "alpha_over_pi": 0.8,
+      "source_npz": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\figures\\strip_data\\alpha_0.8_fine.npz",
+      "sha256": "6779899e7912576d3a818ea3c3b115f950382aca5722a9aaeff0a5f0648720b7",
+      "mode_samples": 21708,
+      "params": [
+        3.0,
+        0.0,
+        0.12709375,
+        2.5132741228718345,
+        51.96896100959848,
+        1.0
+      ],
+      "crossing_count_reverification": {
+        "10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 4,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        },
+        "-10.0": {
+          "count_left": 2,
+          "count_right": -2,
+          "accepted_crossings_left": 2,
+          "accepted_crossings_right": 2,
+          "excluded_crossings": 4,
+          "bulk_intersections_detected": true,
+          "bulk_line_gap_certified": false
+        }
+      }
+    }
+  ],
+  "pdf_sha256": "797db135d18b3f132b706bf09ab9fe4cb8efb47e10bd0a57416352eae0f0e2c2",
+  "png_sha256": "098b1ca6371b3398771e9f4d7b49828be658d6a80f6bb5a07dfac745163fc629"
+}

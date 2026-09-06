@@ -1,0 +1,59 @@
+{
+  "data_dir": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data",
+  "output_dir": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Phase_Informed_Boundary_Flow_Refined",
+  "alpha_over_pi": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "refined_alpha_over_pi": [
+    0.0,
+    0.1,
+    0.2,
+    0.3,
+    0.4,
+    0.5,
+    0.6,
+    0.7,
+    0.8,
+    0.9,
+    1.0
+  ],
+  "terminal_circuit_times": 10.0,
+  "gate_length_over_d0": 0.5,
+  "block_time_over_d0_over_v": 1.0,
+  "macro_extent_over_d0": 2.0,
+  "minimum_phase_projection": 0.05,
+  "minimum_displacement_over_v_dt": 0.02,
+  "maximum_projection_step_factor": 1.05,
+  "boundary_layer_over_d0": 1.0,
+  "join_exclusion_over_d0": 0.05,
+  "projection_tie_over_d0": 1e-07,
+  "minimum_calibration_trials": 3,
+  "minimum_calibration_agreement": 0.6666666666666666,
+  "minimum_directional_purity": 0.6666666666666666,
+  "minimum_active_blocks_for_sign": 3,
+  "minimum_support_pairs": 1,
+  "support_pair_sensitivity": [
+    1,
+    2,
+    3
+  ],
+  "w_dead_zone_over_v_over_d0": 0.02,
+  "validate_optimized_phase_rhs": true,
+  "phase_rhs_validation_tolerance": 5e-10,
+  "q0_sensitivity": [
+    0.02,
+    0.05,
+    0.1
+  ],
+  "figure_dpi": 450
+}

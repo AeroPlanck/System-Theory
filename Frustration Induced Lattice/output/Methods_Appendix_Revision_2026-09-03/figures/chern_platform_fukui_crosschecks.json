@@ -1,0 +1,104 @@
+[
+  {
+    "alpha_over_pi": 0.2,
+    "bands": [
+      0
+    ],
+    "raw": -2.000000000000004,
+    "integer": -2,
+    "status": "valid_numerical",
+    "pole": -2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.2,
+    "bands": [
+      2
+    ],
+    "raw": 2.000000000000003,
+    "integer": 2,
+    "status": "valid_numerical",
+    "pole": 2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.2,
+    "bands": [
+      0,
+      1
+    ],
+    "raw": -1.9999999999999956,
+    "integer": -2,
+    "status": "valid_numerical",
+    "pole": -2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.5,
+    "bands": [
+      0
+    ],
+    "raw": -2.000000000000015,
+    "integer": -2,
+    "status": "valid_numerical",
+    "pole": -2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.5,
+    "bands": [
+      2
+    ],
+    "raw": 2.000000000000015,
+    "integer": 2,
+    "status": "valid_numerical",
+    "pole": 2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.5,
+    "bands": [
+      0,
+      1
+    ],
+    "raw": -2.000000000000013,
+    "integer": -2,
+    "status": "valid_numerical",
+    "pole": -2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.8,
+    "bands": [
+      0
+    ],
+    "raw": -1.999999999999999,
+    "integer": -2,
+    "status": "valid_numerical",
+    "pole": -2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.8,
+    "bands": [
+      2
+    ],
+    "raw": 2.0000000000000004,
+    "integer": 2,
+    "status": "valid_numerical",
+    "pole": 2,
+    "valid": true
+  },
+  {
+    "alpha_over_pi": 0.8,
+    "bands": [
+      0,
+      1
+    ],
+    "raw": -1.9999999999999916,
+    "integer": -2,
+    "status": "valid_numerical",
+    "pole": -2,
+    "valid": true
+  }
+]

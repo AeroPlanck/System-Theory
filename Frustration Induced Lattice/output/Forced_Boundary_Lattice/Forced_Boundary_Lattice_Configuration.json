@@ -1,0 +1,77 @@
+{
+  "data_kind": "forced_initial_condition_then_original_model_dynamics",
+  "warning": "Not evidence of spontaneous crystallization.",
+  "agents_num": 2000,
+  "dt": 0.005,
+  "iterations": 50000,
+  "snapshot_interval": 100,
+  "target_mode_formula": "floor(pi * diameter / d0)",
+  "conditions": [
+    {
+      "family": "critical_failure",
+      "strength_k": 20.75,
+      "d0": 1.0,
+      "alpha_over_pi": 0.5,
+      "diameter": 3.0,
+      "seed": 10,
+      "source_file": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\critical_boundary_lattice_quantization\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=3.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=500,seed=10).h5",
+      "target_mode": 9,
+      "label": "K20p75_d01_D3_a0p5pi_seed10_m9"
+    },
+    {
+      "family": "critical_failure",
+      "strength_k": 20.75,
+      "d0": 1.0,
+      "alpha_over_pi": 0.5,
+      "diameter": 3.5,
+      "seed": 10,
+      "source_file": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\critical_boundary_lattice_quantization\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=3.5,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=500,seed=10).h5",
+      "target_mode": 10,
+      "label": "K20p75_d01_D3p5_a0p5pi_seed10_m10"
+    },
+    {
+      "family": "d0_failure",
+      "strength_k": 40.0,
+      "d0": 1.25,
+      "alpha_over_pi": 0.5,
+      "diameter": 4.58,
+      "seed": 9,
+      "source_file": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\boundary_lattice_d0_sweep\\CircularBoundaryPatternFormation(K=40.000,D0=1.250,A0=1.571,L=4.6,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=500,seed=9).h5",
+      "target_mode": 11,
+      "label": "K40_d01p25_D4p58_a0p5pi_seed9_m11"
+    },
+    {
+      "family": "critical_failure",
+      "strength_k": 20.75,
+      "d0": 1.0,
+      "alpha_over_pi": 0.5,
+      "diameter": 4.0,
+      "seed": 10,
+      "source_file": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\critical_boundary_lattice_quantization\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=4.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=500,seed=10).h5",
+      "target_mode": 12,
+      "label": "K20p75_d01_D4_a0p5pi_seed10_m12"
+    },
+    {
+      "family": "critical_failure",
+      "strength_k": 20.75,
+      "d0": 1.0,
+      "alpha_over_pi": 0.5,
+      "diameter": 4.5,
+      "seed": 11,
+      "source_file": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\critical_boundary_lattice_quantization\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=4.5,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=500,seed=11).h5",
+      "target_mode": 14,
+      "label": "K20p75_d01_D4p5_a0p5pi_seed11_m14"
+    },
+    {
+      "family": "critical_failure",
+      "strength_k": 20.75,
+      "d0": 1.0,
+      "alpha_over_pi": 0.5,
+      "diameter": 5.0,
+      "seed": 11,
+      "source_file": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\critical_boundary_lattice_quantization\\CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.571,L=5.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=500,seed=11).h5",
+      "target_mode": 15,
+      "label": "K20p75_d01_D5_a0p5pi_seed11_m15"
+    }
+  ]
+}

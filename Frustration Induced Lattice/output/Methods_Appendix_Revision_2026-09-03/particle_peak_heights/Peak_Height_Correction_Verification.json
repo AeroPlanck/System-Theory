@@ -1,0 +1,257 @@
+{
+  "production_change": "Quadratic peak-height coefficient 1/2 corrected to 1/4.",
+  "trajectory_or_figure_files_written": false,
+  "thresholds_unchanged": {
+    "minimum_mean_peak_height": 0.3,
+    "maximum_temporal_cv": 0.1
+  },
+  "summary_json": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Lattice_Scale_Comparison\\Lattice_Scale_10Seed_Summary.json",
+  "summary_json_changed": false,
+  "summary_reason": "It contains classification and spacing aggregates, which are unchanged; it stores no per-row peak heights.",
+  "datasets": [
+    {
+      "source_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Lattice_Scale_Comparison\\HalfPi_Boundary_Arc_Correlation_10Seeds.csv",
+      "backup_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\before\\particle_peak_heights\\HalfPi_Boundary_Arc_Correlation_10Seeds.csv",
+      "revised_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\particle_peak_heights\\HalfPi_Boundary_Arc_Correlation_10Seeds.csv",
+      "row_count": 10,
+      "changed_column": "autocorrelation_peak_height_mean",
+      "all_other_fields_preserved_as_strings": true,
+      "quality_classification_changes": 0,
+      "unresolved": [
+        {
+          "seed": "5"
+        },
+        {
+          "seed": "7"
+        }
+      ],
+      "maximum_absolute_peak_height_change": 0.005245337434744979,
+      "baseline_sha256": "3687a7250c6e48563644dd38163431d4fc62065e3ff7af12b1ed4fb0034b686e",
+      "corrected_sha256": "d994b6ad2076fdd6d182fc48dd4c90f8c436c1480826f4ebed02f8e3bb28256e",
+      "published": true,
+      "rows": [
+        {
+          "seed": "1",
+          "old_peak_height_mean": 0.8472594608373,
+          "corrected_peak_height_mean": 0.8441846223774216,
+          "difference": -0.0030748384598783263
+        },
+        {
+          "seed": "2",
+          "old_peak_height_mean": 0.8290498854001735,
+          "corrected_peak_height_mean": 0.8257883933561776,
+          "difference": -0.0032614920439959505
+        },
+        {
+          "seed": "3",
+          "old_peak_height_mean": 0.8608259389142328,
+          "corrected_peak_height_mean": 0.8555806014794878,
+          "difference": -0.005245337434744979
+        },
+        {
+          "seed": "4",
+          "old_peak_height_mean": 0.8598919440856488,
+          "corrected_peak_height_mean": 0.8556659612824009,
+          "difference": -0.00422598280324793
+        },
+        {
+          "seed": "5",
+          "old_peak_height_mean": 0.12657011898213927,
+          "corrected_peak_height_mean": 0.12635388364786285,
+          "difference": -0.00021623533427642117
+        },
+        {
+          "seed": "6",
+          "old_peak_height_mean": 0.8173962925993575,
+          "corrected_peak_height_mean": 0.8140821256983987,
+          "difference": -0.0033141669009588703
+        },
+        {
+          "seed": "7",
+          "old_peak_height_mean": 0.3634499977628613,
+          "corrected_peak_height_mean": 0.3633191403901574,
+          "difference": -0.00013085737270390752
+        },
+        {
+          "seed": "8",
+          "old_peak_height_mean": 0.8112580820871989,
+          "corrected_peak_height_mean": 0.8073871212825192,
+          "difference": -0.003870960804679635
+        },
+        {
+          "seed": "9",
+          "old_peak_height_mean": 0.8363922257142365,
+          "corrected_peak_height_mean": 0.8329880833778314,
+          "difference": -0.0034041423364051804
+        },
+        {
+          "seed": "10",
+          "old_peak_height_mean": 0.8631769298354943,
+          "corrected_peak_height_mean": 0.8591473275035424,
+          "difference": -0.004029602331951931
+        }
+      ]
+    },
+    {
+      "source_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Lattice_Scale_Comparison\\Pi_Boundary_Arc_Correlation_10Seeds.csv",
+      "backup_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\before\\particle_peak_heights\\Pi_Boundary_Arc_Correlation_10Seeds.csv",
+      "revised_csv": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\output\\Methods_Appendix_Revision_2026-09-03\\particle_peak_heights\\Pi_Boundary_Arc_Correlation_10Seeds.csv",
+      "row_count": 20,
+      "changed_column": "autocorrelation_peak_height_mean",
+      "all_other_fields_preserved_as_strings": true,
+      "quality_classification_changes": 0,
+      "unresolved": [
+        {
+          "seed": "4",
+          "family": "CW"
+        }
+      ],
+      "maximum_absolute_peak_height_change": 0.0006473375140942927,
+      "baseline_sha256": "cdf094178a6885d07a99a24b09e5f1ac7809d96da8790e0031d61a7a55d266e7",
+      "corrected_sha256": "8262a97bb322b8ac3a7b80ab2285d94ca50aca8b3eac12b0c312011993d43639",
+      "published": true,
+      "rows": [
+        {
+          "seed": "1",
+          "family": "CW",
+          "old_peak_height_mean": 0.5341938017311372,
+          "corrected_peak_height_mean": 0.5337679993077682,
+          "difference": -0.00042580242336898166
+        },
+        {
+          "seed": "1",
+          "family": "CCW",
+          "old_peak_height_mean": 0.5430403070662747,
+          "corrected_peak_height_mean": 0.542875536322025,
+          "difference": -0.00016477074424969818
+        },
+        {
+          "seed": "2",
+          "family": "CW",
+          "old_peak_height_mean": 0.44251330106350223,
+          "corrected_peak_height_mean": 0.4422381957826918,
+          "difference": -0.0002751052808104282
+        },
+        {
+          "seed": "2",
+          "family": "CCW",
+          "old_peak_height_mean": 0.5258897026036228,
+          "corrected_peak_height_mean": 0.5257367494220248,
+          "difference": -0.00015295318159802562
+        },
+        {
+          "seed": "3",
+          "family": "CW",
+          "old_peak_height_mean": 0.440531632233494,
+          "corrected_peak_height_mean": 0.44038910220267863,
+          "difference": -0.00014253003081537985
+        },
+        {
+          "seed": "3",
+          "family": "CCW",
+          "old_peak_height_mean": 0.5819706096307945,
+          "corrected_peak_height_mean": 0.5816289141025839,
+          "difference": -0.0003416955282106171
+        },
+        {
+          "seed": "4",
+          "family": "CW",
+          "old_peak_height_mean": 0.2673779447966093,
+          "corrected_peak_height_mean": 0.2671024924422432,
+          "difference": -0.0002754523543661014
+        },
+        {
+          "seed": "4",
+          "family": "CCW",
+          "old_peak_height_mean": 0.47069778721697236,
+          "corrected_peak_height_mean": 0.47050915275287913,
+          "difference": -0.00018863446409322915
+        },
+        {
+          "seed": "5",
+          "family": "CW",
+          "old_peak_height_mean": 0.5699137305106383,
+          "corrected_peak_height_mean": 0.569266392996544,
+          "difference": -0.0006473375140942927
+        },
+        {
+          "seed": "5",
+          "family": "CCW",
+          "old_peak_height_mean": 0.40894646507042676,
+          "corrected_peak_height_mean": 0.40874750583185776,
+          "difference": -0.00019895923856899644
+        },
+        {
+          "seed": "6",
+          "family": "CW",
+          "old_peak_height_mean": 0.526846356739303,
+          "corrected_peak_height_mean": 0.526511161347414,
+          "difference": -0.00033519539188897607
+        },
+        {
+          "seed": "6",
+          "family": "CCW",
+          "old_peak_height_mean": 0.510722990657441,
+          "corrected_peak_height_mean": 0.5101417069192672,
+          "difference": -0.0005812837381737879
+        },
+        {
+          "seed": "7",
+          "family": "CW",
+          "old_peak_height_mean": 0.5746691218784684,
+          "corrected_peak_height_mean": 0.5744414600781752,
+          "difference": -0.0002276618002932107
+        },
+        {
+          "seed": "7",
+          "family": "CCW",
+          "old_peak_height_mean": 0.37361824732551807,
+          "corrected_peak_height_mean": 0.3733010461593086,
+          "difference": -0.0003172011662094798
+        },
+        {
+          "seed": "8",
+          "family": "CW",
+          "old_peak_height_mean": 0.43991803196685225,
+          "corrected_peak_height_mean": 0.43971434980430507,
+          "difference": -0.00020368216254718075
+        },
+        {
+          "seed": "8",
+          "family": "CCW",
+          "old_peak_height_mean": 0.3988214112093601,
+          "corrected_peak_height_mean": 0.3985580366837321,
+          "difference": -0.000263374525628024
+        },
+        {
+          "seed": "9",
+          "family": "CW",
+          "old_peak_height_mean": 0.5803447670656567,
+          "corrected_peak_height_mean": 0.5798528267474246,
+          "difference": -0.0004919403182321869
+        },
+        {
+          "seed": "9",
+          "family": "CCW",
+          "old_peak_height_mean": 0.4536554126399578,
+          "corrected_peak_height_mean": 0.45355838320785524,
+          "difference": -9.702943210254666e-05
+        },
+        {
+          "seed": "10",
+          "family": "CW",
+          "old_peak_height_mean": 0.404303549167594,
+          "corrected_peak_height_mean": 0.40392755777399303,
+          "difference": -0.0003759913936009496
+        },
+        {
+          "seed": "10",
+          "family": "CCW",
+          "old_peak_height_mean": 0.4520036069413201,
+          "corrected_peak_height_mean": 0.4517342183700831,
+          "difference": -0.0002693885712369837
+        }
+      ]
+    }
+  ]
+}

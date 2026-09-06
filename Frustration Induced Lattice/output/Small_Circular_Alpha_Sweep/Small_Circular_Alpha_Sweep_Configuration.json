@@ -1,0 +1,33 @@
+{
+  "model": "CircularBoundaryPatternFormation",
+  "diameters": [
+    3.0,
+    5.0
+  ],
+  "alpha_over_pi": [
+    0.0,
+    0.2,
+    0.4,
+    0.5,
+    0.6,
+    0.8,
+    1.0
+  ],
+  "config": {
+    "strengthK": 20.75,
+    "distanceD0": 1.0,
+    "speedV": 3.0,
+    "freqDist": "uniform",
+    "omegaMin": 0.0,
+    "deltaOmega": 0.0,
+    "agentsNum": 2000,
+    "dt": 0.005,
+    "shotsnaps": 500,
+    "randomSeed": 9,
+    "iterations": 50000
+  },
+  "terminal_time": 250.0,
+  "data_directory": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\small_circular_alpha_sweep\\N2000_steps50000",
+  "comparison_design": "Particle count and all non-boundary parameters are held fixed; only alpha and boundary diameter vary.",
+  "coupling_kernel": "Pair-symmetric, allocation-light implementation of the original distance-cutoff phase coupling; verified against the original kernel to double-precision tolerance."
+}

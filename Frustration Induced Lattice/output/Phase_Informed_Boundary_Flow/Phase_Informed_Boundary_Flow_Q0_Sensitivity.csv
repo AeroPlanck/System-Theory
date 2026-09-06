@@ -1,0 +1,7 @@
+condition,condition_label,alpha_over_pi,minimum_phase_projection_q0,xi_persist,xi_sign,calibrated_gate_count,gate_count,maximum_contiguous_extent,extent_valid
+Square,Square,0.2,0.02,0.9774436090225563,0.07525641025641025,56,56,27.5,True
+Square,Square,0.2,0.05,0.981203007518797,0.07369093231162197,56,56,27.5,True
+Square,Square,0.2,0.1,0.981203007518797,0.0826309067688378,56,56,28.0,True
+Square_Four_Symmetric_Defects_H1,"Square, four symmetric defects (H = 1)",0.2,0.02,0.9049079754601227,0.05739427835714457,80,80,34.24621125123532,True
+Square_Four_Symmetric_Defects_H1,"Square, four symmetric defects (H = 1)",0.2,0.05,0.901840490797546,0.05551612698713807,80,80,34.24621125123532,True
+Square_Four_Symmetric_Defects_H1,"Square, four symmetric defects (H = 1)",0.2,0.1,0.8987730061349694,0.06802363186416198,80,80,34.24621125123532,True
