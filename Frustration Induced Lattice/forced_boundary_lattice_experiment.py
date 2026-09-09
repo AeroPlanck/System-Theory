@@ -12,6 +12,7 @@ import argparse
 import json
 import math
 import multiprocessing as mp
+import os
 import shutil
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
@@ -34,7 +35,7 @@ from small_circular_alpha_sweep import _calc_dot_phase_collision_fast
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-DATA_DIR = PROJECT_DIR / "data" / "forced_boundary_lattice"
+DATA_DIR = Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data"))
 OUTPUT_DIR = PROJECT_DIR / "output" / "Forced_Boundary_Lattice"
 VIDEO_DIR = OUTPUT_DIR / "Videos"
 CRITICAL_MEASUREMENTS = (
@@ -113,7 +114,7 @@ def selected_conditions() -> list[ForcedCondition]:
             alpha_over_pi=float(row.alpha_over_pi),
             diameter=float(row.diameter),
             seed=int(row.seed),
-            source_file=str(row.source_file),
+            source_file=str(resolve_source_file(row.source_file)),
         )
         for row in critical_failed.itertuples(index=False)
     ]
@@ -133,7 +134,7 @@ def selected_conditions() -> list[ForcedCondition]:
             alpha_over_pi=0.5,
             diameter=float(row.diameter),
             seed=int(row.seed),
-            source_file=str(row.source_file),
+            source_file=str(resolve_source_file(row.source_file)),
         )
         for row in d0_failed.itertuples(index=False)
     )
@@ -147,6 +148,16 @@ def selected_conditions() -> list[ForcedCondition]:
         listing = "\n".join(f"  - {path}" for path in missing_sources)
         raise FileNotFoundError(f"Original failed HDF5 source(s) missing:\n{listing}")
     return conditions
+
+
+def resolve_source_file(recorded_path: str) -> Path:
+    """Resolve a flattened source trajectory without guessing its parameters."""
+
+    recorded = Path(str(recorded_path))
+    if recorded.is_file():
+        return recorded
+    flattened = DATA_DIR / recorded.name
+    return flattened if flattened.is_file() else recorded
 
 
 class ForcedCircularBoundaryLattice(CircularBoundaryPatternFormation):
@@ -807,6 +818,11 @@ def parse_args() -> argparse.Namespace:
     modes.add_argument("--simulate-only", action="store_true")
     modes.add_argument("--analyze-only", action="store_true")
     modes.add_argument("--videos-only", action="store_true")
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Explicitly generate missing intervention trajectories.",
+    )
     parser.add_argument("--skip-videos", action="store_true")
     parser.add_argument("--workers", type=int, default=4)
     return parser.parse_args()
@@ -815,7 +831,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     conditions = selected_conditions()
-    if not args.analyze_only and not args.videos_only:
+    if args.simulate_only or args.generate_missing:
         ensure_simulations(conditions, args.workers)
     if args.simulate_only:
         return

@@ -15,6 +15,7 @@ import importlib.util
 import json
 import math
 import multiprocessing as mp
+import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -33,11 +34,18 @@ from small_circular_alpha_sweep import ExperimentConfig, build_model
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-DATA_DIR = PROJECT_DIR / "data" / "boundary_lattice_k_sweep"
+DATA_DIR = Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data"))
 OUTPUT_DIR = PROJECT_DIR / "output" / "Boundary_Lattice_K_Sweep"
-REFERENCE_DISPERSION = Path(r"D:\PrivatePythonProject\Math\Lattice\Dispersion.py")
-REFERENCE_PRL = Path(r"D:\LaTex\Boundary Flow\PRL.tex")
-REFERENCE_METHODS = Path(r"D:\LaTex\Boundary Flow\Methods Appendix.tex")
+DRIVE_ROOT = Path(PROJECT_DIR.anchor)
+REFERENCE_DISPERSION = DRIVE_ROOT / "PrivatePythonProject" / "Math" / "Lattice" / "Dispersion.py"
+PAPER_DIR = Path(
+    os.environ.get("BOUNDARY_FLOW_PAPER_DIR", DRIVE_ROOT / "LaTex" / "Boundary Flow")
+)
+REFERENCE_DISPERSION = Path(
+    os.environ.get("BOUNDARY_FLOW_DISPERSION", REFERENCE_DISPERSION)
+)
+REFERENCE_SHORT = PAPER_DIR / "Short.tex"
+REFERENCE_METHODS = PAPER_DIR / "Methods Appendix.tex"
 
 K_VALUES = (8.0, 12.0, 20.75, 40.0)
 DIAMETERS = (3.30, 4.58)
@@ -783,7 +791,7 @@ def create_kinetics_figure(measurements: pd.DataFrame) -> plt.Figure:
 
 def reference_hashes() -> dict[str, str]:
     hashes = {}
-    for path in (REFERENCE_DISPERSION, REFERENCE_PRL, REFERENCE_METHODS):
+    for path in (REFERENCE_DISPERSION, REFERENCE_SHORT, REFERENCE_METHODS):
         hashes[str(path)] = hashlib.sha256(path.read_bytes()).hexdigest()
     return hashes
 
@@ -944,6 +952,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--simulate-only", action="store_true")
     parser.add_argument("--analyze-only", action="store_true")
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Explicitly generate missing trajectories before analysis.",
+    )
     return parser.parse_args()
 
 
@@ -951,7 +964,7 @@ def main() -> None:
     args = parse_args()
     if args.simulate_only and args.analyze_only:
         raise ValueError("Choose at most one of --simulate-only/--analyze-only")
-    if not args.analyze_only:
+    if args.simulate_only or args.generate_missing:
         ensure_simulations(conditions(), args.workers)
     if not args.simulate_only:
         analyze()

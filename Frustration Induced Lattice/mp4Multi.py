@@ -14,6 +14,7 @@ import imageio
 import os
 import shutil
 import sys
+from pathlib import Path
 sys.path.append("..")
 
 from main import *
@@ -45,14 +46,16 @@ sns.set_theme(
 
 plt.rcParams['mathtext.fontset'] = 'cm'
 plt.rcParams['font.family'] = 'STIXGeneral'
-# plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
 
 import pandas as pd
 from multiprocessing import Pool
 
-SAVE_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\data"
-MP4_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4"
-MP4_TEMP_PATH = r"D:\PythonProject\System Theory\Frustration Induced Lattice\mp4_temp"
+PROJECT_DIR = Path(__file__).resolve().parent
+SAVE_PATH = str(Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data")))
+MP4_PATH = str(Path(os.environ.get("FIL_MP4_DIR", PROJECT_DIR / "mp4")))
+MP4_TEMP_PATH = str(
+    Path(os.environ.get("FIL_MP4_TEMP_DIR", PROJECT_DIR / "mp4_temp"))
+)
 BATCH_SIZE = 200
 NUM_WORKERS = max(1, (os.cpu_count() or 1) // 2)
 
@@ -124,6 +127,9 @@ def draw_frame(sa: StateAnalysis):
 
 
 if __name__ == "__main__":
+
+    Path(SAVE_PATH).mkdir(parents=True, exist_ok=True)
+    Path(MP4_PATH).mkdir(parents=True, exist_ok=True)
 
     model = CircularBoundaryPatternFormation(
     strengthK=20.75, distanceD0=1, phaseLagA0=0.5 * np.pi,

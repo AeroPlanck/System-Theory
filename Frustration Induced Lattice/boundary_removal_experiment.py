@@ -11,6 +11,7 @@ import json
 import multiprocessing as mp
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
+import os
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -25,7 +26,7 @@ from small_circular_alpha_sweep import _calc_dot_phase_collision_fast
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-DATA_DIR = PROJECT_DIR / "data" / "boundary_removal_experiment"
+DATA_DIR = Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data"))
 OUTPUT_DIR = PROJECT_DIR / "output" / "Boundary_Removal_Experiment"
 
 CONTINUATION_STEPS = 20_000
@@ -95,7 +96,7 @@ def build_continuation(job: ContinuationJob):
         if job.protocol == "retained"
         else BoundaryRemovedContinuation
     )
-    protocol_dir = DATA_DIR / job.protocol
+    protocol_dir = DATA_DIR
     model = model_class(
         strengthK=critical.STRENGTH_K,
         distanceD0=critical.INTERACTION_D0,
@@ -646,12 +647,16 @@ def write_report(
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--skip-simulation", action="store_true")
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Explicitly generate missing continuations; default is analysis-only.",
+    )
     args = parser.parse_args()
     if not 1 <= args.workers <= 4:
         raise ValueError("--workers must be between 1 and 4")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-    if not args.skip_simulation:
+    if args.generate_missing:
         ensure_continuations(args.workers)
     time_series, summary = analyze()
     chords = critical_chord_measurements()

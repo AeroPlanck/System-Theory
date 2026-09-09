@@ -1,7 +1,7 @@
 """Quantify and visualize boundary transport from existing HDF5 trajectories.
 
 This file is deliberately self-contained.  It never runs/continues a model,
-never writes HDF5, and never touches PRL.tex.  All user-facing parameters live
+never writes HDF5, and never edits manuscript files.  All user-facing parameters live
 in the configuration block immediately below.
 """
 

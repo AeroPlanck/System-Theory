@@ -12,6 +12,7 @@ import argparse
 import json
 import math
 import multiprocessing as mp
+import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -363,6 +364,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--snapshot-interval", type=int, default=None)
     parser.add_argument("--output-dir", type=Path, default=DEFAULT_OUTPUT_DIR)
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Explicitly generate missing trajectories; default is analysis-only.",
+    )
     return parser.parse_args()
 
 
@@ -390,16 +396,12 @@ def main() -> int:
     diameters = DEFAULT_DIAMETERS
     alpha_over_pi = DEFAULT_ALPHA_OVER_PI
     output_dir = args.output_dir.resolve()
-    data_dir = (
-        PROJECT_DIR
-        / "data"
-        / "small_circular_alpha_sweep"
-        / f"N{config.agentsNum}_steps{config.iterations}"
-    )
+    data_dir = Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data"))
     output_dir.mkdir(parents=True, exist_ok=True)
 
     models = build_models(diameters, alpha_over_pi, config, data_dir)
-    ensure_simulations(models, config, data_dir, args.workers)
+    if args.generate_missing:
+        ensure_simulations(models, config, data_dir, args.workers)
     analyses = [LastFrameStateAnalysis(model) for model in models]
 
     stem_suffix = f"N{config.agentsNum}_Steps{config.iterations}"

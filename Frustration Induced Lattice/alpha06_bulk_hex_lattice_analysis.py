@@ -11,6 +11,7 @@ from dataclasses import dataclass
 import hashlib
 import json
 import math
+import os
 from pathlib import Path
 
 import matplotlib as mpl
@@ -32,20 +33,24 @@ from pi_endpoint_lattice_analysis import import_dispersion_module, most_unstable
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "output" / "Alpha06_Bulk_Hex_Lattice"
-EXTRA_DATA = ROOT / "data" / "alpha06_bulk_N2000_steps50000_snap50"
-SEED9_PATH = ROOT / "data" / (
+DATA_ROOT = Path(os.environ.get("FIL_DATA_DIR", ROOT / "data"))
+SEED9_PATH = DATA_ROOT / (
     "CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,"
     "v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=10,seed=9).h5"
 )
-DISPERSION = Path(r"D:\PrivatePythonProject\Math\Lattice\Dispersion.py")
-PRL = Path(r"D:\LaTex\Boundary Flow\PRL.tex")
-METHODS = Path(r"D:\LaTex\Boundary Flow\Methods Appendix.tex")
-
-EXPECTED_HASHES = {
-    DISPERSION: "A1FC299F4AB13F9997BDF0EBA993C6BA12054500134A8617180F572F3732B89D",
-    PRL: "8265AF6394ACD421FDE1E1163DC42B126AB33A8EEC0F019D91D4B4D5537BD7A6",
-    METHODS: "CB0A459012329E1CCE7584152E55333467F8A48E1317C04DCA3DCCA72D07F7A8",
-}
+DRIVE_ROOT = Path(ROOT.anchor)
+PAPER_DIR = Path(
+    os.environ.get("BOUNDARY_FLOW_PAPER_DIR", DRIVE_ROOT / "LaTex" / "Boundary Flow")
+)
+DISPERSION = Path(
+    os.environ.get(
+        "BOUNDARY_FLOW_DISPERSION",
+        DRIVE_ROOT / "PrivatePythonProject" / "Math" / "Lattice" / "Dispersion.py",
+    )
+)
+SHORT = PAPER_DIR / "Short.tex"
+METHODS = PAPER_DIR / "Methods Appendix.tex"
+REFERENCE_FILES = (DISPERSION, SHORT, METHODS)
 
 N = 2000
 K = 20.75
@@ -96,15 +101,15 @@ def file_hash(path: Path) -> str:
     return digest.hexdigest().upper()
 
 
-def verify_references() -> dict[str, str]:
-    values = {str(path): file_hash(path) for path in EXPECTED_HASHES}
-    changed = [
-        str(path)
-        for path, expected in EXPECTED_HASHES.items()
-        if values[str(path)] != expected
-    ]
-    if changed:
-        raise RuntimeError("Read-only reference hash changed: " + ", ".join(changed))
+def verify_references(expected: dict[str, str] | None = None) -> dict[str, str]:
+    missing = [str(path) for path in REFERENCE_FILES if not path.is_file()]
+    if missing:
+        raise FileNotFoundError("Missing read-only reference: " + ", ".join(missing))
+    values = {str(path): file_hash(path) for path in REFERENCE_FILES}
+    if expected is not None:
+        changed = [path for path, digest in values.items() if expected.get(path) != digest]
+        if changed:
+            raise RuntimeError("Read-only reference changed during run: " + ", ".join(changed))
     return values
 
 
@@ -131,10 +136,14 @@ def build_model(seed: int, snap: int) -> CircularBoundaryPatternFormation:
 def trajectory(seed: int) -> tuple[Path, int]:
     if seed == 9:
         return SEED9_PATH, 10
-    matches = list(EXTRA_DATA.glob(f"*seed={seed}).h5"))
-    if len(matches) != 1:
-        raise RuntimeError(f"Expected one long trajectory for seed={seed}: {matches}")
-    return matches[0], 50
+    path = DATA_ROOT / (
+        "CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,"
+        "v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,"
+        f"snap=50,seed={seed}).h5"
+    )
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing exact trajectory: {path}")
+    return path, 50
 
 
 def load_terminal(seed: int) -> tuple[np.ndarray, np.ndarray, np.ndarray, int, Path]:
@@ -613,7 +622,7 @@ def main() -> None:
     )
     plot_results(all_frames, summary_table, spectral, ks, growth)
     write_report(spectral, summary_table, sensitivity_table)
-    verify_references()
+    verify_references(reference_hashes)
     print("Spectral prediction:")
     print(json.dumps(spectral, indent=2))
     print("\nMeasurements:")

@@ -19,6 +19,7 @@ from main import CircularBoundaryPatternFormation
 
 
 ROOT = Path(__file__).resolve().parent
+DATA_ROOT = Path(os.environ.get("FIL_DATA_DIR", ROOT / "data"))
 N = 2000
 STEPS = 50_000
 SNAP = 50
@@ -35,9 +36,9 @@ class Condition:
 
 
 FAMILIES = (
-    ("halfpi", 0.5, ROOT / "data" / "halfpi_boundary_N2000_steps50000_snap50"),
-    ("alpha06", 0.6, ROOT / "data" / "alpha06_bulk_N2000_steps50000_snap50"),
-    ("pi", 1.0, ROOT / "data" / "pi_endpoint_N2000_steps50000_snap50"),
+    ("halfpi", 0.5, DATA_ROOT),
+    ("alpha06", 0.6, DATA_ROOT),
+    ("pi", 1.0, DATA_ROOT),
 )
 
 
@@ -170,7 +171,15 @@ def all_conditions() -> list[Condition]:
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--workers", type=int, default=4)
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Required to generate trajectories that are not already present.",
+    )
     args = parser.parse_args()
+    if not args.generate_missing:
+        print("Analysis-only safety stop: pass --generate-missing to create data.")
+        return
     for _, alpha, _ in FAMILIES:
         error = validate_kernel(alpha)
         if error > 5e-12:

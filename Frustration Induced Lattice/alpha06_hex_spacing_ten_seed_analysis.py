@@ -7,6 +7,7 @@ written to the result table.
 from __future__ import annotations
 
 from pathlib import Path
+import os
 
 import numba as nb
 import pandas as pd
@@ -16,15 +17,19 @@ import alpha06_bulk_hex_lattice_analysis as core
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "output" / "Lattice_Scale_Comparison"
-DATA = ROOT / "data" / "alpha06_bulk_N2000_steps50000_snap50"
+DATA = Path(os.environ.get("FIL_DATA_DIR", ROOT / "data"))
 SEEDS = tuple(range(1, 11))
 
 
 def standardized_trajectory(seed: int) -> tuple[Path, int]:
-    matches = list(DATA.glob(f"*seed={seed}).h5"))
-    if len(matches) != 1:
-        raise RuntimeError(f"Expected one standardized trajectory: seed={seed}, {matches}")
-    return matches[0], 50
+    path = DATA / (
+        "CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0=1.885,L=7.0,"
+        "v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,"
+        f"snap=50,seed={seed}).h5"
+    )
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing exact trajectory: {path}")
+    return path, 50
 
 
 def main() -> None:

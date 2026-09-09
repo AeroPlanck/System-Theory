@@ -6,6 +6,7 @@ import argparse
 import importlib.util
 import json
 import multiprocessing as mp
+import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import dataclass
 from pathlib import Path
@@ -24,10 +25,16 @@ from small_circular_alpha_sweep import ExperimentConfig, build_model
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-DATA_DIR = PROJECT_DIR / "data" / "boundary_lattice_d0_sweep"
-K_SWEEP_DATA_DIR = PROJECT_DIR / "data" / "boundary_lattice_k_sweep"
+DRIVE_ROOT = Path(PROJECT_DIR.anchor)
+DATA_DIR = Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data"))
+K_SWEEP_DATA_DIR = DATA_DIR
 OUTPUT_DIR = PROJECT_DIR / "output" / "Boundary_Lattice_D0_Sweep"
-REFERENCE_DISPERSION = Path(r"D:\PrivatePythonProject\Math\Lattice\Dispersion.py")
+REFERENCE_DISPERSION = Path(
+    os.environ.get(
+        "BOUNDARY_FLOW_DISPERSION",
+        DRIVE_ROOT / "PrivatePythonProject" / "Math" / "Lattice" / "Dispersion.py",
+    )
+)
 
 STRENGTH_K = 40.0
 D0_VALUES = (0.75, 1.0, 1.25)
@@ -739,6 +746,11 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--simulate-only", action="store_true")
     parser.add_argument("--analyze-only", action="store_true")
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Explicitly generate missing trajectories before analysis.",
+    )
     return parser.parse_args()
 
 
@@ -746,7 +758,7 @@ def main() -> None:
     args = parse_args()
     if args.simulate_only and args.analyze_only:
         raise ValueError("Choose at most one action flag.")
-    if not args.analyze_only:
+    if args.simulate_only or args.generate_missing:
         ensure_simulations(all_conditions(), args.workers)
     if not args.simulate_only:
         analyze()

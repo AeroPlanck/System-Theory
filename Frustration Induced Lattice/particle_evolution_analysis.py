@@ -26,6 +26,7 @@ import os
 import shutil
 import pickle
 import sys
+from pathlib import Path
 from sklearn.cluster import DBSCAN
 from sklearn.neighbors import NearestNeighbors
 from scipy.spatial.distance import cdist
@@ -106,6 +107,8 @@ class ParticleEvolutionAnalyzer:
         print("Initializing model...")
         
         # Create model instance
+        temp_data = Path(__file__).resolve().parent / "temp_data"
+        temp_data.mkdir(parents=True, exist_ok=True)
         self.model = PhaseLagPatternFormation(
             strengthK=self.model_params['strengthK'],
             distanceD0=self.model_params['distanceD0'],
@@ -117,7 +120,7 @@ class ParticleEvolutionAnalyzer:
             boundaryLength=self.model_params['boundaryLength'],
             speedV=self.model_params['speedV'],
             tqdm=True,
-            savePath="d:/PythonProject/System Theory/Frustration Induced Lattice/temp_data",
+            savePath=str(temp_data),
             shotsnaps=1,
             randomSeed=self.model_params['randomSeed'],
             overWrite=force_rerun

@@ -1,11 +1,13 @@
 import os
 import zipfile
+from pathlib import Path
 import numpy as np
 from tqdm import tqdm
 from main import CollisionBoundaryPatternFormation
 
 # Configuration from multiRun.py
-SAVE_PATH = r"F:\MS_ExperimentData\general"
+PROJECT_DIR = Path(__file__).resolve().parent
+SAVE_PATH = str(Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data")))
 
 # Parameters (must match multiRun.py)
 phaseLags = [0 * np.pi]
@@ -22,9 +24,7 @@ def compress_by_parameter_group():
     total_groups = len(phaseLags)
     print(f"Starting compression grouped by phaseLags (Total groups: {total_groups})")
 
-    if not os.path.exists(SAVE_PATH):
-        print(f"Error: SAVE_PATH does not exist: {SAVE_PATH}")
-        return
+    Path(SAVE_PATH).mkdir(parents=True, exist_ok=True)
 
     # Loop 1: phaseLag (The Grouping Parameter)
     for i, phaseLag in enumerate(tqdm(phaseLags, desc="Processing Groups")):

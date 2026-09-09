@@ -8,6 +8,7 @@ autocorrelation after the zero-lag self peak.
 from __future__ import annotations
 
 import math
+import os
 from pathlib import Path
 
 import numpy as np
@@ -18,8 +19,9 @@ from scipy.signal import find_peaks
 
 ROOT = Path(__file__).resolve().parent
 OUT = ROOT / "output" / "Lattice_Scale_Comparison"
-HALF_DATA = ROOT / "data" / "halfpi_boundary_N2000_steps50000_snap50"
-PI_DATA = ROOT / "data" / "pi_endpoint_N2000_steps50000_snap50"
+DATA_ROOT = Path(os.environ.get("FIL_DATA_DIR", ROOT / "data"))
+HALF_DATA = "halfpi"
+PI_DATA = "pi"
 
 N = 2000
 SNAP = 50
@@ -32,15 +34,22 @@ PI_SHELL = 0.50
 PHASE_CONFIDENCE = 0.50
 
 
-def trajectory(directory: Path, seed: int) -> Path:
-    matches = list(directory.glob(f"*seed={seed}).h5"))
-    if len(matches) != 1:
-        raise RuntimeError(f"Expected one trajectory for seed={seed}: {matches}")
-    return matches[0]
+def trajectory(dataset: str, seed: int) -> Path:
+    alpha = {HALF_DATA: "1.571", PI_DATA: "3.142"}.get(dataset)
+    if alpha is None:
+        raise ValueError(f"Unknown boundary dataset: {dataset}")
+    path = DATA_ROOT / (
+        f"CircularBoundaryPatternFormation(K=20.750,D0=1.000,A0={alpha},L=7.0,"
+        "v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,"
+        f"snap=50,seed={seed}).h5"
+    )
+    if not path.is_file():
+        raise FileNotFoundError(f"Missing exact trajectory: {path}")
+    return path
 
 
 def load_window(
-    directory: Path,
+    directory: str,
     seed: int,
     start_iteration: int,
     stop_iteration: int,

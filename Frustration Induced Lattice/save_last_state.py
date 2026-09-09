@@ -9,6 +9,7 @@ import numba as nb
 import imageio
 import os
 import shutil
+from pathlib import Path
 
 randomSeed = 10
 
@@ -42,12 +43,16 @@ sns.set_theme(
 
 plt.rcParams['mathtext.fontset'] = 'stix'
 plt.rcParams['font.family'] = 'STIXGeneral'
-plt.rcParams['animation.ffmpeg_path'] = "/opt/conda/bin/ffmpeg"
+ffmpeg_path = shutil.which("ffmpeg")
+if ffmpeg_path:
+    plt.rcParams['animation.ffmpeg_path'] = ffmpeg_path
 
 from main import *
 from multiprocessing import Pool
 
-SAVE_PATH = "/home/thanmark/MS_DATA/cryst"
+PROJECT_DIR = Path(__file__).resolve().parent
+SAVE_PATH = str(Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data")))
+Path(SAVE_PATH).mkdir(parents=True, exist_ok=True)
 
 
 phaseLags = [0.6 * np.pi]
@@ -77,7 +82,9 @@ def get_state(model: PhaseLagPatternFormation):
     sa = StateAnalysis(model)
     return sa.get_state(-1)
 
-savePath = f"last_state/{models[0].__class__.__name__}_lastState.h5"
+last_state_dir = PROJECT_DIR / "last_state"
+last_state_dir.mkdir(parents=True, exist_ok=True)
+savePath = str(last_state_dir / f"{models[0].__class__.__name__}_lastState.h5")
 
 if os.path.exists(savePath):
     os.remove(savePath)

@@ -12,6 +12,7 @@ import hashlib
 import importlib.util
 import json
 import multiprocessing as mp
+import os
 from concurrent.futures import ProcessPoolExecutor, as_completed
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -31,14 +32,21 @@ from small_circular_alpha_sweep import ExperimentConfig, build_model
 
 
 PROJECT_DIR = Path(__file__).resolve().parent
-REFERENCE_DISPERSION = Path(r"D:\PrivatePythonProject\Math\Lattice\Dispersion.py")
-REFERENCE_PRL = Path(r"D:\LaTex\Boundary Flow\PRL.tex")
-REFERENCE_METHODS = Path(r"D:\LaTex\Boundary Flow\Methods Appendix.tex")
-
-DATA_DIR = PROJECT_DIR / "data" / "critical_boundary_lattice_quantization"
-EXISTING_DATA_DIR = (
-    PROJECT_DIR / "data" / "small_circular_alpha_sweep" / "N2000_steps50000"
+DRIVE_ROOT = Path(PROJECT_DIR.anchor)
+PAPER_DIR = Path(
+    os.environ.get("BOUNDARY_FLOW_PAPER_DIR", DRIVE_ROOT / "LaTex" / "Boundary Flow")
 )
+REFERENCE_DISPERSION = Path(
+    os.environ.get(
+        "BOUNDARY_FLOW_DISPERSION",
+        DRIVE_ROOT / "PrivatePythonProject" / "Math" / "Lattice" / "Dispersion.py",
+    )
+)
+REFERENCE_SHORT = PAPER_DIR / "Short.tex"
+REFERENCE_METHODS = PAPER_DIR / "Methods Appendix.tex"
+
+DATA_DIR = Path(os.environ.get("FIL_DATA_DIR", PROJECT_DIR / "data"))
+EXISTING_DATA_DIR = DATA_DIR
 OUTPUT_DIR = PROJECT_DIR / "output" / "Critical_Boundary_Lattice_Quantization"
 
 STRENGTH_K = 20.75
@@ -131,16 +139,6 @@ def hdf_is_complete(path: Path, config: ExperimentConfig) -> bool:
 
 
 def source_directory(condition: Condition) -> Path:
-    if (
-        np.isclose(condition.alpha_over_pi, 0.5)
-        and condition.seed == 9
-        and condition.diameter in (3.0, 5.0)
-    ):
-        old_model = make_model(condition, EXISTING_DATA_DIR)
-        if hdf_is_complete(
-            expected_data_path(old_model), condition_config(condition)
-        ):
-            return EXISTING_DATA_DIR
     return DATA_DIR
 
 
@@ -779,7 +777,7 @@ def write_report(
     )
     reference_hashes = {
         str(path): file_sha256(path)
-        for path in (REFERENCE_DISPERSION, REFERENCE_PRL, REFERENCE_METHODS)
+        for path in (REFERENCE_DISPERSION, REFERENCE_SHORT, REFERENCE_METHODS)
     }
     report_path = OUTPUT_DIR / "Critical_Boundary_Lattice_Analysis.md"
     lines = [
@@ -978,7 +976,7 @@ def run_analysis(workers: int, skip_simulation: bool = False) -> None:
         "terminal_window_frames": TERMINAL_WINDOW_FRAMES,
         "reference_files": {
             str(path): file_sha256(path)
-            for path in (REFERENCE_DISPERSION, REFERENCE_PRL, REFERENCE_METHODS)
+            for path in (REFERENCE_DISPERSION, REFERENCE_SHORT, REFERENCE_METHODS)
         },
     }
     (OUTPUT_DIR / "Critical_Boundary_Lattice_Configuration.json").write_text(
@@ -991,7 +989,11 @@ def run_analysis(workers: int, skip_simulation: bool = False) -> None:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--workers", type=int, default=4)
-    parser.add_argument("--skip-simulation", action="store_true")
+    parser.add_argument(
+        "--generate-missing",
+        action="store_true",
+        help="Explicitly generate missing trajectories; default is analysis-only.",
+    )
     return parser.parse_args()
 
 
@@ -999,7 +1001,7 @@ def main() -> int:
     args = parse_args()
     if not 1 <= args.workers <= 4:
         raise ValueError("--workers must be between 1 and 4.")
-    run_analysis(args.workers, skip_simulation=args.skip_simulation)
+    run_analysis(args.workers, skip_simulation=not args.generate_missing)
     return 0
 
 
