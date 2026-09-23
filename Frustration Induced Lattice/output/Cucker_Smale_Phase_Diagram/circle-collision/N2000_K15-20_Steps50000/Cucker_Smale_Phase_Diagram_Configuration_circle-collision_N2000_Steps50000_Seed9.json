@@ -1,0 +1,77 @@
+{
+  "model_family": "CuckerSmaleParticleModel",
+  "boundary_class": "CircularCollisionBoundary",
+  "hdf5_filename_prefix": "CSC",
+  "kernel": "(1 + (r/D0)^(2q))^(-1/2)",
+  "kernel_reference": "Scaled q=1 case matches the beta=1 Cucker-Smale communication weight in Ha, Jeong & Kang, Nonlinearity 23 (2010), section 2.1, following condition (2.2).",
+  "hard_cutoff_limit": "q -> infinity",
+  "coupling_normalization": "sum of pair weights plus the unit self-weight; the centred self-coupling numerator is exactly zero",
+  "sharpness_values": [
+    16.0,
+    4.0,
+    1.0
+  ],
+  "sharpness_labels": {
+    "16.0": "strong",
+    "4.0": "medium",
+    "1.0": "weak"
+  },
+  "strength_values": [
+    15.0,
+    17.5,
+    20.0
+  ],
+  "distance_values": [
+    1.0,
+    2.0
+  ],
+  "production_policy": {
+    "minimum_coupling_strength": 15.0,
+    "minimum_saved_iterations": 50000,
+    "terminal_figures_only": true,
+    "video_generated": false
+  },
+  "phase_lag_a0": 1.8849555921538759,
+  "alpha_over_pi": 0.6,
+  "config": {
+    "boundary": "circle-collision",
+    "boundaryLength": 7.0,
+    "speedV": 3.0,
+    "freqDist": "uniform",
+    "omegaMin": 0.0,
+    "deltaOmega": 0.0,
+    "agentsNum": 2000,
+    "dt": 0.005,
+    "shotsnaps": 100,
+    "randomSeed": 9,
+    "iterations": 50000,
+    "defectHeight": 0.8,
+    "defectHalfWidth": null
+  },
+  "data_directory": "D:\\PythonProject\\System Theory\\Frustration Induced Lattice\\data\\Cucker_Smale_Phase_Diagram\\circle-collision\\N2000_K15-20_Steps50000",
+  "source_frame_counts": {
+    "CSC(K=15.000,D0=1.000,q=16.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=17.500,D0=1.000,q=16.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=20.000,D0=1.000,q=16.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=15.000,D0=2.000,q=16.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=17.500,D0=2.000,q=16.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=20.000,D0=2.000,q=16.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=15.000,D0=1.000,q=4.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=17.500,D0=1.000,q=4.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=20.000,D0=1.000,q=4.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=15.000,D0=2.000,q=4.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=17.500,D0=2.000,q=4.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=20.000,D0=2.000,q=4.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=15.000,D0=1.000,q=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=17.500,D0=1.000,q=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=20.000,D0=1.000,q=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=15.000,D0=2.000,q=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=17.500,D0=2.000,q=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501,
+    "CSC(K=20.000,D0=2.000,q=1.000,A0=1.885,L=7.0,v=3.0,dist=uniform,wMin=0.000,dw=0.000,N=2000,dt=0.005,snap=100,seed=9).h5": 501
+  },
+  "video_generated": false,
+  "hdf5_keys": [
+    "positionX",
+    "phaseTheta"
+  ]
+}
